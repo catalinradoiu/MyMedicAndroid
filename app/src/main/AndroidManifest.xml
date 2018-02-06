@@ -3,6 +3,7 @@
     package="com.catalin.mymedic">
 
     <application
+        android:name="MyMedicApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,9 +18,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.AuthenticationActivity"
+            android:name=".feature.authentication.RegistrationActivity"
             android:label="@string/title_activity_authentication"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
