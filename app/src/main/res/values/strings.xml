@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">My Medic</string>
     <string name="title_activity_authentication">AuthenticationActivity</string>
+    <string name="register">Register</string>
+    <string name="email_address">E-mail address</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
 </resources>

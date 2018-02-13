@@ -10,8 +10,8 @@ import javax.inject.Singleton
  */
 
 @Singleton
-@Component(modules = [AppModule::class])
-interface ApplicationComponent{
+@Component(modules = [(AppModule::class)])
+interface ApplicationComponent {
 
     fun inject(registrationActivity: RegistrationActivity)
 }

@@ -1,11 +1,9 @@
 package com.catalin.mymedic.component
 
 import com.google.firebase.auth.FirebaseAuth
-
-import javax.inject.Singleton
-
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 /**
  * @author catalinradoiu
@@ -17,7 +15,5 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth {
-        return FirebaseAuth.getInstance()
-    }
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 }

@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'kotlin-android-extensions'
 
 ext {
@@ -39,9 +41,10 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$playServicesVersion"
     implementation "com.google.firebase:firebase-auth:$playServicesVersion"
     implementation "com.google.dagger:dagger-android:$daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     implementation 'com.android.support:design:27.0.2'
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt 'com.android.databinding:compiler:2.3.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     testImplementation 'junit:junit:4.12'
