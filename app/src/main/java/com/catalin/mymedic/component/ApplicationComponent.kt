@@ -10,7 +10,7 @@ import javax.inject.Singleton
  */
 
 @Singleton
-@Component(modules = [(AppModule::class)])
+@Component(modules = [(FirebaseModule::class)])
 interface ApplicationComponent {
 
     fun inject(registrationActivity: RegistrationActivity)

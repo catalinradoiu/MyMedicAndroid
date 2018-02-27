@@ -1,10 +1,18 @@
 package com.catalin.mymedic.data
 
+import java.util.*
+
 /**
  *
  */
-class User {
+data class User(
+        var firstName: String,
+        var lastName: String,
+        var email: String,
+        var birthDate: Long,
+        var gender: Gender
+)
 
-    var token: String? = null
-    var role: String = ""
+enum class Gender {
+    MALE, FEMALE
 }

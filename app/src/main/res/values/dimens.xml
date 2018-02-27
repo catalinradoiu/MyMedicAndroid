@@ -2,4 +2,8 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="primary_margin">16dp</dimen>
     <dimen name="secondary_margin">32dp</dimen>
+    <dimen name="second_key_line">72dp</dimen>
+    <dimen name="registration_root_top_margin">48dp</dimen>
+    <dimen name="drawable_primary_width">24dp</dimen>
+    <dimen name="drawable_primary_height">24dp</dimen>
 </resources>

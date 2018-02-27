@@ -1,6 +1,7 @@
 package com.catalin.mymedic
 
 import android.app.Application
+import com.catalin.mymedic.component.ApplicationComponent
 import com.catalin.mymedic.component.DaggerApplicationComponent
 
 /**
@@ -9,5 +10,5 @@ import com.catalin.mymedic.component.DaggerApplicationComponent
  */
 class MyMedicApplication : Application() {
 
-    val applicationComponent = DaggerApplicationComponent.builder().build()
+    val applicationComponent: ApplicationComponent = DaggerApplicationComponent.builder().build()
 }
