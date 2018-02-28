@@ -1,24 +1,23 @@
 package com.catalin.mymedic.feature.authentication
 
 import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableLong
 import com.catalin.mymedic.data.Gender
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * @author catalinradoiu
  * @since 2/12/2018
  */
-class RegistrationViewModel @Inject constructor(private val usersRepository: UsersRepository) : ViewModel() {
+internal class RegistrationViewModel(private val usersRepository: UsersRepository) : ViewModel() {
 
     val email: ObservableField<String> = ObservableField("")
     val password: ObservableField<String> = ObservableField("")
@@ -50,7 +49,13 @@ class RegistrationViewModel @Inject constructor(private val usersRepository: Use
         disposables.clear()
     }
 
+    class RegistrationViewModelProvider @Inject constructor(private val usersRepository: UsersRepository) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (RegistrationViewModel(usersRepository) as T)
+
+    }
+
     enum class RegistrationResult {
-        NO_INTERNET, EMAIL_IN_USE
+        NO_INTERNET, EMAIL_IN_USE, NONE
     }
 }

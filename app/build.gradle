@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 ext {
-    androidLibraryVersion = '27.0.2'
+    androidLibraryVersion = '27.1.0'
     daggerVersion = '2.11'
     playServicesVersion = '11.8.0'
     dataBindingVersion = '3.0.1'
@@ -51,7 +51,8 @@ dependencies {
     implementation "com.android.support:design:$androidLibraryVersion"
     implementation "com.google.firebase:firebase-database:$playServicesVersion"
     implementation 'com.github.frangsierra:rx2firebase:1.4.0'
-    implementation "android.arch.lifecycle:viewmodel:$architectureLibraryVersion"
+    implementation "android.arch.lifecycle:extensions:$architectureLibraryVersion"
+    kapt "android.arch.lifecycle:compiler:$architectureLibraryVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.android.databinding:compiler:$dataBindingVersion"
