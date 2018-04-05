@@ -1,6 +1,5 @@
 package com.catalin.mymedic.storage.source
 
-import com.catalin.mymedic.data.Gender
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.utils.DatabaseConfig
 import com.google.firebase.auth.FirebaseAuth
@@ -11,18 +10,28 @@ import io.reactivex.Completable
 import javax.inject.Inject
 
 /**
+ * Remote source for the users based on Firebase
+ *
  * @author catalinradoiu
  * @since 2/21/2018
  */
 
-class UsersRemoteSource @Inject constructor(private val firebaseAuth: FirebaseAuth,
-                                            private val firebaseDatabase: FirebaseDatabase){
+class UsersRemoteSource @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val firebaseDatabase: FirebaseDatabase
+) {
 
-    fun registerUser(email: String, password: String, firstName: String, lastName: String, birthDate: Long, gender: Gender): Completable =
-            RxFirebaseAuth.createUserWithEmailAndPassword(firebaseAuth, email, password)
-                    .flatMapCompletable {
-                        it.user.sendEmailVerification()
-                        RxFirebaseDatabase.setValue(firebaseDatabase.getReference(DatabaseConfig.DATABASE_NAME).child(DatabaseConfig.USERS_TABLE_NAME).push(),
-                                User(firstName, lastName, email, birthDate, gender))
-                    }
+    /**
+     * Get as parameters the user and his password
+     * Registers the user then sends the corresponding email
+     * @return a Completable with the status of the operation
+     */
+    fun registerUser(user: User, password: String): Completable =
+        RxFirebaseAuth.createUserWithEmailAndPassword(firebaseAuth, user.email, password).flatMapCompletable {
+            it.user.sendEmailVerification()
+            RxFirebaseDatabase.setValue(
+                firebaseDatabase.getReference(DatabaseConfig.DATABASE_NAME).child(DatabaseConfig.USERS_TABLE_NAME).push(),
+                user
+            )
+        }
 }

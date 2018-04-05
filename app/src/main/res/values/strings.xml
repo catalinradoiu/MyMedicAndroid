@@ -3,7 +3,7 @@
     <string name="title_activity_authentication">AuthenticationActivity</string>
 
     <!-- Registration -->
-    <string name="register">Register</string>
+    <string name="register_now">Register now</string>
     <string name="email_address">E-mail address</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
@@ -11,6 +11,7 @@
     <string name="last_name">Last name</string>
     <string name="birth_date">Birth date</string>
     <string name="gender">Gender</string>
+    <string name="registration_success_with_confirmation_sent">A confirmation email has been sent to your address</string>
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>

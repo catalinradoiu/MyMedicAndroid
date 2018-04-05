@@ -6,6 +6,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableLong
 import com.catalin.mymedic.data.Gender
+import com.catalin.mymedic.data.User
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
 import io.reactivex.disposables.CompositeDisposable
@@ -14,6 +15,8 @@ import io.reactivex.functions.Consumer
 import javax.inject.Inject
 
 /**
+ * ViewModel for the RegistrationActivity
+ *
  * @author catalinradoiu
  * @since 2/12/2018
  */
@@ -30,18 +33,22 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
     val validPassword = ObservableBoolean(true)
     val passwordsMatch = ObservableBoolean(true)
     val validName = ObservableBoolean(true)
-    val registrationResult = ObservableBoolean(true)
+    val registrationResult = ObservableField<OperationResult>(OperationResult.NoOperation)
 
     private val disposables = CompositeDisposable()
 
 
+    /**
+     * Registers the user with the data from the ObservableFields
+     * Sets the corresponding result of the operation depending on its status ( success, failure )
+     */
     fun registerUser() {
-        usersRepository.registerUser(email.get(), password.get(), firstName.get(), lastName.get(), 0, Gender.MALE)
-                .mainThreadSubscribe(Action {
-                    registrationResult.set(true)
-                }, Consumer {
-                    registrationResult.set(false)
-                })
+        usersRepository.registerUser(User(firstName.get(), lastName.get(), email.get(), 0, Gender.MALE), password.get())
+            .mainThreadSubscribe(Action {
+                registrationResult.set(OperationResult.Success())
+            }, Consumer {
+                registrationResult.set(OperationResult.Error(it.localizedMessage))
+            })
     }
 
     override fun onCleared() {
@@ -49,13 +56,17 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
         disposables.clear()
     }
 
+    /**
+     * Provider class for the RegistrationViewModel
+     */
     class RegistrationViewModelProvider @Inject constructor(private val usersRepository: UsersRepository) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = (RegistrationViewModel(usersRepository) as T)
-
     }
 
-    enum class RegistrationResult {
-        NO_INTERNET, EMAIL_IN_USE, NONE
+    sealed class OperationResult {
+        data class Error(val message: String) : OperationResult()
+        data class Success(val message: String = "") : OperationResult()
+        object NoOperation : OperationResult()
     }
 }

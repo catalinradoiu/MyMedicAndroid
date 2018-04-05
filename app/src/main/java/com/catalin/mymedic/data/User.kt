@@ -1,9 +1,7 @@
 package com.catalin.mymedic.data
 
-import java.util.*
-
 /**
- *
+ *  Class for holding the user data
  */
 data class User(
         var firstName: String,

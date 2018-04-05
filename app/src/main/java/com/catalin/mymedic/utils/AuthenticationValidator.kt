@@ -4,7 +4,7 @@ package com.catalin.mymedic.utils
  * @author catalinradoiu
  * @since 2/28/2018
  */
-class AuthenticationValidator {
+class AuthenticationValidator() {
 
     fun validateName(name: String) {
 
