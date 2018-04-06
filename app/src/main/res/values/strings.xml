@@ -2,22 +2,23 @@
     <string name="app_name">My Medic</string>
     <string name="title_activity_authentication">AuthenticationActivity</string>
 
-    <!-- Registration -->
-    <string name="register_now">Register now</string>
+    <!-- Authentication -->
+    <string name="invalid_password">Password must contain at least 8 characters</string>
+    <string name="invalid_email">The email address is incorrect</string>
     <string name="email_address">E-mail address</string>
     <string name="password">Password</string>
+    <string name="login">Log in</string>
+    <string name="register_now">Register now</string>
+    <string name="registration_success_with_confirmation_sent">A confirmation email has been sent to your address</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="registration_passwords_not_match">Passwords don\'t match</string>
+    <string name="sign_up">Sign up</string>
+
     <string name="confirm_password">Confirm password</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="birth_date">Birth date</string>
     <string name="gender">Gender</string>
-    <string name="registration_success_with_confirmation_sent">A confirmation email has been sent to your address</string>
-    <string name="login">Log in</string>
-    <string name="sign_up">Sign up</string>
-    <string name="login_forgot_password">Forgot password?</string>
-    <string name="registration_passwords_not_match">Passwords don\'t match</string>
-    <string name="registration_invalid_password">Password must contain at least 8 characters</string>
-    <string name="registration_invalid_email">The email adress is incorrect</string>
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>

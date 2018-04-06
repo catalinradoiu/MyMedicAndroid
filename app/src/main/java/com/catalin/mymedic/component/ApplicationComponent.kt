@@ -1,5 +1,6 @@
 package com.catalin.mymedic.component
 
+import com.catalin.mymedic.feature.authentication.login.LoginActivity
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
 import dagger.Component
 import javax.inject.Singleton
@@ -14,4 +15,5 @@ import javax.inject.Singleton
 interface ApplicationComponent {
 
     fun inject(registrationActivity: RegistrationActivity)
+    fun inject(registrationActivity: LoginActivity)
 }

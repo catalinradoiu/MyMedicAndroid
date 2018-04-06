@@ -2,11 +2,13 @@ package com.catalin.mymedic.storage.source
 
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.utils.DatabaseConfig
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import durdinapps.rxfirebase2.RxFirebaseDatabase
 import io.reactivex.Completable
+import io.reactivex.Single
 import javax.inject.Inject
 
 /**
@@ -34,4 +36,7 @@ class UsersRemoteSource @Inject constructor(
                 user
             )
         }
+
+    fun getUserByEmailAndPassword(email: String, password: String): Single<AuthResult> =
+        RxFirebaseAuth.signInWithEmailAndPassword(firebaseAuth, email, password).toSingle()
 }

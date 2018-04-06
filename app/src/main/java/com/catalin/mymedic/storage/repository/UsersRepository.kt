@@ -2,7 +2,9 @@ package com.catalin.mymedic.storage.repository
 
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.storage.source.UsersRemoteSource
+import com.google.firebase.auth.AuthResult
 import io.reactivex.Completable
+import io.reactivex.Single
 import javax.inject.Inject
 
 /**
@@ -20,4 +22,6 @@ class UsersRepository @Inject constructor(private val usersRemoteSource: UsersRe
      */
     fun registerUser(user: User, password: String): Completable =
         usersRemoteSource.registerUser(user, password)
+
+    fun getUserByEmailAndPassword(email: String, password: String): Single<AuthResult> = usersRemoteSource.getUserByEmailAndPassword(email, password)
 }

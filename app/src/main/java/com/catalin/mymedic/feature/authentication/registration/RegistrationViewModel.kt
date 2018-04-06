@@ -8,6 +8,7 @@ import com.catalin.mymedic.data.Gender
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
 import com.catalin.mymedic.storage.repository.UsersRepository
+import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
@@ -46,12 +47,14 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
         if (isValidEmail && isValidPassword) {
             if (password.get() == passwordConfirmation.get()) {
                 passwordsMatch.set(true)
-                usersRepository.registerUser(User("", "", email.get(), 0, Gender.NOT_COMPLETED), password.get())
+                disposables.add(
+                    usersRepository.registerUser(User("", "", email.get(), 0, Gender.NOT_COMPLETED), password.get())
                     .mainThreadSubscribe(Action {
                         registrationResult.set(OperationResult.Success())
                     }, Consumer {
                         registrationResult.set(OperationResult.Error(it.localizedMessage))
                     })
+                )
             }
         } else {
             passwordsMatch.set(false)
@@ -66,7 +69,7 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
     /**
      * Provider class for the RegistrationViewModel
      */
-    class RegistrationViewModelProvider @Inject constructor(
+    internal class RegistrationViewModelProvider @Inject constructor(
         private val usersRepository: UsersRepository,
         private val authenticationValidator: AuthenticationValidator
     ) : ViewModelProvider.Factory {
@@ -74,11 +77,5 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = (RegistrationViewModel(
             usersRepository, authenticationValidator
         ) as T)
-    }
-
-    sealed class OperationResult {
-        data class Error(val message: String) : OperationResult()
-        data class Success(val message: String = "") : OperationResult()
-        object NoOperation : OperationResult()
     }
 }
