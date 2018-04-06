@@ -1,4 +1,4 @@
-package com.catalin.mymedic.feature.authentication
+package com.catalin.mymedic.feature.authentication.registration
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
@@ -61,7 +61,9 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
      */
     class RegistrationViewModelProvider @Inject constructor(private val usersRepository: UsersRepository) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (RegistrationViewModel(usersRepository) as T)
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (RegistrationViewModel(
+            usersRepository
+        ) as T)
     }
 
     sealed class OperationResult {

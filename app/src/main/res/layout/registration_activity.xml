@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.catalin.mymedic.feature.authentication.RegistrationViewModel" />
+            type="com.catalin.mymedic.feature.authentication.registration.RegistrationViewModel" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout

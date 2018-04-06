@@ -1,6 +1,6 @@
 package com.catalin.mymedic.component
 
-import com.catalin.mymedic.feature.authentication.RegistrationActivity
+import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
 import dagger.Component
 import javax.inject.Singleton
 

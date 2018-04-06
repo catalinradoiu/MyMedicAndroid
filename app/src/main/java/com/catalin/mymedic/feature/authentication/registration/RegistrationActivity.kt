@@ -1,4 +1,4 @@
-package com.catalin.mymedic.feature.authentication
+package com.catalin.mymedic.feature.authentication.registration
 
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -26,7 +26,8 @@ class RegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (application as MyMedicApplication).applicationComponent.inject(this)
-        registrationViewModel = ViewModelProviders.of(this, viewModelFactory).get(RegistrationViewModel::class.java)
+        registrationViewModel =
+                ViewModelProviders.of(this, viewModelFactory).get(RegistrationViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.registration_activity)
         binding.viewModel = registrationViewModel
         initListeners()
@@ -48,11 +49,5 @@ class RegistrationActivity : AppCompatActivity() {
 
     private fun displaySnackBar(message: String) {
         operationSnackbar = operationSnackbar.newLongSnackbar(binding.registrationRoot, message)
-    }
-
-    companion object {
-        private const val START_YEAR = 1920
-        private const val START_MONTH = 1
-        private const val START_DAY = 1
     }
 }
