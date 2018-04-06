@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.catalin.mymedic.feature.authentication.registration.RegistrationViewModel" />
-    </data>
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,7 +24,6 @@
                 android:hint="@string/first_name"
                 android:inputType="text"
                 android:lines="1"
-                android:text="@={viewModel.firstName}"
                 app:drawableTint="@{@color/light_gray}" />
 
         </android.support.design.widget.TextInputLayout>
@@ -53,7 +46,6 @@
                 android:hint="@string/last_name"
                 android:inputType="text"
                 android:lines="1"
-                android:text="@={viewModel.lastName}"
                 app:drawableTint="@{@color/light_gray}" />
 
         </android.support.design.widget.TextInputLayout>

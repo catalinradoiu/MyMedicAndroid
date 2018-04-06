@@ -45,6 +45,16 @@ class RegistrationActivity : AppCompatActivity() {
                 is RegistrationViewModel.OperationResult.Error -> displaySnackBar(value.message)
             }
         }
+        registrationViewModel.passwordsMatch.onPropertyChanged { value ->
+            binding.passwordConfirmationLayout.error = if (value) "" else getString(R.string.registration_passwords_not_match)
+        }
+        registrationViewModel.validPassword.onPropertyChanged { value ->
+            binding.passwordLayout.error = if (value) "" else getString(R.string.registration_invalid_password)
+
+        }
+        registrationViewModel.validEmail.onPropertyChanged { value ->
+            binding.emailLayout.error = if (value) "" else getString(R.string.registration_invalid_email)
+        }
     }
 
     private fun displaySnackBar(message: String) {

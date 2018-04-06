@@ -15,6 +15,9 @@
     <string name="login">Log in</string>
     <string name="sign_up">Sign up</string>
     <string name="login_forgot_password">Forgot password?</string>
+    <string name="registration_passwords_not_match">Passwords don\'t match</string>
+    <string name="registration_invalid_password">Password must contain at least 8 characters</string>
+    <string name="registration_invalid_email">The email adress is incorrect</string>
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>
