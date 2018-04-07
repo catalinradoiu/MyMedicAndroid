@@ -59,6 +59,11 @@ class LoginActivity : AppCompatActivity() {
         viewModel.validEmail.onPropertyChanged { value ->
             binding.loginEmailLayout.error = if (value) "" else getString(R.string.invalid_email)
         }
+
+        binding.signUpButton.setOnClickListener {
+            startActivity(RegistrationActivity.getStartIntent(this))
+            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
+        }
     }
 
     private fun displaySnackBar(message: String) {

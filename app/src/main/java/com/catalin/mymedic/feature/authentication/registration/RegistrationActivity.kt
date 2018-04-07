@@ -31,7 +31,13 @@ class RegistrationActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RegistrationViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.registration_activity)
         binding.viewModel = viewModel
+//        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_24dp)
         initListeners()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
     }
 
     override fun onStop() {
@@ -47,7 +53,8 @@ class RegistrationActivity : AppCompatActivity() {
             }
         }
         viewModel.passwordsMatch.onPropertyChanged { value ->
-            binding.passwordConfirmationLayout.error = if (value) "" else getString(R.string.registration_passwords_not_match)
+            binding.passwordConfirmationLayout.error =
+                    if (value) "" else getString(R.string.registration_passwords_not_match)
         }
         viewModel.validPassword.onPropertyChanged { value ->
             binding.passwordLayout.error = if (value) "" else getString(R.string.invalid_password)

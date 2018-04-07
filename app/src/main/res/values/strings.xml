@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Medic</string>
+    <string name="app_name">MyMedic</string>
     <string name="title_activity_authentication">AuthenticationActivity</string>
 
     <!-- Authentication -->
@@ -19,6 +19,7 @@
     <string name="last_name">Last name</string>
     <string name="birth_date">Birth date</string>
     <string name="gender">Gender</string>
+    <string name="login_i_am_medic">I am a medic</string>
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>

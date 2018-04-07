@@ -67,8 +67,7 @@
                 android:drawableStart="@drawable/ic_date_range_24dp"
                 android:hint="@string/birth_date"
                 android:lines="1"
-                app:drawableTint="@{@color/light_gray}"
-                app:longDate="@{viewModel.birthDate}" />
+                app:drawableTint="@{@color/light_gray}" />
 
         </android.support.design.widget.TextInputLayout>
 

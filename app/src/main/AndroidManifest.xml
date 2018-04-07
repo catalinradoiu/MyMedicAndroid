@@ -11,8 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".feature.authentication.registration.RegistrationActivity"
-            android:label="@string/register_now">
+            android:name=".feature.authentication.login.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.authentication.login.LoginActivity"
-            android:label="@string/title_activity_authentication"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".feature.authentication.registration.RegistrationActivity"
+            android:parentActivityName=".feature.authentication.login.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 
