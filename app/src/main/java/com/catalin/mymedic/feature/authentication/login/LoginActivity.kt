@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                     displaySnackBar(value.message)
                 }
                 is OperationResult.Success -> {
-                    RegistrationActivity.getStartIntent(this)
+                    startActivity(RegistrationActivity.getStartIntent(this))
                 }
             }
         }
@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.signUpButton.setOnClickListener {
             startActivity(RegistrationActivity.getStartIntent(this))
-            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         }
     }
 

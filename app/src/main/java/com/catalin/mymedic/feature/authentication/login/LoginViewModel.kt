@@ -27,6 +27,7 @@ class LoginViewModel(private val usersRepository: UsersRepository, private val a
     private val disposables = CompositeDisposable()
 
     fun loginUser() {
+        //TODO : Handle the case when the user wants to log in as a medic
         val isValidEmail = authenticationValidator.isValidEmailAdress(email.get())
         val isValidPassword = authenticationValidator.isValidPassword(password.get())
         validEmail.set(isValidEmail)

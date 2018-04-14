@@ -20,6 +20,7 @@
     <string name="birth_date">Birth date</string>
     <string name="gender">Gender</string>
     <string name="login_i_am_medic">I am a medic</string>
+    <string name="already_registered">I am already registered!</string>
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>

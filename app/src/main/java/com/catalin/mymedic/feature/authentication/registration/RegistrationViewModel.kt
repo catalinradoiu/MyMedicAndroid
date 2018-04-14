@@ -5,9 +5,11 @@ import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import com.catalin.mymedic.data.Gender
+import com.catalin.mymedic.data.Role
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
 import com.catalin.mymedic.storage.repository.UsersRepository
+import com.catalin.mymedic.utils.Constants
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
 import io.reactivex.disposables.CompositeDisposable
@@ -48,8 +50,9 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
             if (password.get() == passwordConfirmation.get()) {
                 passwordsMatch.set(true)
                 disposables.add(
-                    usersRepository.registerUser(User("", "", email.get(), 0, Gender.NOT_COMPLETED), password.get())
-                    .mainThreadSubscribe(Action {
+                    usersRepository.registerUser(
+                        User("", "", email.get(), 0, Gender.NOT_COMPLETED, Role.PATIENT, Constants.PATIENT), password.get()
+                    ).mainThreadSubscribe(Action {
                         registrationResult.set(OperationResult.Success())
                     }, Consumer {
                         registrationResult.set(OperationResult.Error(it.localizedMessage))
@@ -59,6 +62,12 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
         } else {
             passwordsMatch.set(false)
         }
+    }
+
+    fun clearFields() {
+        email.set("")
+        password.set("")
+        passwordConfirmation.set("")
     }
 
     override fun onCleared() {
@@ -77,5 +86,6 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = (RegistrationViewModel(
             usersRepository, authenticationValidator
         ) as T)
+
     }
 }
