@@ -1,5 +1,6 @@
-package com.catalin.mymedic.component
+package com.catalin.mymedic.architecture
 
+import com.catalin.mymedic.feature.LauncherActivity
 import com.catalin.mymedic.feature.authentication.login.LoginActivity
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
 import dagger.Component
@@ -11,9 +12,10 @@ import javax.inject.Singleton
  */
 
 @Singleton
-@Component(modules = [(FirebaseModule::class)])
+@Component(modules = [FirebaseModule::class, ApplicationModule::class])
 interface ApplicationComponent {
 
     fun inject(registrationActivity: RegistrationActivity)
     fun inject(registrationActivity: LoginActivity)
+    fun inject(launcherActivity: LauncherActivity)
 }
