@@ -26,7 +26,6 @@ class SharedPreferencesManager @Inject constructor(context: Context) {
     }
 
     companion object {
-        private const val USER_LOGGED_IN = "userLoggedIn"
-        private const val CURRENT_USER = "currentUser"
+        private const val CURRENT_USER = "getCurrentUser"
     }
 }

@@ -1,8 +1,8 @@
 package com.catalin.mymedic.architecture
 
-import com.catalin.mymedic.feature.LauncherActivity
 import com.catalin.mymedic.feature.authentication.login.LoginActivity
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
+import com.catalin.mymedic.feature.launcher.LauncherActivity
 import dagger.Component
 import javax.inject.Singleton
 
