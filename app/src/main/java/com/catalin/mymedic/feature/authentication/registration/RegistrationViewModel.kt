@@ -83,9 +83,6 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
         private val authenticationValidator: AuthenticationValidator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (RegistrationViewModel(
-            usersRepository, authenticationValidator
-        ) as T)
-
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (RegistrationViewModel(usersRepository, authenticationValidator) as T)
     }
 }

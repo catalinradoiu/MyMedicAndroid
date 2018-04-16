@@ -1,6 +1,7 @@
 package com.catalin.mymedic.feature.launcher
 
 import android.animation.ObjectAnimator
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -21,13 +22,16 @@ import javax.inject.Inject
 class LauncherActivity : AppCompatActivity() {
 
     @Inject
-    internal lateinit var viewModel: LauncherActivityViewModel
+    internal lateinit var viewModelFactory: LauncherActivityViewModel.LauncherActivityViewModelProvider
+
+    private lateinit var viewModel: LauncherActivityViewModel
 
     private lateinit var binding: LauncherActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (application as MyMedicApplication).applicationComponent.inject(this)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LauncherActivityViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.launcher_activity)
         binding.launcherWelcomeText.text = if (viewModel.currentUser == null) getString(R.string.welcome_anonymous_user) else
             getString(R.string.welcome_authenticated_user, viewModel.currentUser?.email)
