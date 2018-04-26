@@ -2,7 +2,7 @@ package com.catalin.mymedic.feature.launcher
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.databinding.ObservableBoolean
+import android.databinding.ObservableInt
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Observable
@@ -18,7 +18,7 @@ import javax.inject.Inject
  */
 class LauncherActivityViewModel(usersRepository: UsersRepository) : ViewModel() {
 
-    val isAuthenticated = ObservableBoolean()
+    val isAuthenticated = ObservableInt(-1)
     val currentUser: FirebaseUser? = usersRepository.getCurrentUser()
 
     private val disposables = CompositeDisposable()
@@ -26,7 +26,7 @@ class LauncherActivityViewModel(usersRepository: UsersRepository) : ViewModel() 
     init {
         disposables.add(
             Observable.timer(SPLASH_SCREEN_DURATION, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ isAuthenticated.set(currentUser != null) })
+                .subscribe({ isAuthenticated.set(if (currentUser == null) 0 else 1) })
         )
     }
 

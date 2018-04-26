@@ -1,5 +1,4 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
     <dimen name="primary_margin">16dp</dimen>
     <dimen name="secondary_margin">32dp</dimen>
     <dimen name="second_key_line">72dp</dimen>
@@ -11,4 +10,5 @@
     <dimen name="forgot_pass_text_size">@dimen/alert_text_size</dimen>
     <dimen name="registration_already_registered_text_size">@dimen/alert_text_size</dimen>
     <dimen name="authentication_logo_size">120dp</dimen>
+    <dimen name="standard_elevation">4dp</dimen>
 </resources>
