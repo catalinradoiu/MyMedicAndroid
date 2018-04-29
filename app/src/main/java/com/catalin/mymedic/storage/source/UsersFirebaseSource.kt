@@ -33,7 +33,7 @@ class UsersFirebaseSource @Inject constructor(
         RxFirebaseAuth.createUserWithEmailAndPassword(firebaseAuth, user.email, password).flatMapCompletable {
             it.user.sendEmailVerification()
             RxFirebaseDatabase.setValue(
-                firebaseDatabase.getReference(DatabaseConfig.DATABASE_NAME).child(DatabaseConfig.USERS_TABLE_NAME).push(),
+                firebaseDatabase.getReference(DatabaseConfig.USERS_TABLE_NAME).child(it.user.uid),
                 user
             )
         }
