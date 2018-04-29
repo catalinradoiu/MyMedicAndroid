@@ -73,17 +73,6 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/login_medic_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/secondary_margin"
-                android:text="@string/login_i_am_medic"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/forgot_pass_text_size"
-                android:textStyle="bold" />
-
             <TextView
                 android:id="@+id/forgot_password_text"
                 android:layout_width="wrap_content"
@@ -92,6 +81,7 @@
                 android:layout_marginEnd="@dimen/secondary_margin"
                 android:layout_marginTop="@dimen/primary_margin"
                 android:text="@string/login_forgot_password"
+                android:textColor="@drawable/blue_selectable_text_view"
                 android:textSize="@dimen/forgot_pass_text_size"
                 android:textStyle="bold" />
 
