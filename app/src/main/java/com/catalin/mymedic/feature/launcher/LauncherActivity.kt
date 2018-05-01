@@ -36,7 +36,7 @@ class LauncherActivity : AppCompatActivity() {
         binding.launcherWelcomeText.text = if (viewModel.currentUser == null) getString(R.string.welcome_anonymous_user) else
             getString(R.string.welcome_authenticated_user, viewModel.currentUser?.email)
         viewModel.isAuthenticated.onPropertyChanged { isAuthenticated ->
-            if (isAuthenticated == 1) {
+            if (isAuthenticated) {
                 startActivity(HomeActivity.getStartIntent(this))
             } else {
                 startActivity(LoginActivity.getStartIntent(this))

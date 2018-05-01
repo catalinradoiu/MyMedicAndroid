@@ -32,6 +32,19 @@
     <string name="settings">Settings</string>
     <string name="medical_record">Medical record</string>
 
+    <string-array name="medical_record_patient_options">
+        <item>Search</item>
+        <item>Appointments</item>
+        <item>History</item>
+    </string-array>
+
+    <string-array name="medical_record_medic_options">
+        <item>Awaiting</item>
+        <item>Appointments</item>
+        <item>Personal</item>
+        <item>History</item>
+    </string-array>
+
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>
