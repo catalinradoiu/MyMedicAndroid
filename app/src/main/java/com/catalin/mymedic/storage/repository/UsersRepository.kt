@@ -25,5 +25,7 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
 
     fun getUserByEmailAndPassword(email: String, password: String): Single<AuthResult> = usersFirebaseSource.getUserByEmailAndPassword(email, password)
 
+    fun sendPasswordResetEmail(email: String) = usersFirebaseSource.sendPasswordResetEmail(email)
+
     fun getCurrentUser() = usersFirebaseSource.getCurrentUser()
 }

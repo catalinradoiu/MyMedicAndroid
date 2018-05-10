@@ -41,5 +41,7 @@ class UsersFirebaseSource @Inject constructor(
     fun getUserByEmailAndPassword(email: String, password: String): Single<AuthResult> =
         RxFirebaseAuth.signInWithEmailAndPassword(firebaseAuth, email, password).toSingle()
 
+    fun sendPasswordResetEmail(email: String) = RxFirebaseAuth.sendPasswordResetEmail(firebaseAuth, email)
+
     fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
 }

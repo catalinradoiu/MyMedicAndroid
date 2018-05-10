@@ -26,6 +26,9 @@
     <string name="login_i_am_medic">I am a medic</string>
     <string name="already_registered">I am already registered!</string>
 
+    <string name="password_reset_string">Please enter your email address below. We\'ll send an mail to reset your password to the specified address :</string>
+    <string name="reset_password">Reset password</string>
+
     <!-- Main navigation -->
     <string name="profile">Profile</string>
     <string name="chat">Chat</string>
