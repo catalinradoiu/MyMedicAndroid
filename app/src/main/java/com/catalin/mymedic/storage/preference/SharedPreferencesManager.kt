@@ -20,10 +20,7 @@ class SharedPreferencesManager @Inject constructor(context: Context) {
         sharedPreferences.edit().putString(CURRENT_USER_ROLE, userRole.toString()).apply()
     }
 
-    fun getCurrentUserRole(): Role = if (sharedPreferences.getString(
-            CURRENT_USER_ROLE,
-            ROLE_PATIENT
-        ) == SharedPreferencesManager.Companion.ROLE_PATIENT)
+    fun getCurrentUserRole(): Role = if (sharedPreferences.getString(CURRENT_USER_ROLE, ROLE_PATIENT) == SharedPreferencesManager.Companion.ROLE_PATIENT)
         Role.PATIENT else Role.MEDIC
 
     companion object {

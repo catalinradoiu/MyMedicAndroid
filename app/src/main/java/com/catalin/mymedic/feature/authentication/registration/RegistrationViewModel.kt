@@ -51,7 +51,7 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
                 passwordsMatch.set(true)
                 disposables.add(
                     usersRepository.registerUser(
-                        User("", "", email.get(), 0, Gender.NOT_COMPLETED, Role.PATIENT, Constants.PATIENT), password.get()
+                        User("", email.get(), 0, Gender.NOT_COMPLETED, Role.PATIENT, Constants.PATIENT), password.get()
                     ).mainThreadSubscribe(Action {
                         registrationResult.set(OperationResult.Success())
                     }, Consumer {
