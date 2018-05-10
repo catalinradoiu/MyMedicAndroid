@@ -14,7 +14,7 @@
         android:id="@+id/registration_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent_green">
+        android:background="@color/transparent_blue">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/secondary_margin"
                 android:layout_marginStart="@dimen/secondary_margin"
-                android:layout_marginTop="@dimen/primary_margin"
+                android:layout_marginTop="@dimen/secondary_margin"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText

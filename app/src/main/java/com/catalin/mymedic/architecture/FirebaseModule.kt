@@ -1,4 +1,4 @@
-package com.catalin.mymedic.component
+package com.catalin.mymedic.architecture
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -7,6 +7,8 @@ import dagger.Provides
 import javax.inject.Singleton
 
 /**
+ * Module for providing the firebase classes
+ *
  * @author catalinradoiu
  * @since 2/6/2018
  */

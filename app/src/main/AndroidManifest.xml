@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".feature.authentication.login.LoginActivity"
+            android:name=".feature.launcher.LauncherActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,11 +21,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".feature.authentication.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".feature.authentication.registration.RegistrationActivity"
             android:label="@string/register_now"
             android:parentActivityName=".feature.authentication.login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".feature.home.HomeActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

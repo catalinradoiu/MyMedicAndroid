@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/main_navigation_medical_record"
+        android:icon="@drawable/ic_health_book_48"
+        app:showAsAction="always"
+        android:title="@string/medical_record" />
+    <item
+        android:id="@+id/main_navigation_chat"
+        android:icon="@drawable/ic_chat_24dp"
+        android:title="@string/chat" />
+    <item
+        android:id="@+id/main_navigation_profile"
+        android:icon="@drawable/ic_person_24dp"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/main_navigation_settings"
+        android:icon="@drawable/ic_settings_24dp"
+        android:title="@string/settings" />
+
+</menu>

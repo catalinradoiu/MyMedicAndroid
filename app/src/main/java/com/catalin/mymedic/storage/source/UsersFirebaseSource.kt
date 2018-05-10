@@ -4,6 +4,7 @@ import com.catalin.mymedic.data.User
 import com.catalin.mymedic.utils.DatabaseConfig
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import durdinapps.rxfirebase2.RxFirebaseDatabase
@@ -18,7 +19,7 @@ import javax.inject.Inject
  * @since 2/21/2018
  */
 
-class UsersRemoteSource @Inject constructor(
+class UsersFirebaseSource @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseDatabase: FirebaseDatabase
 ) {
@@ -32,11 +33,13 @@ class UsersRemoteSource @Inject constructor(
         RxFirebaseAuth.createUserWithEmailAndPassword(firebaseAuth, user.email, password).flatMapCompletable {
             it.user.sendEmailVerification()
             RxFirebaseDatabase.setValue(
-                firebaseDatabase.getReference(DatabaseConfig.DATABASE_NAME).child(DatabaseConfig.USERS_TABLE_NAME).push(),
+                firebaseDatabase.getReference(DatabaseConfig.USERS_TABLE_NAME).child(it.user.uid),
                 user
             )
         }
 
     fun getUserByEmailAndPassword(email: String, password: String): Single<AuthResult> =
         RxFirebaseAuth.signInWithEmailAndPassword(firebaseAuth, email, password).toSingle()
+
+    fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
 }
