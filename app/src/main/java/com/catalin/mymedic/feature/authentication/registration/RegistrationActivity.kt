@@ -59,7 +59,11 @@ class RegistrationActivity : AppCompatActivity() {
                     viewModel.clearFields()
                     displaySnackBar(getString(R.string.registration_success_with_confirmation_sent))
                 }
-                is OperationResult.Error -> displaySnackBar(value.message)
+                is OperationResult.Error -> {
+                    value.message?.let {
+                        displaySnackBar(it)
+                    }
+                }
             }
         }
         viewModel.passwordsMatch.onPropertyChanged { value ->

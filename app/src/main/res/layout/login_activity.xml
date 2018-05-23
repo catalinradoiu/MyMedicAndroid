@@ -80,10 +80,10 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/secondary_margin"
                 android:layout_marginTop="@dimen/primary_margin"
-                android:text="@string/login_forgot_password"
                 android:textColor="@drawable/blue_selectable_text_view"
                 android:textSize="@dimen/forgot_pass_text_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Forgot pass" />
 
             <Button
                 android:id="@+id/login_button"
