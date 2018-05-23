@@ -34,6 +34,12 @@
             android:name=".feature.home.HomeActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.authentication.passwordreset.PasswordResetActivity"
+            android:label="@string/reset_password"
+            android:parentActivityName=".feature.authentication.login.LoginActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

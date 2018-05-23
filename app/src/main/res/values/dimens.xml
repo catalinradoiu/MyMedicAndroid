@@ -11,4 +11,5 @@
     <dimen name="registration_already_registered_text_size">@dimen/alert_text_size</dimen>
     <dimen name="authentication_logo_size">120dp</dimen>
     <dimen name="standard_elevation">4dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
 </resources>

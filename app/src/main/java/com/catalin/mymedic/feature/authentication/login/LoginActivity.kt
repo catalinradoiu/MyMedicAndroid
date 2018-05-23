@@ -7,9 +7,12 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.LoginActivityBinding
+import com.catalin.mymedic.feature.authentication.passwordreset.PasswordResetActivity
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
 import com.catalin.mymedic.feature.home.HomeActivity
 import com.catalin.mymedic.utils.OperationResult
@@ -37,6 +40,10 @@ class LoginActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity)
         binding.viewModel = viewModel
+
+        val forgotPasswordText = SpannableString(getString(R.string.login_forgot_password))
+        forgotPasswordText.setSpan(UnderlineSpan(), 0, forgotPasswordText.length, 0)
+        binding.forgotPasswordText.text = forgotPasswordText
         initListeners()
     }
 
@@ -49,7 +56,9 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginResult.onPropertyChanged { value ->
             when (value) {
                 is OperationResult.Error -> {
-                    displaySnackBar(value.message)
+                    value.message?.let {
+                        displaySnackBar(it)
+                    }
                 }
                 is OperationResult.Success -> {
                     startActivity(HomeActivity.getStartIntent(this))
@@ -67,6 +76,10 @@ class LoginActivity : AppCompatActivity() {
         binding.signUpButton.setOnClickListener {
             startActivity(RegistrationActivity.getStartIntent(this))
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
+        binding.forgotPasswordText.setOnClickListener {
+            startActivity(PasswordResetActivity.getStartIntent(this))
         }
     }
 
