@@ -14,3 +14,9 @@ fun Snackbar?.newLongSnackbar(view: View, message: String): Snackbar {
         show()
     }
 }
+
+fun Snackbar?.dismissIfVisible() {
+    if (this?.isShown == true) {
+        this.dismiss()
+    }
+}

@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:textColor="@color/colorAccent"
-            android:textSize="@dimen/welcome_text_size"
+            android:textSize="@dimen/highlight_text_size"
             android:textStyle="bold"
             tools:text="Welcome, User !" />
 

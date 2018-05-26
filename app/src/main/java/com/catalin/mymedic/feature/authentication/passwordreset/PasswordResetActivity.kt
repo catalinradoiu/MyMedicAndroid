@@ -12,6 +12,7 @@ import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.PasswordResetActivityBinding
 import com.catalin.mymedic.utils.OperationResult
+import com.catalin.mymedic.utils.extension.dismissIfVisible
 import com.catalin.mymedic.utils.extension.newLongSnackbar
 import com.catalin.mymedic.utils.extension.onPropertyChanged
 import javax.inject.Inject
@@ -36,6 +37,11 @@ class PasswordResetActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.password_reset_activity)
         binding.viewModel = viewModel
         initListeners()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        operationSnackbar?.dismissIfVisible()
     }
 
     private fun initListeners() {

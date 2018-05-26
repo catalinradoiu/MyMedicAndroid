@@ -10,5 +10,6 @@ class DatabaseConfig {
         const val DATABASE_NAME = "server/database/MyMedic"
         const val USERS_TABLE_NAME = "users"
         const val SCHEDULES_TABLE_NAME = "schedules"
+        const val MEDICAL_SPECIALTIES_TABLE_NAME = "medical_specialties"
     }
 }

@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author catalinradoiu
  * @since 5/10/2018
  */
-class PasswordResetViewModel @Inject constructor(
+class PasswordResetViewModel(
     private val usersRepository: UsersRepository,
     private val authenticationValidator: AuthenticationValidator
 ) : ViewModel() {

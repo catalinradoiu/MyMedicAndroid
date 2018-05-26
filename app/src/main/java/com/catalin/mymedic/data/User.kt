@@ -9,7 +9,7 @@ data class User(
     var birthDate: Long,
     var gender: Gender,
     var userRole: Role,
-    var specialisation: String
+    var specialisationId: Int
 )
 
 enum class Gender {
