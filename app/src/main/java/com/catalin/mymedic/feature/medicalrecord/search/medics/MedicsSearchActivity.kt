@@ -1,12 +1,15 @@
 package com.catalin.mymedic.feature.medicalrecord.search.medics
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.MedicsSearchActivityBinding
+import javax.inject.Inject
 
 /**
  * @author catalinradoiu
@@ -14,14 +17,21 @@ import com.catalin.mymedic.databinding.MedicsSearchActivityBinding
  */
 class MedicsSearchActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var viewModelFactory: MedicsSearchViewModel.Factory
+
     private lateinit var binding: MedicsSearchActivityBinding
+    private lateinit var viewModel: MedicsSearchViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (application as MyMedicApplication).applicationComponent.inject(this)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MedicsSearchViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.medics_search_activity)
         supportActionBar?.let {
             title = intent.getStringExtra(SPECIALTY_NAME)
         }
+        viewModel.initMedicsList(intent.getIntExtra(SPECIALTY_ID, 0))
     }
 
     override fun onSupportNavigateUp(): Boolean {

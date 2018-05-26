@@ -44,4 +44,11 @@ class UsersFirebaseSource @Inject constructor(
     fun sendPasswordResetEmail(email: String) = RxFirebaseAuth.sendPasswordResetEmail(firebaseAuth, email)
 
     fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
+
+    fun getMedicsBySpecialty(specialtyId: Int): Single<List<User>> =
+        RxFirebaseDatabase.observeSingleValueEvent(firebaseDatabase.reference.child(DatabaseConfig.USERS_TABLE_NAME).orderByChild("specialisationId").equalTo(
+            specialtyId.toDouble()
+        ), { data ->
+            data.children.mapNotNull { value -> value.getValue(User::class.java) }.filter { medic -> medic.specialisationId == specialtyId }
+        }).toSingle()
 }

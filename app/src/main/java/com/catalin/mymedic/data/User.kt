@@ -8,14 +8,11 @@ data class User(
     var email: String,
     var birthDate: Long,
     var gender: Gender,
-    var userRole: Role,
     var specialisationId: Int
-)
+) {
+    constructor() : this("", "", 0, Gender.NOT_COMPLETED, 0)
+}
 
 enum class Gender {
     MALE, FEMALE, NOT_COMPLETED
-}
-
-enum class Role {
-    PATIENT, MEDIC
 }

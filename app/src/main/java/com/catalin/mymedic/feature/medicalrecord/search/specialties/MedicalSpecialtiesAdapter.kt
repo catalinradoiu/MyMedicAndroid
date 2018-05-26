@@ -18,10 +18,6 @@ class MedicalSpecialtiesAdapter(private val firebaseStorage: FirebaseStorage) :
     private val medicalSpecialties = ArrayList<MedicalSpecialty>()
     private var onItemClickListener: OnItemClickListener? = null
 
-    init {
-
-    }
-
     fun addMedicalSpecialties(medicalSpecialties: List<MedicalSpecialty>) {
         this.medicalSpecialties.addAll(medicalSpecialties)
         notifyDataSetChanged()

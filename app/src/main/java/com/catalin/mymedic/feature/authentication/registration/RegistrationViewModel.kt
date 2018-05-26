@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import com.catalin.mymedic.data.Gender
-import com.catalin.mymedic.data.Role
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
 import com.catalin.mymedic.storage.repository.UsersRepository
@@ -51,7 +50,7 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
                 passwordsMatch.set(true)
                 disposables.add(
                     usersRepository.registerUser(
-                        User("", email.get(), 0, Gender.NOT_COMPLETED, Role.PATIENT, Constants.PATIENT), password.get()
+                        User("", email.get(), 0, Gender.NOT_COMPLETED, Constants.PATIENT), password.get()
                     ).mainThreadSubscribe(Action {
                         registrationResult.set(OperationResult.Success())
                     }, Consumer {
