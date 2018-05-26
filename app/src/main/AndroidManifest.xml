@@ -40,6 +40,10 @@
             android:parentActivityName=".feature.authentication.login.LoginActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.medicalrecord.search.medics.MedicsSearchActivity"
+            android:parentActivityName=".feature.home.HomeActivity" />
+
     </application>
 
 </manifest>

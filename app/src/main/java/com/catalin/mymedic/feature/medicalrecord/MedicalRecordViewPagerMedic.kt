@@ -3,7 +3,7 @@ package com.catalin.mymedic.feature.medicalrecord
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import com.catalin.mymedic.feature.medicalrecord.searchmedics.MedicalSpecialtiesSearchFragment
+import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 
 /**
  * @author catalinradoiu

@@ -11,6 +11,8 @@ import javax.inject.Inject
  */
 class MedicalSpecialtiesRepository @Inject constructor(private val medicalSpecialtiesSource: MedicalSpecialtiesFirebaseSource) {
 
-    fun getAllMedicalSpecialties(): Single<List<MedicalSpecialty>> =
-        medicalSpecialtiesSource.getAllSpecialties()
+    private val medicalSpecialties = ArrayList<MedicalSpecialty>()
+
+    fun getAllMedicalSpecialties(): Single<List<MedicalSpecialty>> = if (medicalSpecialties.isEmpty())
+        medicalSpecialtiesSource.getAllSpecialties().doOnSuccess { elements -> medicalSpecialties.addAll(elements) } else Single.just(medicalSpecialties)
 }

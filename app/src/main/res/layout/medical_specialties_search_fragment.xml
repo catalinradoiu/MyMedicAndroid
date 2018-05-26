@@ -10,14 +10,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/primary_margin"
-            android:layout_marginStart="@dimen/highlight_text_size"
-            android:layout_marginTop="@dimen/primary_margin"
-            android:text="@string/search_select_medical_specialty"
-            android:textSize="@dimen/highlight_text_size" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:elevation="@dimen/standard_elevation"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/primary_margin"
+                android:layout_marginStart="@dimen/highlight_text_size"
+                android:layout_marginTop="@dimen/primary_margin"
+                android:text="@string/search_select_medical_specialty"
+                android:textSize="@dimen/highlight_text_size" />
+
+        </FrameLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/medical_specialties_recycler"

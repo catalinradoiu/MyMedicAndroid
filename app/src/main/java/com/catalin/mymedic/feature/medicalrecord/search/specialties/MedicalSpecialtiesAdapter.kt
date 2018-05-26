@@ -1,4 +1,4 @@
-package com.catalin.mymedic.feature.medicalrecord.searchmedics
+package com.catalin.mymedic.feature.medicalrecord.search.specialties
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -28,6 +28,10 @@ class MedicalSpecialtiesAdapter(private val firebaseStorage: FirebaseStorage) :
     }
 
     fun getMedicalSpecialty(position: Int) = medicalSpecialties[position]
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicalSpecialtyViewHolder =
         MedicalSpecialtyViewHolder(

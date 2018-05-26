@@ -1,4 +1,4 @@
-package com.catalin.mymedic.feature.medicalrecord.searchmedics
+package com.catalin.mymedic.feature.medicalrecord.search.specialties
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.MedicalSpecialtiesSearchFragmentBinding
+import com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchActivity
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.dismissIfVisible
 import com.catalin.mymedic.utils.extension.newLongSnackbar
@@ -48,6 +49,15 @@ class MedicalSpecialtiesSearchFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MedicalSpecialtiesSearchViewModel::class.java)
         viewModel.initMedicalSpecialties()
         medicalSpecialtiesAdapter = MedicalSpecialtiesAdapter(firebaseStorage)
+        medicalSpecialtiesAdapter.setOnItemClickListener(object : MedicalSpecialtiesAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                context?.let {
+                    val selectedSpecialty = medicalSpecialtiesAdapter.getMedicalSpecialty(position)
+                    startActivity(MedicsSearchActivity.getStartIntent(it, selectedSpecialty.id, selectedSpecialty.name))
+                }
+            }
+
+        })
         return binding.root
     }
 

@@ -44,6 +44,11 @@ class PasswordResetActivity : AppCompatActivity() {
         operationSnackbar?.dismissIfVisible()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     private fun initListeners() {
         viewModel.passwordResetResult.onPropertyChanged { value ->
             when (value) {

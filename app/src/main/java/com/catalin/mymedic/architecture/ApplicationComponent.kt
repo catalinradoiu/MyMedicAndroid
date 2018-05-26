@@ -5,7 +5,7 @@ import com.catalin.mymedic.feature.authentication.passwordreset.PasswordResetAct
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
 import com.catalin.mymedic.feature.launcher.LauncherActivity
 import com.catalin.mymedic.feature.medicalrecord.MedicalRecordFragment
-import com.catalin.mymedic.feature.medicalrecord.searchmedics.MedicalSpecialtiesSearchFragment
+import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 import dagger.Component
 import javax.inject.Singleton
 

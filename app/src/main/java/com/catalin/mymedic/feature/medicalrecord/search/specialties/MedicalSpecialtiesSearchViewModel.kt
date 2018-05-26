@@ -1,4 +1,4 @@
-package com.catalin.mymedic.feature.medicalrecord.searchmedics
+package com.catalin.mymedic.feature.medicalrecord.search.specialties
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
