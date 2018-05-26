@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.catalin.mymedic.data.MedicalSpecialty
 import com.catalin.mymedic.databinding.MedicalSpecialtyItemBinding
+import com.catalin.mymedic.utils.GlideApp
+import com.google.firebase.storage.FirebaseStorage
 
 /**
  * @author catalinradoiu
  * @since 5/25/2018
  */
-class MedicalSpecialtiesAdapter :
+class MedicalSpecialtiesAdapter(private val firebaseStorage: FirebaseStorage) :
     RecyclerView.Adapter<MedicalSpecialtiesAdapter.MedicalSpecialtyViewHolder>() {
 
     private val medicalSpecialties = ArrayList<MedicalSpecialty>()
@@ -39,7 +41,7 @@ class MedicalSpecialtiesAdapter :
     override fun getItemCount(): Int = medicalSpecialties.size
 
     override fun onBindViewHolder(holder: MedicalSpecialtyViewHolder, position: Int) {
-        holder.bind(medicalSpecialties[position])
+        holder.bind(medicalSpecialties[position], firebaseStorage)
     }
 
     interface OnItemClickListener {
@@ -52,8 +54,9 @@ class MedicalSpecialtiesAdapter :
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(medicalSpecialty: MedicalSpecialty) {
+        fun bind(medicalSpecialty: MedicalSpecialty, firebaseStorage: FirebaseStorage) {
             binding.specialtyName.text = medicalSpecialty.name
+            GlideApp.with(itemView.context).load(firebaseStorage.reference.child(medicalSpecialty.imageUrl)).into(binding.specialtyImage)
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {

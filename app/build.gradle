@@ -15,6 +15,7 @@ ext {
     rxAndroidVersion = '2.0.1'
     architectureLibraryVersion = '1.1.1'
     constraintLayoutVersion = '1.1.0'
+    glideVersion = '4.7.1'
 }
 
 android {
@@ -53,6 +54,8 @@ dependencies {
     implementation "com.google.firebase:firebase-database:$playServicesVersion"
     implementation 'com.github.frangsierra:rx2firebase:1.4.0'
     implementation "android.arch.lifecycle:extensions:$architectureLibraryVersion"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
     kapt "android.arch.lifecycle:compiler:$architectureLibraryVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"

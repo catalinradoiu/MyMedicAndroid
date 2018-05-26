@@ -17,6 +17,7 @@ import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.dismissIfVisible
 import com.catalin.mymedic.utils.extension.newLongSnackbar
 import com.catalin.mymedic.utils.extension.onPropertyChanged
+import com.google.firebase.storage.FirebaseStorage
 import javax.inject.Inject
 
 /**
@@ -28,10 +29,13 @@ class MedicalSpecialtiesSearchFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: MedicalSpecialtiesSearchViewModel.MedicalSpecialtiesViewModelFactory
 
+    @Inject
+    lateinit var firebaseStorage: FirebaseStorage
+
     private lateinit var binding: MedicalSpecialtiesSearchFragmentBinding
     private lateinit var viewModel: MedicalSpecialtiesSearchViewModel
 
-    private val medicalSpecialtiesAdapter = MedicalSpecialtiesAdapter()
+    private lateinit var medicalSpecialtiesAdapter: MedicalSpecialtiesAdapter
     private var operationSnackbar: Snackbar? = null
 
     override fun onAttach(context: Context?) {
@@ -39,20 +43,11 @@ class MedicalSpecialtiesSearchFragment : Fragment() {
         (context?.applicationContext as MyMedicApplication).applicationComponent.inject(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.medical_specialties_search_fragment,
-            container,
-            false
-        )
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(MedicalSpecialtiesSearchViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.medical_specialties_search_fragment, container, false)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MedicalSpecialtiesSearchViewModel::class.java)
         viewModel.initMedicalSpecialties()
+        medicalSpecialtiesAdapter = MedicalSpecialtiesAdapter(firebaseStorage)
         return binding.root
     }
 
