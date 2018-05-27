@@ -35,6 +35,7 @@ class MedicsSearchActivity : AppCompatActivity() {
         (application as MyMedicApplication).applicationComponent.inject(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MedicsSearchViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.medics_search_activity)
+        binding.viewModel = viewModel
         setSupportActionBar(binding.toolbar.apply {
             title = intent.getStringExtra(SPECIALTY_NAME)
         })

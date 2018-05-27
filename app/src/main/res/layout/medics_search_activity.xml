@@ -5,6 +5,11 @@
 
     <data>
 
+        <import type="com.catalin.mymedic.feature.shared.StateLayout.State" />
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchViewModel" />
     </data>
 
     <LinearLayout
@@ -36,6 +41,7 @@
                 android:backgroundTint="@color/white"
                 android:drawablePadding="@dimen/primary_margin"
                 android:drawableStart="@drawable/ic_search_24dp"
+                android:enabled="@{viewModel.state == State.NORMAL}"
                 android:hint="@string/medic_name"
                 android:inputType="text"
                 android:textColor="@color/white"
@@ -44,12 +50,23 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/medics_recycler"
+        <com.catalin.mymedic.feature.shared.StateLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="@dimen/small_margin" />
+            app:layout_empty="@layout/layout_empty"
+            app:layout_error="@layout/layout_error"
+            app:layout_loading="@layout/loading_layout"
+            app:state="@{viewModel.state}">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/medics_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/small_margin" />
+
+        </com.catalin.mymedic.feature.shared.StateLayout>
 
     </LinearLayout>
+
 </layout>

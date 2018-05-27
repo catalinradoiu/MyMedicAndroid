@@ -33,8 +33,8 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
 
     fun getMedicsBySpecialty(specialtyId: Int): Single<List<User>> {
         val cachedMedics = usersList.filter { it.specialisationId == specialtyId }
-        return if (cachedMedics.isEmpty()) usersFirebaseSource.getMedicsBySpecialty(specialtyId) else Single.just(cachedMedics).doOnSuccess { medics ->
-            usersList.addAll(medics)
-        }
+        return if (cachedMedics.isEmpty()) usersFirebaseSource.getMedicsBySpecialty(specialtyId).doOnSuccess { medics -> usersList.addAll(medics) } else Single.just(
+            cachedMedics
+        )
     }
 }
