@@ -14,6 +14,7 @@ import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import com.catalin.mymedic.R
+import com.catalin.mymedic.databinding.LayoutErrorBinding
 
 /**
  * A custom [FrameLayout] that acts as a wrapper on the child it contains, in order to display specific states like: empty, loading or error.
@@ -136,10 +137,10 @@ class StateLayout : FrameLayout {
         }
     }
 
-    fun setOnNetworkErrorTryAgainListener(onErrorClick: () -> Unit) {
+    fun setOnErrorTryAgainListener(onErrorClick: () -> Unit) {
         if (state == State.ERROR) {
             stateView?.let { stateView ->
-                //                NetworkErrorStateBinding.bind(stateView).errorTryAgainButton.setOnClickListener { onErrorClick() }
+                LayoutErrorBinding.bind(stateView).retryButton.setOnClickListener { onErrorClick() }
             }
         }
     }

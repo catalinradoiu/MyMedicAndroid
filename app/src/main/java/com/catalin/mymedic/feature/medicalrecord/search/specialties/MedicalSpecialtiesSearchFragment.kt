@@ -14,9 +14,7 @@ import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.MedicalSpecialtiesSearchFragmentBinding
 import com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchActivity
-import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.dismissIfVisible
-import com.catalin.mymedic.utils.extension.newLongSnackbar
 import com.catalin.mymedic.utils.extension.onPropertyChanged
 import com.google.firebase.storage.FirebaseStorage
 import javax.inject.Inject
@@ -48,6 +46,7 @@ class MedicalSpecialtiesSearchFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.medical_specialties_search_fragment, container, false)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MedicalSpecialtiesSearchViewModel::class.java)
         viewModel.initMedicalSpecialties()
+        binding.viewModel = viewModel
         medicalSpecialtiesAdapter = MedicalSpecialtiesAdapter(firebaseStorage)
         medicalSpecialtiesAdapter.setOnItemClickListener(object : MedicalSpecialtiesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -78,18 +77,8 @@ class MedicalSpecialtiesSearchFragment : Fragment() {
             medicalSpecialtiesAdapter.addMedicalSpecialties(value)
         }
 
-        viewModel.operationResult.onPropertyChanged { value ->
-            when (value) {
-                is OperationResult.Error -> {
-                    value.message?.let {
-                        displaySnackBar(it)
-                    }
-                }
-            }
+        binding.searchStateLayout.setOnErrorTryAgainListener {
+            viewModel.initMedicalSpecialties()
         }
-    }
-
-    private fun displaySnackBar(message: String) {
-        operationSnackbar?.newLongSnackbar(binding.root, message)
     }
 }
