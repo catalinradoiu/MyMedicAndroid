@@ -41,8 +41,8 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
      * Sets the corresponding result of the operation depending on its status ( success, failure )
      */
     fun registerUser() {
-        val isValidEmail = authenticationValidator.isValidEmailAdress(email.get())
-        val isValidPassword = authenticationValidator.isValidPassword(password.get())
+        val isValidEmail = authenticationValidator.isValidEmailAdress(email.get().orEmpty())
+        val isValidPassword = authenticationValidator.isValidPassword(password.get().orEmpty())
         validEmail.set(isValidEmail)
         validPassword.set(isValidPassword)
         passwordsMatch.set(true)
@@ -51,7 +51,7 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
                 passwordsMatch.set(true)
                 disposables.add(
                     usersRepository.registerUser(
-                        User("", email.get(), 0, Gender.NOT_COMPLETED, Role.PATIENT, Constants.PATIENT), password.get()
+                        User("", email.get().orEmpty(), 0, Gender.NOT_COMPLETED, Role.PATIENT, Constants.PATIENT), password.get().orEmpty()
                     ).mainThreadSubscribe(Action {
                         registrationResult.set(OperationResult.Success())
                     }, Consumer {

@@ -4,7 +4,9 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
+import android.util.Log
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
+import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
@@ -16,7 +18,11 @@ import javax.inject.Inject
  * @author catalinradoiu
  * @since 4/6/2018
  */
-class LoginViewModel(private val usersRepository: UsersRepository, private val authenticationValidator: AuthenticationValidator) : ViewModel() {
+class LoginViewModel(
+    private val usersRepository: UsersRepository,
+    private val authenticationValidator: AuthenticationValidator,
+    private val preferencesManager: SharedPreferencesManager
+) : ViewModel() {
 
     val email = ObservableField<String>("")
     val password = ObservableField<String>("")
@@ -28,23 +34,30 @@ class LoginViewModel(private val usersRepository: UsersRepository, private val a
 
     fun loginUser() {
         //TODO : Handle the case when the user wants to log in as a medic
-        val isValidEmail = authenticationValidator.isValidEmailAdress(email.get())
-        val isValidPassword = authenticationValidator.isValidPassword(password.get())
+        val isValidEmail = authenticationValidator.isValidEmailAdress(email.get().orEmpty())
+        val isValidPassword = authenticationValidator.isValidPassword(password.get().orEmpty())
         validEmail.set(isValidEmail)
         validPassword.set(isValidPassword)
         if (isValidEmail && isValidPassword) {
-            disposables.add(usersRepository.getUserByEmailAndPassword(email.get(), password.get()).mainThreadSubscribe(
-                Consumer { result ->
-                    if (result.user.isEmailVerified) {
-                        loginResult.set(OperationResult.Success())
-                    } else {
-                        loginResult.set(OperationResult.Error(EMAIL_NOT_VERIFIED))
+
+            disposables.add(
+                usersRepository.getUserByEmailAndPassword(email.get().orEmpty(), password.get().orEmpty())
+                    .flatMap { authResult ->
+                        usersRepository.getUserById(authResult.user.uid).map { Pair(authResult, it) }
                     }
-                },
-                Consumer { error ->
-                    loginResult.set(OperationResult.Error(error.localizedMessage))
-                }
-            ))
+                    .mainThreadSubscribe(
+                        Consumer { (authResult, user) ->
+                            if (authResult.user.isEmailVerified) {
+                                Log.d("loggedIn", user.email + " " + user.displayName)
+                                loginResult.set(OperationResult.Success())
+                            } else {
+                                loginResult.set(OperationResult.Error(EMAIL_NOT_VERIFIED))
+                            }
+                        },
+                        Consumer { error ->
+                            loginResult.set(OperationResult.Error(error.localizedMessage))
+                        }
+                    ))
         }
     }
 
@@ -55,10 +68,11 @@ class LoginViewModel(private val usersRepository: UsersRepository, private val a
 
     internal class LoginViewModelProvider @Inject constructor(
         private val usersRepository: UsersRepository,
-        private val authenticationValidator: AuthenticationValidator
+        private val authenticationValidator: AuthenticationValidator,
+        private val preferencesManager: SharedPreferencesManager
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator) as T)
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator, preferencesManager) as T)
     }
 
     companion object {

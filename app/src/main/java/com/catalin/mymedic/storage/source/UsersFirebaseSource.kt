@@ -44,4 +44,8 @@ class UsersFirebaseSource @Inject constructor(
     fun sendPasswordResetEmail(email: String) = RxFirebaseAuth.sendPasswordResetEmail(firebaseAuth, email)
 
     fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
+
+    fun getUserById(userId: String): Single<User> =
+        RxFirebaseDatabase.observeSingleValueEvent(firebaseDatabase.reference.child(DatabaseConfig.USERS_TABLE_NAME).child(userId), User::class.java).toSingle()
+
 }
