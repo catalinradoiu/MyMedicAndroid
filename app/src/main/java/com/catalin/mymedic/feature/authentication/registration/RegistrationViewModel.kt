@@ -40,8 +40,8 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
      * Sets the corresponding result of the operation depending on its status ( success, failure )
      */
     fun registerUser() {
-        val isValidEmail = authenticationValidator.isValidEmailAdress(email.get())
-        val isValidPassword = authenticationValidator.isValidPassword(password.get())
+        val isValidEmail = authenticationValidator.isValidEmailAdress(email.get().orEmpty())
+        val isValidPassword = authenticationValidator.isValidPassword(password.get().orEmpty())
         validEmail.set(isValidEmail)
         validPassword.set(isValidPassword)
         passwordsMatch.set(true)

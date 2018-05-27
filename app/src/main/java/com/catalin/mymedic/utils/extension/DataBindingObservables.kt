@@ -19,7 +19,7 @@ inline fun ObservableBoolean.onPropertyChanged(crossinline callback: (Boolean) -
 inline fun <T> ObservableField<T>.onPropertyChanged(crossinline callback: (T) -> Unit) {
     addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            callback(get())
+            get()?.let { callback(it) }
         }
     })
 }

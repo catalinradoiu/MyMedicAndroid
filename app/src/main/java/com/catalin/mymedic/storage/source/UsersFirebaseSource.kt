@@ -45,6 +45,9 @@ class UsersFirebaseSource @Inject constructor(
 
     fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
 
+    fun getUserById(userId: String): Single<User> =
+        RxFirebaseDatabase.observeSingleValueEvent(firebaseDatabase.reference.child(DatabaseConfig.USERS_TABLE_NAME).child(userId), User::class.java).toSingle()
+
     fun getMedicsBySpecialty(specialtyId: Int): Single<List<User>> =
         RxFirebaseDatabase.observeSingleValueEvent(firebaseDatabase.reference.child(DatabaseConfig.USERS_TABLE_NAME).orderByChild("specialisationId").equalTo(
             specialtyId.toDouble()

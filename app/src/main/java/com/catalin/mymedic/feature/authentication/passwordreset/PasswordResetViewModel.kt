@@ -29,10 +29,10 @@ class PasswordResetViewModel(
     private var disposables = CompositeDisposable()
 
     fun sendPasswordResetEmail() {
-        if (authenticationValidator.isValidEmailAdress(email.get())) {
+        if (authenticationValidator.isValidEmailAdress(email.get().orEmpty())) {
             validEmail.set(true)
             disposables.add(
-                usersRepository.sendPasswordResetEmail(email.get()).mainThreadSubscribe(Action {
+                usersRepository.sendPasswordResetEmail(email.get().orEmpty()).mainThreadSubscribe(Action {
                     passwordResetResult.set(OperationResult.Success())
                 }, Consumer {
                     passwordResetResult.set(OperationResult.Error(it.message))
