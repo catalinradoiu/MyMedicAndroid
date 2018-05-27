@@ -1,5 +1,7 @@
 package com.catalin.mymedic.storage.repository
 
+import com.catalin.mymedic.data.Gender
+import com.catalin.mymedic.data.Role
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.storage.source.UsersFirebaseSource
 import com.google.firebase.auth.AuthResult
@@ -24,6 +26,8 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
         usersFirebaseSource.registerUser(user, password)
 
     fun getUserByEmailAndPassword(email: String, password: String): Single<AuthResult> = usersFirebaseSource.getUserByEmailAndPassword(email, password)
+
+    fun getAuthenticatedUser(userId: String): Single<User> = Single.just(User("", "", 0, Gender.MALE, Role.PATIENT, ""))
 
     fun sendPasswordResetEmail(email: String) = usersFirebaseSource.sendPasswordResetEmail(email)
 
