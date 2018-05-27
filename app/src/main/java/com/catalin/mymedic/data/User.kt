@@ -8,9 +8,10 @@ data class User(
     var email: String,
     var birthDate: Long,
     var gender: Gender,
-    var specialisationId: Int
+    var specialisationId: Int,
+    var imageUrl: String
 ) {
-    constructor() : this("", "", 0, Gender.NOT_COMPLETED, 0)
+    constructor() : this("", "", 0, Gender.NOT_COMPLETED, 0, "")
 }
 
 enum class Gender {

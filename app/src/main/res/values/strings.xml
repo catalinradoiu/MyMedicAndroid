@@ -37,6 +37,7 @@
     <string name="settings">Settings</string>
     <string name="medical_record">Medical record</string>
     <string name="search_select_medical_specialty">Please select the medical specialty that you need</string>
+    <string name="medic_name">Medic name</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>

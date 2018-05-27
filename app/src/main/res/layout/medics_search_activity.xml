@@ -1,13 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </android.support.constraint.ConstraintLayout>
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/standard_elevation">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:theme="@style/ToolbarStyle"
+                app:titleTextColor="@color/white" />
+
+            <EditText
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_margin"
+                android:layout_marginEnd="@dimen/primary_margin"
+                android:layout_marginStart="@dimen/primary_margin"
+                android:layout_marginTop="@dimen/small_margin"
+                android:backgroundTint="@color/white"
+                android:drawablePadding="@dimen/primary_margin"
+                android:drawableStart="@drawable/ic_search_24dp"
+                android:hint="@string/medic_name"
+                android:inputType="text"
+                android:textColor="@color/white"
+                app:drawableTint="@{@color/white}"
+                tools:ignore="LabelFor" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/medics_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/small_margin" />
+
+    </LinearLayout>
 </layout>

@@ -30,13 +30,7 @@ class MedicalSpecialtiesAdapter(private val firebaseStorage: FirebaseStorage) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicalSpecialtyViewHolder =
-        MedicalSpecialtyViewHolder(
-            MedicalSpecialtyItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ), onItemClickListener
-        )
+        MedicalSpecialtyViewHolder(MedicalSpecialtyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), onItemClickListener)
 
     override fun getItemCount(): Int = medicalSpecialties.size
 
@@ -48,10 +42,7 @@ class MedicalSpecialtiesAdapter(private val firebaseStorage: FirebaseStorage) :
         fun onItemClick(position: Int)
     }
 
-    class MedicalSpecialtyViewHolder(
-        private val binding: MedicalSpecialtyItemBinding,
-        private val onItemClickListener: OnItemClickListener?
-    ) :
+    class MedicalSpecialtyViewHolder(private val binding: MedicalSpecialtyItemBinding, private val onItemClickListener: OnItemClickListener?) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(medicalSpecialty: MedicalSpecialty, firebaseStorage: FirebaseStorage) {
