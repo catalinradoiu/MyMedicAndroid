@@ -10,7 +10,9 @@ data class User(
     var gender: Gender,
     var userRole: Role,
     var specialisation: String
-)
+) {
+    constructor() : this("", "", 0, Gender.NOT_COMPLETED, Role.PATIENT, "")
+}
 
 enum class Gender {
     MALE, FEMALE, NOT_COMPLETED

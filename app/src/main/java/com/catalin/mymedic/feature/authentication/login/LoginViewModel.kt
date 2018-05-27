@@ -4,7 +4,9 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
+import android.util.Log
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
+import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
@@ -18,7 +20,8 @@ import javax.inject.Inject
  */
 class LoginViewModel(
     private val usersRepository: UsersRepository,
-    private val authenticationValidator: AuthenticationValidator
+    private val authenticationValidator: AuthenticationValidator,
+    private val preferencesManager: SharedPreferencesManager
 ) : ViewModel() {
 
     val email = ObservableField<String>("")
@@ -40,12 +43,12 @@ class LoginViewModel(
             disposables.add(
                 usersRepository.getUserByEmailAndPassword(email.get().orEmpty(), password.get().orEmpty())
                     .flatMap { authResult ->
-                        usersRepository.getAuthenticatedUser(authResult.user.uid).map { Pair(authResult, it) }
+                        usersRepository.getUserById(authResult.user.uid).map { Pair(authResult, it) }
                     }
                     .mainThreadSubscribe(
                         Consumer { (authResult, user) ->
                             if (authResult.user.isEmailVerified) {
-                                println("Logged in user: $user")
+                                Log.d("loggedIn", user.email + " " + user.displayName)
                                 loginResult.set(OperationResult.Success())
                             } else {
                                 loginResult.set(OperationResult.Error(EMAIL_NOT_VERIFIED))
@@ -65,10 +68,11 @@ class LoginViewModel(
 
     internal class LoginViewModelProvider @Inject constructor(
         private val usersRepository: UsersRepository,
-        private val authenticationValidator: AuthenticationValidator
+        private val authenticationValidator: AuthenticationValidator,
+        private val preferencesManager: SharedPreferencesManager
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator) as T)
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator, preferencesManager) as T)
     }
 
     companion object {
