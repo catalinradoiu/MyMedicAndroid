@@ -1,7 +1,7 @@
 package com.catalin.mymedic.storage.source
 
 import com.catalin.mymedic.data.MedicalSpecialty
-import com.catalin.mymedic.utils.DatabaseConfig
+import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.google.firebase.database.FirebaseDatabase
 import durdinapps.rxfirebase2.RxFirebaseDatabase
 import io.reactivex.Single
@@ -15,7 +15,7 @@ class MedicalSpecialtiesFirebaseSource @Inject constructor(private val firebaseD
 
     fun getAllSpecialties(): Single<List<MedicalSpecialty>> =
         RxFirebaseDatabase.observeSingleValueEvent(
-            firebaseDatabase.reference.child(DatabaseConfig.MEDICAL_SPECIALTIES_TABLE_NAME),
+            firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_SPECIALTIES_TABLE_NAME),
             { data ->
                 data.children.mapNotNull { value ->
                     value.getValue(MedicalSpecialty::class.java)

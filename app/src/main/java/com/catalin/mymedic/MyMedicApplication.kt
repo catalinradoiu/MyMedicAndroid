@@ -21,6 +21,5 @@ class MyMedicApplication : Application() {
         super.onCreate()
         val database = FirebaseDatabase.getInstance()
         database.setPersistenceEnabled(true)
-        database.getReference("users").keepSynced(true)
     }
 }

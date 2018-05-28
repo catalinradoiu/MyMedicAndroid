@@ -1,7 +1,7 @@
 package com.catalin.mymedic.storage.source
 
 import com.catalin.mymedic.data.User
-import com.catalin.mymedic.utils.DatabaseConfig
+import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -33,7 +33,7 @@ class UsersFirebaseSource @Inject constructor(
         RxFirebaseAuth.createUserWithEmailAndPassword(firebaseAuth, user.email, password).flatMapCompletable {
             it.user.sendEmailVerification()
             RxFirebaseDatabase.setValue(
-                firebaseDatabase.getReference(DatabaseConfig.USERS_TABLE_NAME).child(it.user.uid),
+                firebaseDatabase.getReference(FirebaseDatabaseConfig.USERS_TABLE_NAME).child(it.user.uid),
                 user
             )
         }
@@ -46,10 +46,16 @@ class UsersFirebaseSource @Inject constructor(
     fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
 
     fun getUserById(userId: String): Single<User> =
-        RxFirebaseDatabase.observeSingleValueEvent(firebaseDatabase.reference.child(DatabaseConfig.USERS_TABLE_NAME).child(userId), User::class.java).toSingle()
+        RxFirebaseDatabase.observeSingleValueEvent(
+            firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).child(userId),
+            User::class.java
+        ).toSingle()
 
     fun getMedicsBySpecialty(specialtyId: Int): Single<List<User>> =
-        RxFirebaseDatabase.observeSingleValueEvent(firebaseDatabase.reference.child(DatabaseConfig.USERS_TABLE_NAME).orderByChild("specialisationId").equalTo(
+        RxFirebaseDatabase.observeSingleValueEvent(
+            firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).orderByChild(
+                FirebaseDatabaseConfig.USERS_TABLE_SPECIALISATION_ID_COLUMN
+            ).equalTo(
             specialtyId.toDouble()
         ), { data ->
             data.children.mapNotNull { value -> value.getValue(User::class.java) }.filter { medic -> medic.specialisationId == specialtyId }
