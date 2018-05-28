@@ -5,11 +5,11 @@ import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import com.catalin.mymedic.data.Gender
-import com.catalin.mymedic.data.Role
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.Constants
+import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
 import io.reactivex.disposables.CompositeDisposable
@@ -51,7 +51,8 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
                 passwordsMatch.set(true)
                 disposables.add(
                     usersRepository.registerUser(
-                        User("", email.get().orEmpty(), 0, Gender.NOT_COMPLETED, Role.PATIENT, Constants.PATIENT), password.get().orEmpty()
+                        User("", email.get().orEmpty(), 0, Gender.NOT_COMPLETED, Constants.PATIENT, FirebaseDatabaseConfig.DEFAULT_USER_IMAGE_LOCATION),
+                        password.get().orEmpty()
                     ).mainThreadSubscribe(Action {
                         registrationResult.set(OperationResult.Success())
                     }, Consumer {

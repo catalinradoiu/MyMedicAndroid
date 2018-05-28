@@ -11,8 +11,8 @@
 
         <ImageView
             android:id="@+id/launcher_application_logo"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="@dimen/launcher_logo_size"
+            android:layout_height="@dimen/launcher_logo_size"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_application_logo"
             tools:ignore="ContentDescription" />
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:textColor="@color/colorAccent"
-            android:textSize="@dimen/welcome_text_size"
+            android:textSize="@dimen/highlight_text_size"
             android:textStyle="bold"
             tools:text="Welcome, User !" />
 

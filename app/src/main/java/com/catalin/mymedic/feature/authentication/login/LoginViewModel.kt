@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.util.Log
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
 import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.UsersRepository
@@ -48,7 +47,7 @@ class LoginViewModel(
                     .mainThreadSubscribe(
                         Consumer { (authResult, user) ->
                             if (authResult.user.isEmailVerified) {
-                                Log.d("loggedIn", user.email + " " + user.displayName)
+                                preferencesManager.setCurrentUserSpecialty(user.specialisationId)
                                 loginResult.set(OperationResult.Success())
                             } else {
                                 loginResult.set(OperationResult.Error(EMAIL_NOT_VERIFIED))

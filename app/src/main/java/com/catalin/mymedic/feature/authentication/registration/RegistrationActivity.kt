@@ -14,6 +14,7 @@ import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.RegistrationActivityBinding
 import com.catalin.mymedic.utils.OperationResult
+import com.catalin.mymedic.utils.extension.dismissIfVisible
 import com.catalin.mymedic.utils.extension.newLongSnackbar
 import com.catalin.mymedic.utils.extension.onPropertyChanged
 import javax.inject.Inject
@@ -49,7 +50,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        operationSnackbar?.dismiss()
+        operationSnackbar?.dismissIfVisible()
     }
 
     private fun initListeners() {

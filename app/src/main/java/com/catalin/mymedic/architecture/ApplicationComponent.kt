@@ -5,6 +5,8 @@ import com.catalin.mymedic.feature.authentication.passwordreset.PasswordResetAct
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
 import com.catalin.mymedic.feature.launcher.LauncherActivity
 import com.catalin.mymedic.feature.medicalrecord.MedicalRecordFragment
+import com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchActivity
+import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -22,4 +24,6 @@ interface ApplicationComponent {
     fun inject(launcherActivity: LauncherActivity)
     fun inject(medicalRecordFragment: MedicalRecordFragment)
     fun inject(passwordResetActivity: PasswordResetActivity)
+    fun inject(medicalSpecialtiesSearchFragment: MedicalSpecialtiesSearchFragment)
+    fun inject(medicsSearchActivity: MedicsSearchActivity)
 }

@@ -7,6 +7,6 @@ package com.catalin.mymedic.utils
 class Constants {
 
     companion object {
-        const val PATIENT = "Patient"
+        const val PATIENT = 0
     }
 }

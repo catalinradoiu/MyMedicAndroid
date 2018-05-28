@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/medical_specialty_item_height"
+        android:background="?attr/selectableItemBackground"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/specialty_image"
+            android:layout_width="@dimen/medical_specialty_image_size"
+            android:layout_height="@dimen/medical_specialty_image_size"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/primary_margin"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_chat_24dp" />
+
+        <TextView
+            android:id="@+id/specialty_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/primary_margin"
+            android:layout_marginStart="@dimen/primary_margin"
+            android:textSize="@dimen/alert_text_size"
+            tools:text="Cardiology" />
+
+    </LinearLayout>
+</layout>

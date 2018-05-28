@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StateLayout">
+        <attr name="layout_empty" format="reference" />
+        <attr name="layout_loading" format="reference" />
+        <attr name="layout_error" format="reference" />
+        <attr name="disable_initial_animation" format="boolean" />
+        <attr name="state" format="integer" />
+    </declare-styleable>
+</resources>

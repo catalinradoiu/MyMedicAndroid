@@ -16,6 +16,7 @@ import com.catalin.mymedic.feature.authentication.passwordreset.PasswordResetAct
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
 import com.catalin.mymedic.feature.home.HomeActivity
 import com.catalin.mymedic.utils.OperationResult
+import com.catalin.mymedic.utils.extension.dismissIfVisible
 import com.catalin.mymedic.utils.extension.newLongSnackbar
 import com.catalin.mymedic.utils.extension.onPropertyChanged
 import javax.inject.Inject
@@ -49,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        operationSnackbar?.dismiss()
+        operationSnackbar?.dismissIfVisible()
     }
 
     private fun initListeners() {

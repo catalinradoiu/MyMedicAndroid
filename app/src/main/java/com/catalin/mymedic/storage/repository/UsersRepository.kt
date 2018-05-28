@@ -16,6 +16,8 @@ import javax.inject.Inject
 
 class UsersRepository @Inject constructor(private val usersFirebaseSource: UsersFirebaseSource) {
 
+    private var usersList = ArrayList<User>()
+
     /**
      * Calls the remote source to register the user
      * @return a Completable with the status of the operation
@@ -30,4 +32,14 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
     fun sendPasswordResetEmail(email: String) = usersFirebaseSource.sendPasswordResetEmail(email)
 
     fun getCurrentUser() = usersFirebaseSource.getCurrentUser()
+
+    fun getMedicsBySpecialty(specialtyId: Int): Single<List<User>> {
+        val cachedMedics = usersList.filter { it.specialisationId == specialtyId }
+        return if (cachedMedics.isEmpty()) usersFirebaseSource.getMedicsBySpecialty(specialtyId).doOnSuccess { medics -> usersList.addAll(medics) } else Single.just(
+            cachedMedics
+        )
+    }
+
+    fun getFilteredMedicsList(specialtyId: Int, name: String): Single<List<User>> =
+        Single.just(usersList.filter { it.specialisationId == specialtyId && it.displayName.contains(name) })
 }
