@@ -14,7 +14,7 @@ import com.google.firebase.storage.FirebaseStorage
  */
 class MedicsAdapter(private val firebaseStorage: FirebaseStorage) : RecyclerView.Adapter<MedicsAdapter.MedicViewHolder>() {
 
-    private val medicsList = ArrayList<User>()
+    private var medicsList = ArrayList<User>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicViewHolder =
         MedicViewHolder(MedicSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -26,15 +26,15 @@ class MedicsAdapter(private val firebaseStorage: FirebaseStorage) : RecyclerView
     }
 
     fun setMedics(medicsList: List<User>) {
-        this.medicsList.addAll(medicsList)
+        this.medicsList = ArrayList(medicsList)
         notifyDataSetChanged()
     }
 
     class MedicViewHolder(private val binding: MedicSearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(medic: User, firebaseStorage: FirebaseStorage) {
-            binding.medicName.text = medic.displayName
             GlideApp.with(itemView).load(firebaseStorage.reference.child(medic.imageUrl)).into(binding.medicPhoto)
+            binding.medicName.text = medic.displayName
         }
     }
 }

@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <import type="com.catalin.mymedic.feature.shared.StateLayout.State" />
 
         <variable
@@ -41,12 +43,20 @@
                 android:backgroundTint="@color/white"
                 android:drawablePadding="@dimen/primary_margin"
                 android:drawableStart="@drawable/ic_search_24dp"
-                android:enabled="@{viewModel.state == State.NORMAL}"
                 android:hint="@string/medic_name"
                 android:inputType="text"
+                android:text="@={viewModel.filteringName}"
                 android:textColor="@color/white"
                 app:drawableTint="@{@color/white}"
                 tools:ignore="LabelFor" />
+
+            <ProgressBar
+                android:id="@+id/filtering_progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="@{viewModel.isFilterInProgress ? View.VISIBLE : View.INVISIBLE}" />
 
         </android.support.design.widget.AppBarLayout>
 

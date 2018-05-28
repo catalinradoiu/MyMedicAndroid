@@ -4,11 +4,11 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import com.catalin.mymedic.storage.repository.UsersRepository
+import com.catalin.mymedic.utils.extension.onNextSubscribe
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.functions.Consumer
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -25,13 +25,12 @@ class LauncherActivityViewModel(usersRepository: UsersRepository) : ViewModel() 
 
     init {
         disposables.add(
-            Observable.timer(SPLASH_SCREEN_DURATION, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    isAuthenticated.set(currentUser != null)
-                    if (!isAuthenticated.get()) {
-                        isAuthenticated.notifyChange()
-                    }
-                })
+            Observable.timer(SPLASH_SCREEN_DURATION, TimeUnit.MILLISECONDS).onNextSubscribe(Consumer {
+                isAuthenticated.set(currentUser != null)
+                if (!isAuthenticated.get()) {
+                    isAuthenticated.notifyChange()
+                }
+            })
         )
     }
 

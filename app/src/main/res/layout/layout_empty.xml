@@ -11,8 +11,8 @@
 
         <ImageView
             android:id="@+id/empty_image"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="@dimen/state_layout_image_size"
+            android:layout_height="@dimen/state_layout_image_size"
             android:src="@drawable/ic_empty_24dp"
             android:tint="@color/light_gray"
             app:layout_constraintBottom_toBottomOf="parent"

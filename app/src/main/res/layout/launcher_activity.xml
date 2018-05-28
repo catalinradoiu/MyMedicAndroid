@@ -11,8 +11,8 @@
 
         <ImageView
             android:id="@+id/launcher_application_logo"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="@dimen/launcher_logo_size"
+            android:layout_height="@dimen/launcher_logo_size"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_application_logo"
             tools:ignore="ContentDescription" />

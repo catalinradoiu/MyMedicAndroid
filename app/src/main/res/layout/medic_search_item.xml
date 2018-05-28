@@ -8,6 +8,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/primary_margin"
         android:layout_marginEnd="@dimen/primary_margin"
         android:layout_marginStart="@dimen/primary_margin"
         android:elevation="@dimen/standard_elevation">
@@ -19,7 +20,7 @@
             <ImageView
                 android:id="@+id/medic_photo"
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
+                android:layout_height="@dimen/medic_search_image_height"
                 android:scaleType="fitXY"
                 tools:ignore="ContentDescription"
                 tools:src="@color/colorPrimary" />
@@ -32,13 +33,13 @@
                 android:layout_marginEnd="@dimen/primary_margin"
                 android:layout_marginStart="@dimen/primary_margin"
                 android:textColor="@color/white"
-                android:textSize="32sp"
+                android:textSize="@dimen/medic_search_name_size"
                 app:layout_constraintBottom_toBottomOf="@id/medic_photo"
                 tools:text="Popescu Ion" />
 
             <ImageButton
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/image_button_size"
+                android:layout_height="@dimen/image_button_size"
                 android:layout_marginBottom="@dimen/small_margin"
                 android:layout_marginEnd="@dimen/primary_margin"
                 android:layout_marginTop="@dimen/small_margin"

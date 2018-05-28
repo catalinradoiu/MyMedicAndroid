@@ -39,4 +39,7 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
             cachedMedics
         )
     }
+
+    fun getFilteredMedicsList(specialtyId: Int, name: String): Single<List<User>> =
+        Single.just(usersList.filter { it.specialisationId == specialtyId && it.displayName.contains(name) })
 }

@@ -49,18 +49,13 @@ class MedicalRecordFragment : Fragment() {
 
     private fun initPager() {
         binding.medicalRecordPager.adapter =
-                if (prefsManager.getCurrentUserRole() == Constants.PATIENT) MedicalRecordViewPagerPatient(
-                    childFragmentManager
-                ).apply {
-                    pageTitles = resources.getStringArray(R.array.medical_record_patient_options)
-                        .toList()
+                if (prefsManager.getCurrentUserRole() == Constants.PATIENT) MedicalRecordViewPagerPatient(childFragmentManager).apply {
+                    pageTitles = resources.getStringArray(R.array.medical_record_patient_options).toList()
                 } else
                     MedicalRecordViewPagerMedic(childFragmentManager).apply {
-                        pageTitles = resources.getStringArray(R.array.medical_record_medic_options)
-                            .toList()
+                        pageTitles = resources.getStringArray(R.array.medical_record_medic_options).toList()
                     }
         binding.medicalRecordTabs.setupWithViewPager(binding.medicalRecordPager)
-        binding.medicalRecordTabs.tabMode =
-                if (prefsManager.getCurrentUserRole() != Constants.PATIENT) TabLayout.MODE_SCROLLABLE else TabLayout.MODE_FIXED
+        binding.medicalRecordTabs.tabMode = if (prefsManager.getCurrentUserRole() != Constants.PATIENT) TabLayout.MODE_SCROLLABLE else TabLayout.MODE_FIXED
     }
 }
