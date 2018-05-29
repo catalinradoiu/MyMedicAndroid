@@ -47,6 +47,11 @@
     <string name="medic_name">Medic name</string>
     <string name="could_not_retrieve_medics">Could not retrieve medics</string>
 
+    <!-- New appointment -->
+    <string name="enter_appointment_details">Please enter the details for your appointment :</string>
+    <string name="medical_specialty">Medical specialty</string>
+    <string name="medical_appointment_details_needed">Please provide some details about the reason you need this medical appointment (symptoms etc.). This will help the medic with the medical examination.</string>
+
     <string-array name="medical_record_patient_options">
         <item>Search</item>
         <item>Appointments</item>

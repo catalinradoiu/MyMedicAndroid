@@ -10,6 +10,7 @@ import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.LauncherActivityBinding
 import com.catalin.mymedic.feature.authentication.login.LoginActivity
 import com.catalin.mymedic.feature.home.HomeActivity
+import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.utils.extension.onPropertyChanged
 import javax.inject.Inject
 
@@ -24,6 +25,9 @@ class LauncherActivity : AppCompatActivity() {
     @Inject
     internal lateinit var viewModelFactory: LauncherActivityViewModel.LauncherActivityViewModelProvider
 
+    @Inject
+    lateinit var preferencesManager: SharedPreferencesManager
+
     private lateinit var viewModel: LauncherActivityViewModel
 
     private lateinit var binding: LauncherActivityBinding
@@ -33,8 +37,10 @@ class LauncherActivity : AppCompatActivity() {
         (application as MyMedicApplication).applicationComponent.inject(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LauncherActivityViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.launcher_activity)
-        binding.launcherWelcomeText.text = if (viewModel.currentUser == null) getString(R.string.welcome_anonymous_user) else
-            getString(R.string.welcome_authenticated_user, viewModel.currentUser?.email)
+        val currentUserWelcomeText =
+            if (viewModel.currentUser != null && preferencesManager.currentUserName.isNotEmpty()) preferencesManager.currentUserName.split(" ")[0] else ""
+        binding.launcherWelcomeText.text = if (currentUserWelcomeText.isEmpty()) getString(R.string.welcome_anonymous_user) else
+            getString(R.string.welcome_authenticated_user, currentUserWelcomeText)
         viewModel.isAuthenticated.onPropertyChanged { isAuthenticated ->
             if (isAuthenticated) {
                 startActivity(HomeActivity.getStartIntent(this))

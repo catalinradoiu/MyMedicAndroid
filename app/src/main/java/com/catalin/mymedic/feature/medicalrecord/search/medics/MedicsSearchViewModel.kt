@@ -20,6 +20,8 @@ import javax.inject.Inject
  */
 class MedicsSearchViewModel(private val usersRepository: UsersRepository) : ViewModel() {
 
+    // TODO : Replace the observable field for this users list with live data
+    // TODO : Replace the error observable boolean with SingleLiveData -> this applies to multiple places
     val medicsList = ObservableField<List<User>>()
     val state = ObservableField<StateLayout.State>()
     val isFilterInProgress = ObservableBoolean(false)
@@ -50,7 +52,7 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
     fun getFilteredMedics(specialtyId: Int) {
         disposables.clear()
         isFilterInProgress.set(true)
-        Observable.timer(500L, TimeUnit.MILLISECONDS)
+        Observable.timer(SEARCH_REQUEST_DELAY_TIME, TimeUnit.MILLISECONDS)
             .flatMap({ usersRepository.getFilteredMedicsList(specialtyId, filteringName.get().orEmpty()).toObservable() }).mainThreadSubscribe(
             Consumer
             { result ->
@@ -84,5 +86,9 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T =
             MedicsSearchViewModel(usersRepository) as T
+    }
+
+    companion object {
+        private const val SEARCH_REQUEST_DELAY_TIME = 1000L
     }
 }

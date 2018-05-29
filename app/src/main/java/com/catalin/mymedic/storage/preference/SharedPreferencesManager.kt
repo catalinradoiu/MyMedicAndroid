@@ -3,8 +3,9 @@ package com.catalin.mymedic.storage.preference
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.catalin.mymedic.utils.Constants
 import javax.inject.Inject
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 /**
  * Class for managing the shared preferences
@@ -15,14 +16,34 @@ import javax.inject.Inject
 class SharedPreferencesManager @Inject constructor(context: Context) {
 
     private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    var currentUserSpecialty by PreferenceFieldDelegate.Int(CURRENT_USER_SPECIALTY)
+    var currentUserName by PreferenceFieldDelegate.String(CURRENT_USER_NAME)
 
-    fun setCurrentUserSpecialty(userSpecialty: Int) {
-        sharedPreferences.edit().putInt(CURRENT_USER_ROLE, userSpecialty).apply()
+    private sealed class PreferenceFieldDelegate<T>(protected val key: kotlin.String) : ReadWriteProperty<SharedPreferencesManager, T> {
+
+        class Int(key: kotlin.String) : PreferenceFieldDelegate<kotlin.Int>(key) {
+            override fun getValue(thisRef: SharedPreferencesManager, property: KProperty<*>): kotlin.Int =
+                thisRef.sharedPreferences.getInt(key, PREFERENCE_DEFAULT_INT_VALUE)
+
+            override fun setValue(thisRef: SharedPreferencesManager, property: KProperty<*>, value: kotlin.Int) =
+                thisRef.sharedPreferences.edit().putInt(key, value).apply()
+
+        }
+
+        class String(key: kotlin.String) : PreferenceFieldDelegate<kotlin.String>(key) {
+            override fun getValue(thisRef: SharedPreferencesManager, property: KProperty<*>): kotlin.String =
+                thisRef.sharedPreferences.getString(key, PREFERENCE_DEFAULT_STRING_VALUE)
+
+            override fun setValue(thisRef: SharedPreferencesManager, property: KProperty<*>, value: kotlin.String) =
+                thisRef.sharedPreferences.edit().putString(key, value).apply()
+
+        }
     }
 
-    fun getCurrentUserRole(): Int = sharedPreferences.getInt(CURRENT_USER_ROLE, Constants.PATIENT)
-
     companion object {
-        private const val CURRENT_USER_ROLE = "currentUserRole"
+        private const val CURRENT_USER_SPECIALTY = "currentUserSpecialty"
+        private const val CURRENT_USER_NAME = "currentUserName"
+        private const val PREFERENCE_DEFAULT_INT_VALUE = 0
+        private const val PREFERENCE_DEFAULT_STRING_VALUE = ""
     }
 }

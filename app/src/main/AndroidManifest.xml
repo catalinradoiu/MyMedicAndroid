@@ -42,8 +42,12 @@
 
         <activity
             android:name=".feature.medicalrecord.search.medics.MedicsSearchActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".feature.home.HomeActivity" />
+            android:parentActivityName=".feature.home.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".feature.createappointment.AppointmentCreateActivity"
+            android:parentActivityName=".feature.medicalrecord.search.medics.MedicsSearchActivity" />
 
     </application>
 

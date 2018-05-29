@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.MedicsSearchActivityBinding
+import com.catalin.mymedic.feature.createappointment.AppointmentCreateActivity
 import com.catalin.mymedic.feature.shared.OnTextChangedListener
 import com.catalin.mymedic.utils.extension.dismissIfVisible
 import com.catalin.mymedic.utils.extension.newLongSnackbar
@@ -84,6 +85,25 @@ class MedicsSearchActivity : AppCompatActivity() {
         binding.searchInput.addTextChangedListener(object : OnTextChangedListener() {
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.getFilteredMedics(intent.getIntExtra(SPECIALTY_ID, NO_SPECIALTY_ID))
+            }
+
+        })
+
+        medicsAdapter.setOnItemClickListener(object : MedicsAdapter.OnItemClickListener {
+            override fun onNewAppointmentClick(position: Int) {
+                val medic = medicsAdapter.getMedic(position)
+                startActivity(
+                    AppointmentCreateActivity.getStartIntent(
+                        this@MedicsSearchActivity,
+                        medic.displayName,
+                        intent.getStringExtra(SPECIALTY_NAME),
+                        medic.specialisationId
+                    )
+                )
+            }
+
+            override fun onNewMessageClick(position: Int) {
+
             }
 
         })

@@ -11,6 +11,10 @@ data class User(
     var specialisationId: Int,
     var imageUrl: String
 ) {
+    /*
+        Empty constructor needed for parsing the firebase json to an actual User object
+        DataSnapshot.getValue(User::class.java)
+     */
     constructor() : this("", "", 0, Gender.NOT_COMPLETED, 0, "")
 }
 
