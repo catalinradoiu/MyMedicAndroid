@@ -5,7 +5,7 @@ package com.catalin.mymedic.data
  * @since 5/29/2018
  */
 data class MedicalAppointment(
-    val id: String,
+    var id: String,
     val dateTime: Long,
     val patientId: String,
     val medicId: String,

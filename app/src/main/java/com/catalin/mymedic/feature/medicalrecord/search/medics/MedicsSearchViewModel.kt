@@ -1,5 +1,6 @@
 package com.catalin.mymedic.feature.medicalrecord.search.medics
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
@@ -22,7 +23,7 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
 
     // TODO : Replace the observable field for this users list with live data
     // TODO : Replace the error observable boolean with SingleLiveData -> this applies to multiple places
-    val medicsList = ObservableField<List<User>>()
+    val medicsList = MutableLiveData<List<User>>()
     val state = ObservableField<StateLayout.State>()
     val isFilterInProgress = ObservableBoolean(false)
     val filteringName = ObservableField<String>("")
@@ -37,7 +38,7 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
                 state.set(StateLayout.State.EMPTY)
             } else {
                 state.set(StateLayout.State.NORMAL)
-                medicsList.set(result)
+                medicsList.value = result
             }
         }, Consumer { exception ->
             if (exception is NoSuchElementException) {
@@ -62,13 +63,13 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
                     state.set(StateLayout.State.EMPTY)
                 } else {
                     state.set(StateLayout.State.NORMAL)
-                    medicsList.set(result)
+                    medicsList.value = result
                 }
             },
             Consumer
             {
                 isFilterInProgress.set(false)
-                if (medicsList.get()?.isEmpty() == true) {
+                if (medicsList.value?.isEmpty() == true) {
                     isError.set(true)
                 } else {
                     state.set(StateLayout.State.ERROR)

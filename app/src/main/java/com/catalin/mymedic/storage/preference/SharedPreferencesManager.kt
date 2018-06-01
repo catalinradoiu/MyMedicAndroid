@@ -18,6 +18,13 @@ class SharedPreferencesManager @Inject constructor(context: Context) {
     private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     var currentUserSpecialty by PreferenceFieldDelegate.Int(CURRENT_USER_SPECIALTY)
     var currentUserName by PreferenceFieldDelegate.String(CURRENT_USER_NAME)
+    var currentUserId by PreferenceFieldDelegate.String(CURRENT_USER_ID)
+
+    fun clearUserPreferences() {
+        currentUserName = PREFERENCE_DEFAULT_STRING_VALUE
+        currentUserId = PREFERENCE_DEFAULT_STRING_VALUE
+        currentUserSpecialty = PREFERENCE_DEFAULT_INT_VALUE
+    }
 
     private sealed class PreferenceFieldDelegate<T>(protected val key: kotlin.String) : ReadWriteProperty<SharedPreferencesManager, T> {
 
@@ -43,6 +50,7 @@ class SharedPreferencesManager @Inject constructor(context: Context) {
     companion object {
         private const val CURRENT_USER_SPECIALTY = "currentUserSpecialty"
         private const val CURRENT_USER_NAME = "currentUserName"
+        private const val CURRENT_USER_ID = "currentUserId"
         private const val PREFERENCE_DEFAULT_INT_VALUE = 0
         private const val PREFERENCE_DEFAULT_STRING_VALUE = ""
     }

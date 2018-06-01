@@ -51,7 +51,7 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
                 passwordsMatch.set(true)
                 disposables.add(
                     usersRepository.registerUser(
-                        User("", email.get().orEmpty(), 0, Gender.NOT_COMPLETED, Constants.PATIENT, FirebaseDatabaseConfig.DEFAULT_USER_IMAGE_LOCATION),
+                        User("", "", email.get().orEmpty(), 0, Gender.NOT_COMPLETED, Constants.PATIENT, FirebaseDatabaseConfig.DEFAULT_USER_IMAGE_LOCATION),
                         password.get().orEmpty()
                     ).mainThreadSubscribe(Action {
                         registrationResult.set(OperationResult.Success())

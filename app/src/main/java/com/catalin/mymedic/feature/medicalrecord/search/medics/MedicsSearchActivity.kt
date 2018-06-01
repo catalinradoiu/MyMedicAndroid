@@ -1,5 +1,6 @@
 package com.catalin.mymedic.feature.medicalrecord.search.medics
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
+import com.catalin.mymedic.data.User
 import com.catalin.mymedic.databinding.MedicsSearchActivityBinding
 import com.catalin.mymedic.feature.createappointment.AppointmentCreateActivity
 import com.catalin.mymedic.feature.shared.OnTextChangedListener
@@ -72,9 +74,11 @@ class MedicsSearchActivity : AppCompatActivity() {
     }
 
     private fun initListeners() {
-        viewModel.medicsList.onPropertyChanged { medics ->
-            medicsAdapter.setMedics(medics)
-        }
+        viewModel.medicsList.observe(this, Observer<List<User>> { medics ->
+            medics?.let {
+                medicsAdapter.setMedics(medics)
+            }
+        })
 
         viewModel.isError.onPropertyChanged { isError ->
             if (isError) {
@@ -97,7 +101,7 @@ class MedicsSearchActivity : AppCompatActivity() {
                         this@MedicsSearchActivity,
                         medic.displayName,
                         intent.getStringExtra(SPECIALTY_NAME),
-                        medic.specialisationId
+                        medic.id
                     )
                 )
             }

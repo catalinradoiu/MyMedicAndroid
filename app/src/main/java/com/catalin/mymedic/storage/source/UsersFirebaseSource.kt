@@ -34,7 +34,9 @@ class UsersFirebaseSource @Inject constructor(
             it.user.sendEmailVerification()
             RxFirebaseDatabase.setValue(
                 firebaseDatabase.getReference(FirebaseDatabaseConfig.USERS_TABLE_NAME).child(it.user.uid),
-                user
+                user.apply {
+                    id = it.user.uid
+                }
             )
         }
 
@@ -56,8 +58,8 @@ class UsersFirebaseSource @Inject constructor(
             firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).orderByChild(
                 FirebaseDatabaseConfig.USERS_TABLE_SPECIALISATION_ID_COLUMN
             ).equalTo(
-            specialtyId.toDouble()
-        ), { data ->
-            data.children.mapNotNull { value -> value.getValue(User::class.java) }.filter { medic -> medic.specialisationId == specialtyId }
-        }).toSingle()
+                specialtyId.toDouble()
+            ), { data ->
+                data.children.mapNotNull { value -> value.getValue(User::class.java) }.filter { medic -> medic.specialisationId == specialtyId }
+            }).toSingle()
 }
