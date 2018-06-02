@@ -8,5 +8,11 @@ class Constants {
 
     companion object {
         const val PATIENT = 0
+
+        const val MONDAY = "Monday"
+        const val TUESDAY = "Tuesday"
+        const val WEDNESDAY = "Wednesday"
+        const val THURSDAY = "Thursday"
+        const val FRIDAY = "Friday"
     }
 }

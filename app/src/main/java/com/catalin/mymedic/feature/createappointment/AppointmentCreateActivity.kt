@@ -46,6 +46,7 @@ class AppointmentCreateActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AppointmentCreateViewModel::class.java).apply {
             medicId.set(intent.getStringExtra(MEDIC_ID))
             patientId.set(preferencesManager.currentUserId)
+            initFreeAppointmentsTimeData(intent.getStringExtra(MEDIC_ID))
         }
         binding.viewModel = viewModel
 
@@ -111,11 +112,22 @@ class AppointmentCreateActivity : AppCompatActivity() {
             currentCalendar.get(Calendar.MONTH),
             currentCalendar.get(Calendar.DAY_OF_MONTH)
         )
+        datePicker.disabledDays = viewModel.availableAppointmentsDetails.unselectableDays.toTypedArray()
         datePicker.minDate = Calendar.getInstance()
+        datePicker.maxDate = Calendar.getInstance().apply {
+            timeInMillis += TWO_MONTHS_TIME_IN_MILLIS
+        }
         datePicker.show(fragmentManager, APPOINTMENT_DATE_DIALOG_TAG)
     }
 
     private fun displayTimePickerDialog(dayTime: Long) {
+        val dayBeginningTime = Calendar.getInstance().apply {
+            timeInMillis = dayTime
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
         val timePicker = TimePickerDialog.newInstance({ _, hour, minute, _ ->
             val selectedDayTimestamp = Calendar.getInstance().apply {
                 timeInMillis = dayTime
@@ -125,6 +137,12 @@ class AppointmentCreateActivity : AppCompatActivity() {
             }.timeInMillis
             viewModel.appointmentTime.set(selectedDayTimestamp)
         }, true)
+        viewModel.getSelectableTimes(dayTime)?.let {
+            timePicker.setSelectableTimes(it.toTypedArray())
+        }
+        viewModel.availableAppointmentsDetails.unselectableTimesForDays[dayBeginningTime]?.let {
+            timePicker.setDisabledTimes(it.toTypedArray())
+        }
         timePicker.show(fragmentManager, APPOINTMENT_TIME_DIALOG_TAG)
 
     }
@@ -155,6 +173,7 @@ class AppointmentCreateActivity : AppCompatActivity() {
         private const val MEDICAL_SPECIALTY_NAME = "medicalSpecialtyName"
         private const val APPOINTMENT_DATE_DIALOG_TAG = "appointmentDateDialogTag"
         private const val APPOINTMENT_TIME_DIALOG_TAG = "appointmentTimeDialogTag"
+        private const val TWO_MONTHS_TIME_IN_MILLIS: Long = 31 * 24 * 3600 * 1000L
 
         fun getStartIntent(context: Context, medicName: String, medicalSpecialty: String, medicId: String): Intent =
             Intent(context, AppointmentCreateActivity::class.java)

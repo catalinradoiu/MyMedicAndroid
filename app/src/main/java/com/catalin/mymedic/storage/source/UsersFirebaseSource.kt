@@ -19,10 +19,7 @@ import javax.inject.Inject
  * @since 2/21/2018
  */
 
-class UsersFirebaseSource @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
-    private val firebaseDatabase: FirebaseDatabase
-) {
+class UsersFirebaseSource @Inject constructor(private val firebaseAuth: FirebaseAuth, private val firebaseDatabase: FirebaseDatabase) {
 
     /**
      * Get as parameters the user and his password
