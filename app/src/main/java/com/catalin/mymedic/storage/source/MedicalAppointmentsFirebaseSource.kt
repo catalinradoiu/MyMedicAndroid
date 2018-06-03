@@ -77,13 +77,12 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
                         timeInMillis = appointment.dateTime
                     }
                     result.unselectableTimesForDays[calendar.timeInMillis]?.add(
-                        Timepoint(
-                            currentAppointmentCalendar.get(Calendar.HOUR_OF_DAY),
-                            currentAppointmentCalendar.get(Calendar.MINUTE)
-                        )
+                        Timepoint(currentAppointmentCalendar.get(Calendar.HOUR_OF_DAY), currentAppointmentCalendar.get(Calendar.MINUTE))
                     )
                 }
-                result
+                result.apply {
+                    unselectableDays = getUnavailableDays(defaultSelectableTimeForWeek, unselectableTimesForDays)
+                }
             }.toSingle()
         }
     }
@@ -101,9 +100,9 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             }
             val dayHours = ArrayList<Timepoint>()
             if (dayCode != WEEKEND_DAY) {
-                val appointmentDurationLong = appointmentTime * MINUTE_MILLISECONDS_FACTOR
-                var currentTime: Long = schedule.start * ONE_HOUR_MILLISECONDS_FACTOR.toLong()
-                val endTime = schedule.end * ONE_HOUR_MILLISECONDS_FACTOR
+                val appointmentDurationLong = appointmentTime * Constants.MINUTE_TIME_IN_MILLIS
+                var currentTime: Long = schedule.start * Constants.HOUR_TIME_IN_MILLIS
+                val endTime = schedule.end * Constants.HOUR_TIME_IN_MILLIS
                 while (currentTime < endTime) {
                     val calendar = Calendar.getInstance().apply {
                         timeInMillis = currentTime
@@ -117,46 +116,57 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
         return defaultAppointmentTime
     }
 
-    private fun determineDayStartEndTime(calendar: Calendar, medicSchedule: List<Schedule>): Pair<Long, Long> {
-        calendar.apply {
+
+    private fun getUnavailableDays(
+        defaultAvailableTimes: HashMap<Int, ArrayList<Timepoint>>,
+        unavailableTimes: HashMap<Long, ArrayList<Timepoint>>
+    ): ArrayList<Calendar> {
+        // First get a list with the weekend days
+        val unavailableDays = ArrayList<Calendar>()
+        val currentTime = System.currentTimeMillis()
+
+        val iterationCalendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
         }
-        var endTime: Long = WEEKEND_DAY_TIME
-        val startTime: Long =
-            when (calendar.get(Calendar.DAY_OF_WEEK)) {
-                Calendar.MONDAY -> medicSchedule.find { day -> day.dayName == Constants.MONDAY }?.let {
-                    endTime = calendar.timeInMillis + it.end * ONE_HOUR_MILLISECONDS_FACTOR
-                    calendar.timeInMillis + it.start * ONE_HOUR_MILLISECONDS_FACTOR
-                } ?: INVALID_TIME
-                Calendar.TUESDAY -> medicSchedule.find { day -> day.dayName == Constants.TUESDAY }?.let {
-                    endTime = calendar.timeInMillis + it.end * ONE_HOUR_MILLISECONDS_FACTOR
-                    calendar.timeInMillis + it.start * ONE_HOUR_MILLISECONDS_FACTOR
-                } ?: INVALID_TIME
-                Calendar.WEDNESDAY -> medicSchedule.find { day -> day.dayName == Constants.WEDNESDAY }?.let {
-                    endTime = calendar.timeInMillis + it.end * ONE_HOUR_MILLISECONDS_FACTOR
-                    calendar.timeInMillis + it.start * ONE_HOUR_MILLISECONDS_FACTOR
-                } ?: INVALID_TIME
-                Calendar.THURSDAY -> medicSchedule.find { day -> day.dayName == Constants.THURSDAY }?.let {
-                    endTime = calendar.timeInMillis + it.end * ONE_HOUR_MILLISECONDS_FACTOR
-                    calendar.timeInMillis + it.start * ONE_HOUR_MILLISECONDS_FACTOR
-                } ?: INVALID_TIME
-                Calendar.FRIDAY -> medicSchedule.find { day -> day.dayName == Constants.FRIDAY }?.let {
-                    endTime = calendar.timeInMillis + it.end * ONE_HOUR_MILLISECONDS_FACTOR
-                    calendar.timeInMillis + it.start * ONE_HOUR_MILLISECONDS_FACTOR
-                } ?: INVALID_TIME
-                else -> WEEKEND_DAY_TIME
+
+        while (iterationCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+            iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS
+        }
+
+        while (iterationCalendar.timeInMillis <= currentTime + Constants.TOW_MONTHS_TIME_IN_MILLIS) {
+            val saturdayCalendar = Calendar.getInstance().apply {
+                timeInMillis = iterationCalendar.timeInMillis
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
             }
-        return Pair(startTime, endTime)
+            unavailableDays.add(saturdayCalendar)
+            iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS
+            val sundayCalendar = Calendar.getInstance().apply {
+                timeInMillis = iterationCalendar.timeInMillis
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+            }
+            unavailableDays.add(sundayCalendar)
+            iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS * 6
+        }
+
+//        unavailableTimes.forEach { entry ->
+//            val entryDay = Calendar.getInstance().apply {
+//                timeInMillis = entry.key
+//            }
+//            when (entryDay.get(Calendar.DAY_OF_WEEK)) {
+//                Calendar.MONDAY -> defaultAvailableTimes[]
+//            }
+//        }
+
+        return unavailableDays
     }
 
     companion object {
-        private const val ONE_DAY_TIMESTAMP = 3600 * 24 * 1000
-        private const val ONE_HOUR_MILLISECONDS_FACTOR = 3600 * 1000
-        private const val MINUTE_MILLISECONDS_FACTOR = 60 * 1000
-        private const val WEEKEND_DAY_TIME = 0L
-        private const val INVALID_TIME = -1L
-        private const val NO_APPOINTMENT_KEY = -1L
         private const val WEEKEND_DAY = -1
     }
 

@@ -13,6 +13,7 @@ import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.AppointmentCreateActivityBinding
 import com.catalin.mymedic.storage.preference.SharedPreferencesManager
+import com.catalin.mymedic.utils.Constants
 import com.catalin.mymedic.utils.NetworkManager
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.dismissIfVisible
@@ -111,11 +112,16 @@ class AppointmentCreateActivity : AppCompatActivity() {
             currentCalendar.get(Calendar.YEAR),
             currentCalendar.get(Calendar.MONTH),
             currentCalendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.disabledDays = viewModel.availableAppointmentsDetails.unselectableDays.toTypedArray()
-        datePicker.minDate = Calendar.getInstance()
-        datePicker.maxDate = Calendar.getInstance().apply {
-            timeInMillis += TWO_MONTHS_TIME_IN_MILLIS
+        ).apply {
+            disabledDays = viewModel.availableAppointmentsDetails.unselectableDays.toTypedArray()
+            minDate = when (currentCalendar.get(Calendar.DAY_OF_WEEK)) {
+                Calendar.SATURDAY -> Calendar.getInstance().apply { timeInMillis = currentCalendar.timeInMillis + Constants.DAY_TIME_IN_MILLIS * 2 }
+                Calendar.SUNDAY -> Calendar.getInstance().apply { timeInMillis = currentCalendar.timeInMillis + Constants.DAY_TIME_IN_MILLIS }
+                else -> Calendar.getInstance()
+            }
+            maxDate = Calendar.getInstance().apply {
+                timeInMillis += Constants.TOW_MONTHS_TIME_IN_MILLIS
+            }
         }
         datePicker.show(fragmentManager, APPOINTMENT_DATE_DIALOG_TAG)
     }
@@ -173,7 +179,6 @@ class AppointmentCreateActivity : AppCompatActivity() {
         private const val MEDICAL_SPECIALTY_NAME = "medicalSpecialtyName"
         private const val APPOINTMENT_DATE_DIALOG_TAG = "appointmentDateDialogTag"
         private const val APPOINTMENT_TIME_DIALOG_TAG = "appointmentTimeDialogTag"
-        private const val TWO_MONTHS_TIME_IN_MILLIS: Long = 31 * 24 * 3600 * 1000L
 
         fun getStartIntent(context: Context, medicName: String, medicalSpecialty: String, medicId: String): Intent =
             Intent(context, AppointmentCreateActivity::class.java)
