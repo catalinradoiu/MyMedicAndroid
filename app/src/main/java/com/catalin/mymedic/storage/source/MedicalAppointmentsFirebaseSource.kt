@@ -6,6 +6,8 @@ import com.catalin.mymedic.data.MedicalAppointment
 import com.catalin.mymedic.data.Schedule
 import com.catalin.mymedic.utils.Constants
 import com.catalin.mymedic.utils.FirebaseDatabaseConfig
+import com.catalin.mymedic.utils.extension.setToDayStart
+import com.catalin.mymedic.utils.extension.setToDayStartWithTimestamp
 import com.google.firebase.database.FirebaseDatabase
 import com.wdullaer.materialdatetimepicker.time.Timepoint
 import durdinapps.rxfirebase2.RxFirebaseDatabase
@@ -63,13 +65,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
                 })
                 medicalAppointments.sortBy { it.dateTime }
                 medicalAppointments.forEach { appointment ->
-                    val calendar = Calendar.getInstance().apply {
-                        timeInMillis = appointment.dateTime
-                        set(Calendar.HOUR_OF_DAY, 0)
-                        set(Calendar.MINUTE, 0)
-                        set(Calendar.SECOND, 0)
-                        set(Calendar.MILLISECOND, 0)
-                    }
+                    val calendar = Calendar.getInstance().setToDayStartWithTimestamp(appointment.dateTime)
                     if (result.unselectableTimesForDays[calendar.timeInMillis] == null) {
                         result.unselectableTimesForDays[calendar.timeInMillis] = ArrayList()
                     }
@@ -125,12 +121,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
         val unavailableDays = ArrayList<Calendar>()
         val currentTime = System.currentTimeMillis()
 
-        val iterationCalendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
+        val iterationCalendar = Calendar.getInstance().setToDayStart()
 
         while (iterationCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
             iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS
@@ -139,20 +130,11 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
         while (iterationCalendar.timeInMillis <= currentTime + Constants.TOW_MONTHS_TIME_IN_MILLIS) {
             val saturdayCalendar = Calendar.getInstance().apply {
                 timeInMillis = iterationCalendar.timeInMillis
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
+
             }
             unavailableDays.add(saturdayCalendar)
             iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS
-            val sundayCalendar = Calendar.getInstance().apply {
-                timeInMillis = iterationCalendar.timeInMillis
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-            }
+            val sundayCalendar = Calendar.getInstance().setToDayStartWithTimestamp(iterationCalendar.timeInMillis)
             unavailableDays.add(sundayCalendar)
             iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS * 6
         }
@@ -161,13 +143,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             val scheduleForDay = determineSchedule(key, defaultAvailableTimes)
             scheduleForDay?.let {
                 if (value.containsAll(it)) {
-                    unavailableDays.add(Calendar.getInstance().apply {
-                        timeInMillis = key
-                        set(Calendar.HOUR_OF_DAY, 0)
-                        set(Calendar.MINUTE, 0)
-                        set(Calendar.SECOND, 0)
-                        set(Calendar.MILLISECOND, 0)
-                    })
+                    unavailableDays.add(Calendar.getInstance().setToDayStartWithTimestamp(key))
                 }
             }
         }

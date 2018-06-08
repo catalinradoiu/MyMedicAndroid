@@ -12,6 +12,7 @@ import com.catalin.mymedic.storage.repository.MedicalAppointmentsRepository
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.SingleLiveEvent
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
+import com.catalin.mymedic.utils.extension.setToDayStart
 import com.wdullaer.materialdatetimepicker.time.Timepoint
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
@@ -101,12 +102,7 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
         val unavailableTimepoint = Timepoint(dayCalendar.get(Calendar.HOUR_OF_DAY), dayCalendar.get(Calendar.MINUTE))
 
         //Reset de calendar to the beginning of the day and get the time
-        val dayStart = dayCalendar.apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }.timeInMillis
+        val dayStart = dayCalendar.setToDayStart().timeInMillis
 
         @Suppress("ReplacePutWithAssignment")
         availableAppointmentsDetails.unselectableTimesForDays[dayStart]?.add(unavailableTimepoint) ?: availableAppointmentsDetails.unselectableTimesForDays.put(

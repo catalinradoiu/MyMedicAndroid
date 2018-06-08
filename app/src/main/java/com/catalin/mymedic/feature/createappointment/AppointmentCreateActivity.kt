@@ -18,6 +18,7 @@ import com.catalin.mymedic.utils.NetworkManager
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.dismissIfVisible
 import com.catalin.mymedic.utils.extension.newLongSnackbar
+import com.catalin.mymedic.utils.extension.setToDayStartWithTimestamp
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import java.util.*
@@ -130,13 +131,7 @@ class AppointmentCreateActivity : AppCompatActivity() {
     }
 
     private fun displayTimePickerDialog(dayTime: Long) {
-        val dayBeginningTime = Calendar.getInstance().apply {
-            timeInMillis = dayTime
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }.timeInMillis
+        val dayBeginningTime = Calendar.getInstance().setToDayStartWithTimestamp(dayTime).timeInMillis
         val timePicker = TimePickerDialog.newInstance({ _, hour, minute, _ ->
             val selectedDayTimestamp = Calendar.getInstance().apply {
                 timeInMillis = dayTime
