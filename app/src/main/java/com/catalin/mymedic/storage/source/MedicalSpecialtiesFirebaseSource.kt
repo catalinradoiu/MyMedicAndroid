@@ -6,11 +6,13 @@ import com.google.firebase.database.FirebaseDatabase
 import durdinapps.rxfirebase2.RxFirebaseDatabase
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * @author catalinradoiu
  * @since 5/23/2018
  */
+@Singleton
 class MedicalSpecialtiesFirebaseSource @Inject constructor(private val firebaseDatabase: FirebaseDatabase) {
 
     fun getAllSpecialties(): Single<List<MedicalSpecialty>> =

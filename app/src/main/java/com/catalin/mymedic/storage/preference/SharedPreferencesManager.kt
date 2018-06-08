@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -13,6 +14,7 @@ import kotlin.reflect.KProperty
  * @author catalinradoiu
  * @since 4/15/2018
  */
+@Singleton
 class SharedPreferencesManager @Inject constructor(context: Context) {
 
     private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)

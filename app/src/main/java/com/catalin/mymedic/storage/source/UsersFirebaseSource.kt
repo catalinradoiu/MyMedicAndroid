@@ -11,6 +11,7 @@ import durdinapps.rxfirebase2.RxFirebaseDatabase
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Remote source for the users based on Firebase
@@ -18,7 +19,7 @@ import javax.inject.Inject
  * @author catalinradoiu
  * @since 2/21/2018
  */
-
+@Singleton
 class UsersFirebaseSource @Inject constructor(private val firebaseAuth: FirebaseAuth, private val firebaseDatabase: FirebaseDatabase) {
 
     /**

@@ -6,6 +6,7 @@ import com.google.firebase.auth.AuthResult
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Repository for managing the users
@@ -13,7 +14,7 @@ import javax.inject.Inject
  * @author catalinradoiu
  * @since 2/19/2018
  */
-
+@Singleton
 class UsersRepository @Inject constructor(private val usersFirebaseSource: UsersFirebaseSource) {
 
     private var usersList = ArrayList<User>()
