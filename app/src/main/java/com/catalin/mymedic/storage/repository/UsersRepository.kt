@@ -22,8 +22,7 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
      * Calls the remote source to register the user
      * @return a Completable with the status of the operation
      */
-    fun registerUser(user: User, password: String): Completable =
-        usersFirebaseSource.registerUser(user, password)
+    fun registerUser(user: User, password: String): Completable = usersFirebaseSource.registerUser(user, password)
 
     fun getUserByEmailAndPassword(email: String, password: String): Single<AuthResult> = usersFirebaseSource.getUserByEmailAndPassword(email, password)
 

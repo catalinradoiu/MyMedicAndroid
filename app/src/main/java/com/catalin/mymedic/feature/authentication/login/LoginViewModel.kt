@@ -47,7 +47,11 @@ class LoginViewModel(
                     .mainThreadSubscribe(
                         Consumer { (authResult, user) ->
                             if (authResult.user.isEmailVerified) {
-                                preferencesManager.setCurrentUserSpecialty(user.specialisationId)
+                                preferencesManager.apply {
+                                    currentUserSpecialty = user.specialisationId
+                                    currentUserName = user.displayName
+                                    currentUserId = authResult.user.uid
+                                }
                                 loginResult.set(OperationResult.Success())
                             } else {
                                 loginResult.set(OperationResult.Error(EMAIL_NOT_VERIFIED))

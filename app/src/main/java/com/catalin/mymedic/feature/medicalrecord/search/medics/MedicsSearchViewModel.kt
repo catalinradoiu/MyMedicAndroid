@@ -1,5 +1,6 @@
 package com.catalin.mymedic.feature.medicalrecord.search.medics
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
@@ -20,7 +21,9 @@ import javax.inject.Inject
  */
 class MedicsSearchViewModel(private val usersRepository: UsersRepository) : ViewModel() {
 
-    val medicsList = ObservableField<List<User>>()
+    // TODO : Replace the observable field for this users list with live data
+    // TODO : Replace the error observable boolean with SingleLiveData -> this applies to multiple places
+    val medicsList = MutableLiveData<List<User>>()
     val state = ObservableField<StateLayout.State>()
     val isFilterInProgress = ObservableBoolean(false)
     val filteringName = ObservableField<String>("")
@@ -35,7 +38,7 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
                 state.set(StateLayout.State.EMPTY)
             } else {
                 state.set(StateLayout.State.NORMAL)
-                medicsList.set(result)
+                medicsList.value = result
             }
         }, Consumer { exception ->
             if (exception is NoSuchElementException) {
@@ -50,7 +53,7 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
     fun getFilteredMedics(specialtyId: Int) {
         disposables.clear()
         isFilterInProgress.set(true)
-        Observable.timer(500L, TimeUnit.MILLISECONDS)
+        Observable.timer(SEARCH_REQUEST_DELAY_TIME, TimeUnit.MILLISECONDS)
             .flatMap({ usersRepository.getFilteredMedicsList(specialtyId, filteringName.get().orEmpty()).toObservable() }).mainThreadSubscribe(
             Consumer
             { result ->
@@ -60,13 +63,13 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
                     state.set(StateLayout.State.EMPTY)
                 } else {
                     state.set(StateLayout.State.NORMAL)
-                    medicsList.set(result)
+                    medicsList.value = result
                 }
             },
             Consumer
             {
                 isFilterInProgress.set(false)
-                if (medicsList.get()?.isEmpty() == true) {
+                if (medicsList.value?.isEmpty() == true) {
                     isError.set(true)
                 } else {
                     state.set(StateLayout.State.ERROR)
@@ -84,5 +87,9 @@ class MedicsSearchViewModel(private val usersRepository: UsersRepository) : View
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T =
             MedicsSearchViewModel(usersRepository) as T
+    }
+
+    companion object {
+        private const val SEARCH_REQUEST_DELAY_TIME = 1000L
     }
 }

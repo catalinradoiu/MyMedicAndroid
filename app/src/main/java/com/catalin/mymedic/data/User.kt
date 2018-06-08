@@ -4,6 +4,7 @@ package com.catalin.mymedic.data
  *  Class for holding the user data
  */
 data class User(
+    var id: String,
     var displayName: String,
     var email: String,
     var birthDate: Long,
@@ -11,7 +12,11 @@ data class User(
     var specialisationId: Int,
     var imageUrl: String
 ) {
-    constructor() : this("", "", 0, Gender.NOT_COMPLETED, 0, "")
+    /*
+        Empty constructor needed for parsing the firebase json to an actual User object
+        DataSnapshot.getValue(User::class.java)
+     */
+    constructor() : this("", "", "", 0, Gender.NOT_COMPLETED, 0, "")
 }
 
 enum class Gender {

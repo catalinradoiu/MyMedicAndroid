@@ -15,9 +15,10 @@ import com.google.firebase.storage.FirebaseStorage
 class MedicsAdapter(private val firebaseStorage: FirebaseStorage) : RecyclerView.Adapter<MedicsAdapter.MedicViewHolder>() {
 
     private var medicsList = ArrayList<User>()
+    private var onItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicViewHolder =
-        MedicViewHolder(MedicSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        MedicViewHolder(MedicSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), onItemClickListener)
 
     override fun getItemCount(): Int = medicsList.size
 
@@ -30,11 +31,35 @@ class MedicsAdapter(private val firebaseStorage: FirebaseStorage) : RecyclerView
         notifyDataSetChanged()
     }
 
-    class MedicViewHolder(private val binding: MedicSearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun getMedic(position: Int) = medicsList[position]
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
+
+    interface OnItemClickListener {
+        fun onNewAppointmentClick(position: Int)
+        fun onNewMessageClick(position: Int)
+    }
+
+    class MedicViewHolder(private val binding: MedicSearchItemBinding, private val onItemClickListener: OnItemClickListener?) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(medic: User, firebaseStorage: FirebaseStorage) {
             GlideApp.with(itemView).load(firebaseStorage.reference.child(medic.imageUrl)).into(binding.medicPhoto)
             binding.medicName.text = medic.displayName
+            binding.newAppointmentButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClickListener?.onNewAppointmentClick(position)
+                }
+            }
+            binding.newMessageButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClickListener?.onNewMessageClick(position)
+                }
+            }
         }
     }
 }
