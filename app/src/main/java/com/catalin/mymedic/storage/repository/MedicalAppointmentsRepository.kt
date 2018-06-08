@@ -6,11 +6,13 @@ import com.catalin.mymedic.storage.source.MedicalAppointmentsFirebaseSource
 import com.wdullaer.materialdatetimepicker.time.Timepoint
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * @author catalinradoiu
  * @since 5/29/2018
  */
+@Singleton
 class MedicalAppointmentsRepository @Inject constructor(private val medicalAppointmentsRemoteSource: MedicalAppointmentsFirebaseSource) {
 
     private val availableAppointmentsDetails = HashMap<String, AvailableAppointments>()

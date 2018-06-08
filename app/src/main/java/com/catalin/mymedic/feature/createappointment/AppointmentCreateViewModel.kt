@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableField
 import android.databinding.ObservableLong
-import android.util.Log
 import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.data.AvailableAppointments
 import com.catalin.mymedic.data.MedicalAppointment
@@ -42,9 +41,7 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
     fun initFreeAppointmentsTimeData(medicId: String) {
         medicalAppointmentsRepository.getAvailableAppointmentsTime(medicId).mainThreadSubscribe(Consumer { result ->
             availableAppointmentsDetails = result
-            Log.d("operationStatus", "finished")
         }, Consumer {
-            Log.d("operationStatus", "error : " + it.localizedMessage)
         })
     }
 
@@ -67,10 +64,8 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
                     ), unavailableDayTime
                 ).mainThreadSubscribe(Action {
                     operationResult.value = OperationResult.Success()
-                    Log.d("operationStatus", "finished")
                 }, Consumer {
                     operationResult.value = OperationResult.Error(it.localizedMessage)
-                    Log.d("operationStatus", "error : " + it.localizedMessage)
                 })
             )
         }

@@ -15,6 +15,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -22,6 +23,7 @@ import kotlin.collections.HashMap
  * @author catalinradoiu
  * @since 5/29/2018
  */
+@Singleton
 class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebaseDatabase: FirebaseDatabase) {
 
     fun createMedicalAppointment(medicalAppointment: MedicalAppointment): Completable {
