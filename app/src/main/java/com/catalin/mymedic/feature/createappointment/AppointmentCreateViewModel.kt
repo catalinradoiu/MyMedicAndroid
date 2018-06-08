@@ -52,7 +52,7 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
         if (appointmentTime.get() < System.currentTimeMillis()) {
             validDate.value = false
         } else {
-            addUnavailableTimeToDay(appointmentTime.get())
+            val unavailableDayTime = addUnavailableTimeToDay(appointmentTime.get())
             validDate.value = true
             checkOffline.value = true
             disposables.add(
@@ -64,7 +64,7 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
                         medicId.get().orEmpty(),
                         appointmentDetails.get().orEmpty(),
                         AppointmentStatus.AWAITING
-                    )
+                    ), unavailableDayTime
                 ).mainThreadSubscribe(Action {
                     operationResult.value = OperationResult.Success()
                     Log.d("operationStatus", "finished")
@@ -95,7 +95,7 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
         disposables.clear()
     }
 
-    private fun addUnavailableTimeToDay(dayTime: Long) {
+    private fun addUnavailableTimeToDay(dayTime: Long): Pair<Long, Timepoint> {
         val dayCalendar = Calendar.getInstance().apply {
             timeInMillis = dayTime
         }
@@ -108,6 +108,8 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
         availableAppointmentsDetails.unselectableTimesForDays[dayStart]?.add(unavailableTimepoint) ?: availableAppointmentsDetails.unselectableTimesForDays.put(
             dayStart,
             ArrayList<Timepoint>().apply { add(unavailableTimepoint) })
+
+        return Pair(dayStart, unavailableTimepoint)
     }
 
     class Factory @Inject constructor(private val medicalAppointmentsRepository: MedicalAppointmentsRepository) : ViewModelProvider.Factory {

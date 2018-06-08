@@ -3,6 +3,8 @@ package com.catalin.mymedic.storage.repository
 import com.catalin.mymedic.data.AvailableAppointments
 import com.catalin.mymedic.data.MedicalAppointment
 import com.catalin.mymedic.storage.source.MedicalAppointmentsFirebaseSource
+import com.wdullaer.materialdatetimepicker.time.Timepoint
+import io.reactivex.Single
 import javax.inject.Inject
 
 /**
@@ -13,9 +15,20 @@ class MedicalAppointmentsRepository @Inject constructor(private val medicalAppoi
 
     private val availableAppointmentsDetails = HashMap<String, AvailableAppointments>()
 
-    fun createAppointment(appointment: MedicalAppointment) = medicalAppointmentsRemoteSource.createMedicalAppointment(appointment)
+    fun createAppointment(appointment: MedicalAppointment, appointmentDayTime: Pair<Long, Timepoint>) =
+        medicalAppointmentsRemoteSource.createMedicalAppointment(appointment).also {
+            availableAppointmentsDetails[appointment.medicId]?.unselectableTimesForDays?.let {
+                it[appointmentDayTime.first]?.add(appointmentDayTime.second)
+            }
+        }
 
     fun getMedicalAppointmentsForMedic(medicId: String) = medicalAppointmentsRemoteSource.getMedicalAppointmentsForMedic(medicId)
 
-    fun getAvailableAppointmentsTime(medicId: String) = medicalAppointmentsRemoteSource.getAvailableAppointmentsTime(medicId)
+    fun getAvailableAppointmentsTime(medicId: String): Single<AvailableAppointments> =
+        if (availableAppointmentsDetails[medicId] == null)
+            medicalAppointmentsRemoteSource.getAvailableAppointmentsTime(medicId).doOnSuccess {
+                availableAppointmentsDetails[medicId] = it
+            }
+        else
+            Single.just(availableAppointmentsDetails[medicId])
 }
