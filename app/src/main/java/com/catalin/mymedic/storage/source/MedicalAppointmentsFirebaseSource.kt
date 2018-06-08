@@ -154,16 +154,29 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS * 6
         }
 
-//        unavailableTimes.forEach { entry ->
-//            val entryDay = Calendar.getInstance().apply {
-//                timeInMillis = entry.key
-//            }
-//            when (entryDay.get(Calendar.DAY_OF_WEEK)) {
-//                Calendar.MONDAY -> defaultAvailableTimes[]
-//            }
-//        }
+        for ((key, value) in unavailableTimes) {
+            val scheduleForDay = determineSchedule(key, defaultAvailableTimes)
+            scheduleForDay?.let {
+                if (value.containsAll(it)) {
+                    unavailableDays.add(Calendar.getInstance().apply {
+                        timeInMillis = key
+                        set(Calendar.HOUR_OF_DAY, 0)
+                        set(Calendar.MINUTE, 0)
+                        set(Calendar.SECOND, 0)
+                    })
+                }
+            }
+        }
 
         return unavailableDays
+    }
+
+    private fun determineSchedule(dayStart: Long, defaultAvailableTimes: HashMap<Int, ArrayList<Timepoint>>): ArrayList<Timepoint>? {
+        val dayCode = Calendar.getInstance().apply {
+            timeInMillis = dayStart
+        }.get(Calendar.DAY_OF_WEEK)
+
+        return defaultAvailableTimes[dayCode]
     }
 
     companion object {
