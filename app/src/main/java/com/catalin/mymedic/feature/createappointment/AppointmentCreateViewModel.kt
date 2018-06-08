@@ -18,6 +18,7 @@ import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 /**
  * @author catalinradoiu
@@ -30,6 +31,7 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
     val appointmentTime = ObservableLong(0)
     val appointmentDetails = ObservableField<String>("")
     val validDate = SingleLiveEvent<Boolean>()
+    val checkOffline = SingleLiveEvent<Boolean>()
     val operationResult = SingleLiveEvent<OperationResult>()
 
     var availableAppointmentsDetails = AvailableAppointments()
@@ -49,7 +51,9 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
         if (appointmentTime.get() < System.currentTimeMillis()) {
             validDate.value = false
         } else {
+            addUnavailableTimeToDay(appointmentTime.get())
             validDate.value = true
+            checkOffline.value = true
             disposables.add(
                 medicalAppointmentsRepository.createAppointment(
                     MedicalAppointment(
@@ -88,6 +92,26 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
+    }
+
+    private fun addUnavailableTimeToDay(dayTime: Long) {
+        val dayCalendar = Calendar.getInstance().apply {
+            timeInMillis = dayTime
+        }
+        val unavailableTimepoint = Timepoint(dayCalendar.get(Calendar.HOUR_OF_DAY), dayCalendar.get(Calendar.MINUTE))
+
+        //Reset de calendar to the beginning of the day and get the time
+        val dayStart = dayCalendar.apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+
+        @Suppress("ReplacePutWithAssignment")
+        availableAppointmentsDetails.unselectableTimesForDays[dayStart]?.add(unavailableTimepoint) ?: availableAppointmentsDetails.unselectableTimesForDays.put(
+            dayStart,
+            ArrayList<Timepoint>().apply { add(unavailableTimepoint) })
     }
 
     class Factory @Inject constructor(private val medicalAppointmentsRepository: MedicalAppointmentsRepository) : ViewModelProvider.Factory {

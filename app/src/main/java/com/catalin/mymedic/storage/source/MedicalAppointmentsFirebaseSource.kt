@@ -129,6 +129,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
 
         while (iterationCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
@@ -141,6 +142,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
                 set(Calendar.HOUR_OF_DAY, 0)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
             }
             unavailableDays.add(saturdayCalendar)
             iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS
@@ -149,6 +151,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
                 set(Calendar.HOUR_OF_DAY, 0)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
             }
             unavailableDays.add(sundayCalendar)
             iterationCalendar.timeInMillis += Constants.DAY_TIME_IN_MILLIS * 6
@@ -163,6 +166,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
                         set(Calendar.HOUR_OF_DAY, 0)
                         set(Calendar.MINUTE, 0)
                         set(Calendar.SECOND, 0)
+                        set(Calendar.MILLISECOND, 0)
                     })
                 }
             }

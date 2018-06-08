@@ -92,12 +92,15 @@ class AppointmentCreateActivity : AppCompatActivity() {
         })
 
         binding.registerAppointmentButton.setOnClickListener {
-            if (!NetworkManager.isNetworkAvailable(this)) {
-                displaySnackbar(getString(R.string.no_internet_appointment_will_be_created))
-            }
             viewModel.createNewAppointment()
             clearFields()
         }
+
+        viewModel.checkOffline.observe(this, Observer { offline ->
+            if (offline == true && !NetworkManager.isNetworkAvailable(this)) {
+                displaySnackbar(getString(R.string.no_internet_appointment_will_be_created))
+            }
+        })
     }
 
     private fun displayDatePickerDialog() {
