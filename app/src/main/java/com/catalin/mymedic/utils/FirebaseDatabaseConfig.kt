@@ -14,6 +14,7 @@ class FirebaseDatabaseConfig {
         //Users table
         const val USERS_TABLE_NAME = "users"
         const val USERS_TABLE_SPECIALISATION_ID_COLUMN = "specialisationId"
+        const val USERS_NOTIFICATION_TOKEN = "notificationToken"
 
         //Medics details table
         const val MEDICS_DETAILS_TABLE = "medics_details"

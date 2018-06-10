@@ -60,4 +60,8 @@ class UsersFirebaseSource @Inject constructor(private val firebaseAuth: Firebase
             ), { data ->
                 data.children.mapNotNull { value -> value.getValue(User::class.java) }.filter { medic -> medic.specialisationId == specialtyId }
             }).toSingle()
+
+    fun updateUserNotificationToken(token: String?, userId: String) {
+        RxFirebaseDatabase.setValue(firebaseDatabase.reference.child(userId).child(FirebaseDatabaseConfig.USERS_NOTIFICATION_TOKEN), token)
+    }
 }
