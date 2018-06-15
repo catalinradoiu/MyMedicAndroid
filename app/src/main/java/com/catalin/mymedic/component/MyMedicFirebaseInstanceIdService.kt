@@ -1,6 +1,5 @@
 package com.catalin.mymedic.component
 
-import android.util.Log
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.source.UsersFirebaseSource
@@ -23,7 +22,6 @@ class MyMedicFirebaseInstanceIdService : FirebaseInstanceIdService() {
     override fun onCreate() {
         super.onCreate()
         (application as MyMedicApplication).applicationComponent.inject(this)
-        Log.d("firebaseToken", FirebaseInstanceId.getInstance().token)
     }
 
     override fun onTokenRefresh() {
