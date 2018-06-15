@@ -2,6 +2,8 @@ package com.catalin.mymedic.feature.launcher
 
 import android.animation.ObjectAnimator
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -88,5 +90,7 @@ class LauncherActivity : AppCompatActivity() {
 
     companion object {
         private const val WELCOME_ANIMATION_DURATION = 700L
+
+        fun getStartIntent(context: Context) = Intent(context, LauncherActivity::class.java)
     }
 }

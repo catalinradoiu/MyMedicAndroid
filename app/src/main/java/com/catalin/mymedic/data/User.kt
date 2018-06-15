@@ -10,7 +10,8 @@ data class User(
     var birthDate: Long,
     var gender: Gender,
     var specialisationId: Int,
-    var imageUrl: String
+    var imageUrl: String,
+    var notificationToken: String = ""
 ) {
     /*
         Empty constructor needed for parsing the firebase json to an actual User object

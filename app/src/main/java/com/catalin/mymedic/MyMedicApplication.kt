@@ -5,6 +5,7 @@ import com.catalin.mymedic.architecture.ApplicationComponent
 import com.catalin.mymedic.architecture.ApplicationModule
 import com.catalin.mymedic.architecture.DaggerApplicationComponent
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 
 /**
  * Application class
@@ -21,5 +22,6 @@ class MyMedicApplication : Application() {
         super.onCreate()
         val database = FirebaseDatabase.getInstance()
         database.setPersistenceEnabled(true)
+        FirebaseMessaging.getInstance().isAutoInitEnabled = true
     }
 }
