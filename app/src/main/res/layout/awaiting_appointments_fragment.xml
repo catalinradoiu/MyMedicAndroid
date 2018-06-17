@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--suppress AndroidUnknownAttribute -->
+    <data class=".AwaitingAppointmentsBinding">
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.medicalrecord.awaitingappointments.AwaitingAppointmentsViewModel" />
+    </data>
+
+    <com.catalin.mymedic.feature.shared.StateLayout
+        android:id="@+id/awaiting_appointments_state_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_empty="@layout/layout_empty"
+        app:layout_error="@layout/layout_error"
+        app:layout_loading="@layout/loading_layout"
+        app:state="@{viewModel.state}">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/awaiting_appointments_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.catalin.mymedic.feature.shared.StateLayout>
+
+</layout>

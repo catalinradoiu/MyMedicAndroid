@@ -1,6 +1,8 @@
 <resources>
+
+    <!-- General strings -->
     <string name="app_name">MyMedic</string>
-    <string name="title_activity_authentication">AuthenticationActivity</string>
+    <string name="something_went_wrong">Something went wrong</string>
 
     <!-- Launcher -->
     <string name="welcome_anonymous_user">Welcome!</string>
@@ -57,6 +59,13 @@
     <string name="invalid_date">No date given or invalid date</string>
     <string name="appointment_created">Your appointment request was sent successfully</string>
     <string name="no_internet_appointment_will_be_created">You have no internet now, but the appointment will be created once you get online</string>
+
+    <!-- Awaiting appointments -->
+    <string name="new_appointment_request">New request</string>
+    <string name="confirm">Confirm</string>
+    <string name="reject">Reject</string>
+    <string name="appointment_updated_successfully">Appointment has been updated</string>
+    <string name="no_internet_appointment_will_be_updated">You have no internet now, but he appointment will be updated once you get online</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>

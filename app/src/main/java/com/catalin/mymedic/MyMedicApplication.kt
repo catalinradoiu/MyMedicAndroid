@@ -4,6 +4,7 @@ import android.app.Application
 import com.catalin.mymedic.architecture.ApplicationComponent
 import com.catalin.mymedic.architecture.ApplicationModule
 import com.catalin.mymedic.architecture.DaggerApplicationComponent
+import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -22,6 +23,8 @@ class MyMedicApplication : Application() {
         super.onCreate()
         val database = FirebaseDatabase.getInstance()
         database.setPersistenceEnabled(true)
+        database.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME)
+            .keepSynced(true)
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
     }
 }

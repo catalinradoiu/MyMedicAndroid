@@ -1,6 +1,7 @@
 package com.catalin.mymedic.utils.extension
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,3 +26,11 @@ fun <T> Observable<T>.onNextSubscribe(onNext: Consumer<T>): Disposable = this.su
 
 fun <T> Observable<T>.mainThreadSubscribe(onNext: Consumer<T>, onError: Consumer<Throwable>): Disposable = this.subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread()).subscribe({ onNext.accept(it) }, { onError.accept(it) })
+
+fun <T> Flowable<T>.mainThreadSubscribe(
+    onNext: Consumer<T>,
+    onError: Consumer<Throwable>
+): Disposable = this.subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread()).subscribe(
+    { onNext.accept(it) },
+    { onError.accept(it) })

@@ -4,6 +4,7 @@ import com.catalin.mymedic.data.AvailableAppointments
 import com.catalin.mymedic.data.MedicalAppointment
 import com.catalin.mymedic.storage.source.MedicalAppointmentsFirebaseSource
 import com.wdullaer.materialdatetimepicker.time.Timepoint
+import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,7 +25,8 @@ class MedicalAppointmentsRepository @Inject constructor(private val medicalAppoi
             }
         }
 
-    fun getMedicalAppointmentsForMedic(medicId: String) = medicalAppointmentsRemoteSource.getMedicalAppointmentsForMedic(medicId)
+    fun getAwaitingAppointmentsForMedic(medicId: String, timestamp: Long) =
+        medicalAppointmentsRemoteSource.getAwaitingMedicalAppointmentsForMedic(medicId, timestamp)
 
     fun getAvailableAppointmentsTime(medicId: String): Single<AvailableAppointments> =
         if (availableAppointmentsDetails[medicId] == null)
@@ -33,4 +35,7 @@ class MedicalAppointmentsRepository @Inject constructor(private val medicalAppoi
             }
         else
             Single.just(availableAppointmentsDetails[medicId])
+
+    fun updateMedicalAppointment(appointment: MedicalAppointment): Completable =
+        medicalAppointmentsRemoteSource.updateMedicalAppointment(appointment)
 }
