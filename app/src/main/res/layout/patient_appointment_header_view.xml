@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--suppress AndroidUnknownAttribute -->
+    <data class=".PatientAppointmentHeaderBinding" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/highlight_text_size"
+        android:padding="@dimen/primary_margin"
+        android:text="@string/you_have_the_following_appointments" />
+</layout>

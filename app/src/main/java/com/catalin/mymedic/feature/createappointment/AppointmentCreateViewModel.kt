@@ -30,6 +30,8 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
     val patientId = ObservableField<String>("")
     val appointmentTime = ObservableLong(0)
     val appointmentDetails = ObservableField<String>("")
+    val medicName = ObservableField<String>("")
+    val medicalSpecialty = ObservableField<String>("")
     val validDate = SingleLiveEvent<Boolean>()
     val checkOffline = SingleLiveEvent<Boolean>()
     val operationResult = SingleLiveEvent<OperationResult>()
