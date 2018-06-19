@@ -33,18 +33,14 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
         )
     }
 
-    fun getAwaitingMedicalAppointmentsForMedic(
-        medicId: String,
-        timestamp: Long
-    ): Flowable<List<MedicalAppointment>> =
+    fun getAwaitingMedicalAppointmentsForMedic(medicId: String): Flowable<List<MedicalAppointment>> =
         RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
             FirebaseDatabaseConfig.APPOINTMENTS_TABLE_MEDIC_ID
         ).equalTo(medicId),
             { data ->
                 data.children.mapNotNull { value ->
                     value.getValue(MedicalAppointment::class.java)
-                }.filter { it.status == AppointmentStatus.AWAITING && it.dateTime >= timestamp }
-                    .sortedBy { it.dateTime }
+                }.filter { it.status == AppointmentStatus.AWAITING }.sortedBy { it.dateTime }
 
             }
         )
@@ -57,15 +53,18 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             appointment.toMap()
         )
 
+    fun createCancelationReason(cancelationReason: AppointmentCancelationReason): Completable = RxFirebaseDatabase.setValue(
+        firebaseDatabase.reference.child(FirebaseDatabaseConfig.CANCELED_APPOINTMENTS).child(cancelationReason.id),
+        cancelationReason
+    )
 
-    fun getMedicalAppointmentsForUser(userId: String): Flowable<List<MedicalAppointment>> =
+
+    fun getFutureMedicalAppointmentsForUser(userId: String, timestamp: Long): Flowable<List<MedicalAppointment>> =
         RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
             FirebaseDatabaseConfig.APPOINTMENT_PATIENT_ID
         ).equalTo(userId),
             { data ->
-                data.children.mapNotNull { value ->
-                    value.getValue(MedicalAppointment::class.java)
-                }
+                data.children.mapNotNull { value -> value.getValue(MedicalAppointment::class.java) }.filter { it.dateTime >= timestamp }
             }
         )
 

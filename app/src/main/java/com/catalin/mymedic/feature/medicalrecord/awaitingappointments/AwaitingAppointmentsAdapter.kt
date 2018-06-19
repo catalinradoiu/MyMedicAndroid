@@ -29,16 +29,9 @@ class AwaitingAppointmentsAdapter :
         holder.bind(awaitingAppointments[position])
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): AwaitingAppointmentViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AwaitingAppointmentViewHolder =
         AwaitingAppointmentViewHolder(
-            AwaitingAppointmentItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ),
+            AwaitingAppointmentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onAppointmentStatusChangeListener
         )
 

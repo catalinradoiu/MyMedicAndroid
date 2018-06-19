@@ -1,5 +1,6 @@
 package com.catalin.mymedic.storage.repository
 
+import com.catalin.mymedic.data.AppointmentCancelationReason
 import com.catalin.mymedic.data.AvailableAppointments
 import com.catalin.mymedic.data.MedicalAppointment
 import com.catalin.mymedic.storage.source.MedicalAppointmentsFirebaseSource
@@ -25,11 +26,11 @@ class MedicalAppointmentsRepository @Inject constructor(private val medicalAppoi
             }
         }
 
-    fun getAwaitingAppointmentsForMedic(medicId: String, timestamp: Long) =
-        medicalAppointmentsRemoteSource.getAwaitingMedicalAppointmentsForMedic(medicId, timestamp)
+    fun getAwaitingAppointmentsForMedic(medicId: String) =
+        medicalAppointmentsRemoteSource.getAwaitingMedicalAppointmentsForMedic(medicId)
 
-    fun getMedicalAppointmentsForUser(userId: String) =
-        medicalAppointmentsRemoteSource.getMedicalAppointmentsForUser(userId)
+    fun getFutureMedicalAppointmentsForUser(userId: String, timestamp: Long) =
+        medicalAppointmentsRemoteSource.getFutureMedicalAppointmentsForUser(userId, timestamp)
 
     fun getAvailableAppointmentsTime(medicId: String): Single<AvailableAppointments> =
         if (availableAppointmentsDetails[medicId] == null)
@@ -41,4 +42,8 @@ class MedicalAppointmentsRepository @Inject constructor(private val medicalAppoi
 
     fun updateMedicalAppointment(appointment: MedicalAppointment): Completable =
         medicalAppointmentsRemoteSource.updateMedicalAppointment(appointment)
+
+    //TODO : Completable not working here, look into it
+    fun createCancelationReason(appointmentCancelationReason: AppointmentCancelationReason) =
+        medicalAppointmentsRemoteSource.createCancelationReason(appointmentCancelationReason)
 }

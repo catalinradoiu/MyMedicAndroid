@@ -24,12 +24,7 @@ class PatientOwnAppointmentsAdapter : RecyclerView.Adapter<RecyclerView.ViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         R.layout.patient_appointment_header_view -> PatientAppointmentHeader(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                viewType,
-                parent,
-                false
-            )
+            DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false)
         )
         else -> PatientAppointmentItem(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.patient_own_appointment_item, parent, false),

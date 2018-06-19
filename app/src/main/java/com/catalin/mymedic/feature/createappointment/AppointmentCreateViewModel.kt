@@ -62,7 +62,6 @@ class AppointmentCreateViewModel(
                 medicalAppointmentsRepository.createAppointment(
                     MedicalAppointment(
                         "",
-                        preferencesManager.currentUserName,
                         appointmentTime.get(),
                         preferencesManager.currentUserName,
                         medicName.get().orEmpty(),

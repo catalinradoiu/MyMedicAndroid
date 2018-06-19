@@ -35,4 +35,6 @@ fun MedicalAppointment.toMap() = HashMap<String, Any>().apply {
     put("medicId", medicId)
     put("description", description)
     put("dateTime", dateTime)
+    put("medicName", medicName)
+    put("specialtyName", specialtyName)
 }

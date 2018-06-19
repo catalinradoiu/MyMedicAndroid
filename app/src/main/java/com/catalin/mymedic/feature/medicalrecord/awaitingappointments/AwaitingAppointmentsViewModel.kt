@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableField
+import com.catalin.mymedic.data.AppointmentCancelationReason
 import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.data.MedicalAppointment
 import com.catalin.mymedic.feature.shared.StateLayout
@@ -35,10 +36,8 @@ class AwaitingAppointmentsViewModel(
 
     fun initAwaitingAppointments() {
         state.set(StateLayout.State.LOADING)
-        diposables.add(appointmentsRepository.getAwaitingAppointmentsForMedic(
-            preferencesManager.currentUserId,
-            System.currentTimeMillis()
-        ).mainThreadSubscribe(
+        diposables.add(
+            appointmentsRepository.getAwaitingAppointmentsForMedic(preferencesManager.currentUserId).mainThreadSubscribe(
             Consumer { result ->
                 if (result.isEmpty()) {
                     state.set(StateLayout.State.EMPTY)
@@ -53,10 +52,7 @@ class AwaitingAppointmentsViewModel(
         ))
     }
 
-    fun changeAppointmentStatus(
-        appointment: MedicalAppointment,
-        appointmentStatus: AppointmentStatus
-    ) {
+    fun approveAppointment(appointment: MedicalAppointment, appointmentStatus: AppointmentStatus) {
         updateDiposables.add(appointmentsRepository.updateMedicalAppointment(appointment.apply {
             status = appointmentStatus
         }).mainThreadSubscribe(Action {
@@ -64,6 +60,26 @@ class AwaitingAppointmentsViewModel(
         }, Consumer {
             operationResult.value = OperationResult.Error(it.localizedMessage)
         }))
+    }
+
+    fun cancelAppointment(appointment: MedicalAppointment, appointmentStatus: AppointmentStatus, reason: String) {
+        updateDiposables.add(appointmentsRepository.updateMedicalAppointment(appointment.apply {
+            status = appointmentStatus
+        }).andThen {
+            appointmentsRepository.createCancelationReason(
+                AppointmentCancelationReason(
+                    appointment.id,
+                    reason,
+                    appointmentStatus
+                )
+            )
+        }.mainThreadSubscribe(
+                Action {
+                    operationResult.value = OperationResult.Success()
+                }, Consumer {
+                    operationResult.value = OperationResult.Error(it.localizedMessage)
+                }
+            ))
     }
 
     override fun onCleared() {

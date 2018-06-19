@@ -15,6 +15,8 @@ import com.catalin.mymedic.AwaitingAppointmentsBinding
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.data.AppointmentStatus
+import com.catalin.mymedic.feature.shared.AppointmentCancelationDialog
+import com.catalin.mymedic.feature.shared.AppointmentCancelationViewModel
 import com.catalin.mymedic.utils.NetworkManager
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.dismissIfVisible
@@ -42,19 +44,9 @@ class AwaitingAppointmentsFragment : Fragment() {
         (context?.applicationContext as MyMedicApplication).applicationComponent.inject(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.awaiting_appointments_fragment,
-            container,
-            false
-        )
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(AwaitingAppointmentsViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.awaiting_appointments_fragment, container, false)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AwaitingAppointmentsViewModel::class.java)
         binding.viewModel = viewModel
         return binding.root
     }
@@ -93,14 +85,24 @@ class AwaitingAppointmentsFragment : Fragment() {
         awaitingAppointmentsAdapter.setOnAppointmentStatusChangeListener(object :
             AwaitingAppointmentsAdapter.OnAppointmentStatusChangeListener {
             override fun onReject(position: Int) {
-                if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
-                    displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
-                    awaitingAppointmentsAdapter.removeAppointment(position)
+                context?.let {
+                    val dialogViewModel = AppointmentCancelationViewModel()
+                    val rejectionReasonDialog = AppointmentCancelationDialog.getInstance(dialogViewModel).apply {
+                        setOnConfirmationClickListener {
+                            if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
+                                displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
+                                awaitingAppointmentsAdapter.removeAppointment(position)
+                            }
+                            viewModel.cancelAppointment(
+                                awaitingAppointmentsAdapter.awaitingAppointments[position],
+                                AppointmentStatus.REJECTED,
+                                dialogViewModel.cancelationReason.get().orEmpty()
+                            )
+                        }
+                    }
+                    rejectionReasonDialog.show(fragmentManager, CANCEL_APPOINTMENT_DIALOG_TAG)
                 }
-                viewModel.changeAppointmentStatus(
-                    awaitingAppointmentsAdapter.awaitingAppointments[position],
-                    AppointmentStatus.REJECTED
-                )
+
             }
 
             override fun onAccept(position: Int) {
@@ -108,7 +110,7 @@ class AwaitingAppointmentsFragment : Fragment() {
                     displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
                     awaitingAppointmentsAdapter.removeAppointment(position)
                 }
-                viewModel.changeAppointmentStatus(
+                viewModel.approveAppointment(
                     awaitingAppointmentsAdapter.awaitingAppointments[position],
                     AppointmentStatus.CONFIRMED
                 )
@@ -119,5 +121,9 @@ class AwaitingAppointmentsFragment : Fragment() {
 
     private fun displaySnackbar(message: String) {
         operationSnackbar.newLongSnackbar(binding.root, message)
+    }
+
+    companion object {
+        private const val CANCEL_APPOINTMENT_DIALOG_TAG = "cancelAppointmentDialog"
     }
 }
