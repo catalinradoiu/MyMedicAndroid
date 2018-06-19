@@ -34,6 +34,8 @@ class AppointmentCreateViewModel(
     val patientId = ObservableField<String>("")
     val appointmentTime = ObservableLong(0)
     val appointmentDetails = ObservableField<String>("")
+    val medicName = ObservableField<String>("")
+    val medicalSpecialty = ObservableField<String>("")
     val validDate = SingleLiveEvent<Boolean>()
     val checkOffline = SingleLiveEvent<Boolean>()
     val operationResult = SingleLiveEvent<OperationResult>()
@@ -62,6 +64,9 @@ class AppointmentCreateViewModel(
                         "",
                         preferencesManager.currentUserName,
                         appointmentTime.get(),
+                        preferencesManager.currentUserName,
+                        medicName.get().orEmpty(),
+                        medicalSpecialty.get().orEmpty(),
                         patientId.get().orEmpty(),
                         medicId.get().orEmpty(),
                         appointmentDetails.get().orEmpty(),

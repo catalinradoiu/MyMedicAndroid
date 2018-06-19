@@ -3,6 +3,7 @@ package com.catalin.mymedic.feature.medicalrecord
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import com.catalin.mymedic.feature.medicalrecord.ownappointments.PatientOwnAppointmentsFragment
 import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 
 /**
@@ -14,7 +15,10 @@ class MedicalRecordViewPagerPatient(fragmentManager: FragmentManager) :
 
     var pageTitles: List<String>? = null
 
-    override fun getItem(position: Int): Fragment = MedicalSpecialtiesSearchFragment()
+    override fun getItem(position: Int): Fragment = when (position) {
+        0 -> MedicalSpecialtiesSearchFragment()
+        else -> PatientOwnAppointmentsFragment()
+    }
 
     override fun getCount(): Int = pageTitles?.size ?: 0
 

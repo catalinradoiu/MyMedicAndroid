@@ -33,8 +33,11 @@ fun setDateFromLong(textInputEditText: TextInputEditText, date: Long) {
     }
 }
 
-//@SuppressLint("SimpleDateFormat")
-//@InverseBindingAdapter(attribute = "app:longDate")
-//fun getTimesampFromStringDate(textInputEditText: TextInputEditText, stringDate: String): Long =
-//    Calendar.getInstance().apply { time = SimpleDateFormat(TIME_FORMAT_PATTERN).parse(stringDate) }.timeInMillis
+@SuppressLint("SimpleDateFormat")
+@BindingAdapter("longDate", requireAll = true)
+fun setDateFromLong(textView: TextView, date: Long) {
+    if (date != 0L) {
+        textView.text = SimpleDateFormat(TIME_FORMAT_PATTERN).format(Date(date))
+    }
+}
 

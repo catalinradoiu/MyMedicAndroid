@@ -8,6 +8,7 @@ import com.catalin.mymedic.feature.createappointment.AppointmentCreateActivity
 import com.catalin.mymedic.feature.launcher.LauncherActivity
 import com.catalin.mymedic.feature.medicalrecord.MedicalRecordFragment
 import com.catalin.mymedic.feature.medicalrecord.awaitingappointments.AwaitingAppointmentsFragment
+import com.catalin.mymedic.feature.medicalrecord.ownappointments.PatientOwnAppointmentsFragment
 import com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchActivity
 import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 import dagger.Component
@@ -31,5 +32,6 @@ interface ApplicationComponent {
     fun inject(medicsSearchActivity: MedicsSearchActivity)
     fun inject(appointmentCreateActivity: AppointmentCreateActivity)
     fun inject(firebaseInstanceIdService: MyMedicFirebaseInstanceIdService)
+    fun inject(patientOwnAppointmentsFragment: PatientOwnAppointmentsFragment)
     fun inject(awaitingAppointmentsFragment: AwaitingAppointmentsFragment)
 }

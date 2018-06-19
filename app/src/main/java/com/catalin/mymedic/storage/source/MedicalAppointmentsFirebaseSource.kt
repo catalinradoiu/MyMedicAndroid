@@ -58,6 +58,17 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
         )
 
 
+    fun getMedicalAppointmentsForUser(userId: String): Flowable<List<MedicalAppointment>> =
+        RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
+            FirebaseDatabaseConfig.APPOINTMENT_PATIENT_ID
+        ).equalTo(userId),
+            { data ->
+                data.children.mapNotNull { value ->
+                    value.getValue(MedicalAppointment::class.java)
+                }
+            }
+        )
+
     fun getAvailableAppointmentsTime(medicId: String): Single<AvailableAppointments> {
         val result = AvailableAppointments()
         return RxFirebaseDatabase.observeSingleValueEvent(
