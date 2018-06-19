@@ -53,10 +53,15 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             appointment.toMap()
         )
 
-    fun createCancelationReason(cancelationReason: AppointmentCancelationReason): Completable = RxFirebaseDatabase.setValue(
-        firebaseDatabase.reference.child(FirebaseDatabaseConfig.CANCELED_APPOINTMENTS).child(cancelationReason.id),
-        cancelationReason
-    )
+    fun createCancelationReason(cancelationReason: AppointmentCancelationReason): Completable
+//            : Completable = RxFirebaseDatabase.setValue(
+//        firebaseDatabase.reference.child(FirebaseDatabaseConfig.CANCELED_APPOINTMENTS).child(cancelationReason.id),
+//        cancelationReason
+//    )
+    {
+        firebaseDatabase.reference.child(FirebaseDatabaseConfig.CANCELED_APPOINTMENTS).child(cancelationReason.id).setValue(cancelationReason)
+        return Completable.complete()
+    }
 
 
     fun getFutureMedicalAppointmentsForUser(userId: String, timestamp: Long): Flowable<List<MedicalAppointment>> =

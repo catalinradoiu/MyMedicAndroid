@@ -65,21 +65,21 @@ class AwaitingAppointmentsViewModel(
     fun cancelAppointment(appointment: MedicalAppointment, appointmentStatus: AppointmentStatus, reason: String) {
         updateDiposables.add(appointmentsRepository.updateMedicalAppointment(appointment.apply {
             status = appointmentStatus
-        }).andThen {
-            appointmentsRepository.createCancelationReason(
-                AppointmentCancelationReason(
-                    appointment.id,
-                    reason,
-                    appointmentStatus
-                )
-            )
-        }.mainThreadSubscribe(
+        }).mainThreadSubscribe(
                 Action {
                     operationResult.value = OperationResult.Success()
                 }, Consumer {
                     operationResult.value = OperationResult.Error(it.localizedMessage)
                 }
             ))
+
+        appointmentsRepository.createCancelationReason(
+            AppointmentCancelationReason(
+                appointment.id,
+                reason,
+                appointmentStatus
+            )
+        )
     }
 
     override fun onCleared() {

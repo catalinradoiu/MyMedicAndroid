@@ -89,15 +89,15 @@ class AwaitingAppointmentsFragment : Fragment() {
                     val dialogViewModel = AppointmentCancelationViewModel()
                     val rejectionReasonDialog = AppointmentCancelationDialog.getInstance(dialogViewModel).apply {
                         setOnConfirmationClickListener {
-                            if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
-                                displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
-                                awaitingAppointmentsAdapter.removeAppointment(position)
-                            }
                             viewModel.cancelAppointment(
                                 awaitingAppointmentsAdapter.awaitingAppointments[position],
                                 AppointmentStatus.REJECTED,
                                 dialogViewModel.cancelationReason.get().orEmpty()
                             )
+                            if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
+                                displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
+                                awaitingAppointmentsAdapter.removeAppointment(position)
+                            }
                         }
                     }
                     rejectionReasonDialog.show(fragmentManager, CANCEL_APPOINTMENT_DIALOG_TAG)
