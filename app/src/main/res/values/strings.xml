@@ -57,8 +57,10 @@
     <string name="invalid_date">No date given or invalid date</string>
     <string name="appointment_created">Your appointment request was sent successfully</string>
     <string name="no_internet_appointment_will_be_created">You have no internet now, but the appointment will be created once you get online</string>
-    <string name="you_have_the_following_appointments">You have the following appointments :</string>
+    <string name="your_appointments">Your appointments :</string>
     <string name="cancel">Cancel</string>
+    <string name="awaiting">Awaiting</string>
+    <string name="confirmed">Confirmed</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>

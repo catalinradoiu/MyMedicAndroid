@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.catalin.mymedic.PatientAppointmentHeaderBinding
 import com.catalin.mymedic.PatientItemBinding
 import com.catalin.mymedic.R
+import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.data.MedicalAppointment
 
 /**
@@ -15,7 +16,11 @@ import com.catalin.mymedic.data.MedicalAppointment
  */
 class PatientOwnAppointmentsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val appointmentsList = ArrayList<MedicalAppointment>()
+    var appointmentsList = ArrayList<MedicalAppointment>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         R.layout.patient_appointment_header_view -> PatientAppointmentHeader(
@@ -53,6 +58,16 @@ class PatientOwnAppointmentsAdapter : RecyclerView.Adapter<RecyclerView.ViewHold
         fun bind(appointment: MedicalAppointment) {
             viewModel.apply {
                 appointmentTime.set(appointment.dateTime)
+                specialtyName.set(appointment.specialtyName)
+                medicName.set(appointment.medicName)
+                status.set(appointment.status)
+                appointmentStatusString.set(
+                    if (appointment.status == AppointmentStatus.AWAITING) itemView.context.getString(
+                        R.string.awaiting
+                    ) else itemView.context.getString(
+                        R.string.confirmed
+                    )
+                )
             }
         }
     }

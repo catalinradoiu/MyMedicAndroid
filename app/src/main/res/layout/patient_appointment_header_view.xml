@@ -10,5 +10,5 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/highlight_text_size"
         android:padding="@dimen/primary_margin"
-        android:text="@string/you_have_the_following_appointments" />
+        android:text="@string/your_appointments" />
 </layout>

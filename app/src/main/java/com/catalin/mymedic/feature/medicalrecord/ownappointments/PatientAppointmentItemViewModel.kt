@@ -1,6 +1,8 @@
 package com.catalin.mymedic.feature.medicalrecord.ownappointments
 
+import android.databinding.ObservableField
 import android.databinding.ObservableLong
+import com.catalin.mymedic.data.AppointmentStatus
 
 /**
  * View model class for the patient own appointment view holder item
@@ -9,5 +11,9 @@ import android.databinding.ObservableLong
  */
 class PatientAppointmentItemViewModel {
 
-    val appointmentTime = ObservableLong()
+    val appointmentTime = ObservableLong(0)
+    val medicName = ObservableField<String>("")
+    val specialtyName = ObservableField<String>("")
+    val appointmentStatusString = ObservableField<String>("")
+    val status = ObservableField<AppointmentStatus>(AppointmentStatus.AWAITING)
 }

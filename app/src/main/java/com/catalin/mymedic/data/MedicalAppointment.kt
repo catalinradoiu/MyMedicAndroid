@@ -7,6 +7,9 @@ package com.catalin.mymedic.data
 data class MedicalAppointment(
     var id: String,
     val dateTime: Long,
+    val patientName: String,
+    val medicName: String,
+    val specialtyName: String,
     val patientId: String,
     val medicId: String,
     val description: String,
@@ -17,7 +20,7 @@ data class MedicalAppointment(
         Empty constructor needed for parsing the firebase json to an actual MedicalAppointment object
         DataSnapshot.getValue(MedicalAppointment::class.java)
      */
-    constructor() : this("", 0, "", "", "", AppointmentStatus.AWAITING)
+    constructor() : this("", 0, "", "", "", "", "", "", AppointmentStatus.AWAITING)
 }
 
 enum class AppointmentStatus {

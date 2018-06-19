@@ -6,6 +6,8 @@
     <!--suppress AndroidUnknownAttribute -->
     <data class=".PatientItemBinding">
 
+        <import type="com.catalin.mymedic.data.AppointmentStatus" />
+
         <variable
             name="viewModel"
             type="com.catalin.mymedic.feature.medicalrecord.ownappointments.PatientAppointmentItemViewModel" />
@@ -20,14 +22,17 @@
             android:id="@+id/patient_appointment_medical_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@{viewModel.specialtyName}"
             android:textSize="@dimen/alert_text_size"
             android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Padiatrics" />
 
         <TextView
             android:id="@+id/patient_appointment_medic_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@{viewModel.medicName}"
             app:layout_constraintTop_toBottomOf="@id/patient_appointment_medical_section"
             tools:text="George Vlad" />
 
@@ -36,7 +41,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/patient_appointment_medic_name"
+            app:longDate="@{viewModel.appointmentTime}"
             tools:text="12.08.2018 14:45" />
+
+        <TextView
+            android:id="@+id/patient_appointment_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:text="@{viewModel.appointmentStatusString}"
+            android:textColor="@{viewModel.status == AppointmentStatus.AWAITING ? @color/yellow : @color/light_green }"
+            app:layout_constraintTop_toBottomOf="@id/patient_appointment_date"
+            tools:text="AWAITING" />
 
         <Button
             android:layout_width="wrap_content"
