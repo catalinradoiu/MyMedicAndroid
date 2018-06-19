@@ -26,6 +26,9 @@ class MedicalAppointmentsRepository @Inject constructor(private val medicalAppoi
 
     fun getMedicalAppointmentsForMedic(medicId: String) = medicalAppointmentsRemoteSource.getMedicalAppointmentsForMedic(medicId)
 
+    fun getMedicalAppointmentsForUser(userId: String) =
+        medicalAppointmentsRemoteSource.getMedicalAppointmentsForUser(userId)
+
     fun getAvailableAppointmentsTime(medicId: String): Single<AvailableAppointments> =
         if (availableAppointmentsDetails[medicId] == null)
             medicalAppointmentsRemoteSource.getAvailableAppointmentsTime(medicId).doOnSuccess {

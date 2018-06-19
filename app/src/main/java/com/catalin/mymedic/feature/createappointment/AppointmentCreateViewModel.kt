@@ -7,6 +7,7 @@ import android.databinding.ObservableLong
 import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.data.AvailableAppointments
 import com.catalin.mymedic.data.MedicalAppointment
+import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.MedicalAppointmentsRepository
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.SingleLiveEvent
@@ -24,12 +25,17 @@ import kotlin.collections.ArrayList
  * @author catalinradoiu
  * @since 5/29/2018
  */
-class AppointmentCreateViewModel(private val medicalAppointmentsRepository: MedicalAppointmentsRepository) : ViewModel() {
+class AppointmentCreateViewModel(
+    private val medicalAppointmentsRepository: MedicalAppointmentsRepository,
+    private val preferencesManager: SharedPreferencesManager
+) : ViewModel() {
 
     val medicId = ObservableField<String>("")
     val patientId = ObservableField<String>("")
     val appointmentTime = ObservableLong(0)
     val appointmentDetails = ObservableField<String>("")
+    val medicName = ObservableField<String>("")
+    val medicalSpecialty = ObservableField<String>("")
     val validDate = SingleLiveEvent<Boolean>()
     val checkOffline = SingleLiveEvent<Boolean>()
     val operationResult = SingleLiveEvent<OperationResult>()
@@ -57,6 +63,9 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
                     MedicalAppointment(
                         "",
                         appointmentTime.get(),
+                        preferencesManager.currentUserName,
+                        medicName.get().orEmpty(),
+                        medicalSpecialty.get().orEmpty(),
                         patientId.get().orEmpty(),
                         medicId.get().orEmpty(),
                         appointmentDetails.get().orEmpty(),
@@ -107,8 +116,12 @@ class AppointmentCreateViewModel(private val medicalAppointmentsRepository: Medi
         return Pair(dayStart, unavailableTimepoint)
     }
 
-    class Factory @Inject constructor(private val medicalAppointmentsRepository: MedicalAppointmentsRepository) : ViewModelProvider.Factory {
+    class Factory @Inject constructor(
+        private val medicalAppointmentsRepository: MedicalAppointmentsRepository,
+        private val sharedPreferencesManager: SharedPreferencesManager
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = AppointmentCreateViewModel(medicalAppointmentsRepository) as T
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+            AppointmentCreateViewModel(medicalAppointmentsRepository, sharedPreferencesManager) as T
     }
 }

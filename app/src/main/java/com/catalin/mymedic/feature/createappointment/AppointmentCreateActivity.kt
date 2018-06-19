@@ -48,6 +48,8 @@ class AppointmentCreateActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AppointmentCreateViewModel::class.java).apply {
             medicId.set(intent.getStringExtra(MEDIC_ID))
             patientId.set(preferencesManager.currentUserId)
+            medicName.set(intent.getStringExtra(MEDIC_NAME))
+            medicalSpecialty.set(intent.getStringExtra(MEDICAL_SPECIALTY_NAME))
             initFreeAppointmentsTimeData(intent.getStringExtra(MEDIC_ID))
         }
         binding.viewModel = viewModel
@@ -58,8 +60,6 @@ class AppointmentCreateActivity : AppCompatActivity() {
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
-        binding.medicNameInput.setText(intent.getStringExtra(MEDIC_NAME))
-        binding.sectionNameInput.setText(intent.getStringExtra(MEDICAL_SPECIALTY_NAME))
         initListeners()
     }
 

@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.wdullaer.materialdatetimepicker.time.Timepoint
 import durdinapps.rxfirebase2.RxFirebaseDatabase
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import java.util.*
 import javax.inject.Inject
@@ -45,6 +46,17 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
                 }
             }
         ).toSingle()
+
+    fun getMedicalAppointmentsForUser(userId: String): Flowable<List<MedicalAppointment>> =
+        RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
+            FirebaseDatabaseConfig.APPOINTMENT_PATIENT_ID
+        ).equalTo(userId),
+            { data ->
+                data.children.mapNotNull { value ->
+                    value.getValue(MedicalAppointment::class.java)
+                }
+            }
+        )
 
     fun getAvailableAppointmentsTime(medicId: String): Single<AvailableAppointments> {
         val result = AvailableAppointments()
