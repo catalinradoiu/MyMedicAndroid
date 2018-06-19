@@ -26,10 +26,14 @@ class PatientOwnAppointmentsViewModel(
 
     fun initMedicalAppointments() {
         state.set(StateLayout.State.LOADING)
-        medicalAppointmentsRepository.getMedicalAppointmentsForUser(sharedPreferencesManager.currentUserId)
+        medicalAppointmentsRepository.getFutureMedicalAppointmentsForUser(sharedPreferencesManager.currentUserId, System.currentTimeMillis())
             .mainThreadSubscribe(Consumer {
-                patientAppointments.value = it
-                state.set(StateLayout.State.NORMAL)
+                if (it.isEmpty()) {
+                    state.set(StateLayout.State.EMPTY)
+                } else {
+                    patientAppointments.value = it
+                    state.set(StateLayout.State.NORMAL)
+                }
             }, Consumer {
                 state.set(StateLayout.State.ERROR)
             })
@@ -41,9 +45,6 @@ class PatientOwnAppointmentsViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-            PatientOwnAppointmentsViewModel(
-                medicalAppointmentsRepository,
-                sharedPreferencesManager
-            ) as T
+            PatientOwnAppointmentsViewModel(medicalAppointmentsRepository, sharedPreferencesManager) as T
     }
 }

@@ -39,12 +39,7 @@ class PatientOwnAppointmentsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.patient_own_appointments_fragment,
-            container,
-            false
-        )
+        binding = DataBindingUtil.inflate(inflater, R.layout.patient_own_appointments_fragment, container, false)
         viewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(PatientOwnAppointmentsViewModel::class.java)
         binding.viewModel = viewModel

@@ -13,7 +13,7 @@ data class MedicalAppointment(
     val patientId: String,
     val medicId: String,
     val description: String,
-    val status: AppointmentStatus
+    var status: AppointmentStatus
 ) {
 
     /*
@@ -24,5 +24,17 @@ data class MedicalAppointment(
 }
 
 enum class AppointmentStatus {
-    CONFIRMED, AWAITING, REJECTED
+    CONFIRMED, AWAITING, REJECTED, CANCELED_BY_PATIENT, CANCELED_BY_MEDIC
+}
+
+fun MedicalAppointment.toMap() = HashMap<String, Any>().apply {
+    put("id", id)
+    put("patientName", patientName)
+    put("patientId", patientId)
+    put("status", status)
+    put("medicId", medicId)
+    put("description", description)
+    put("dateTime", dateTime)
+    put("medicName", medicName)
+    put("specialtyName", specialtyName)
 }

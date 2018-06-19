@@ -1,9 +1,6 @@
 package com.catalin.mymedic.storage.source
 
-import com.catalin.mymedic.data.AvailableAppointments
-import com.catalin.mymedic.data.MedicDetails
-import com.catalin.mymedic.data.MedicalAppointment
-import com.catalin.mymedic.data.Schedule
+import com.catalin.mymedic.data.*
 import com.catalin.mymedic.utils.Constants
 import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.catalin.mymedic.utils.extension.setToDayStart
@@ -36,25 +33,43 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
         )
     }
 
-    fun getMedicalAppointmentsForMedic(medicId: String): Single<List<MedicalAppointment>> =
-        RxFirebaseDatabase.observeSingleValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
+    fun getAwaitingMedicalAppointmentsForMedic(medicId: String): Flowable<List<MedicalAppointment>> =
+        RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
             FirebaseDatabaseConfig.APPOINTMENTS_TABLE_MEDIC_ID
-        ),
+        ).equalTo(medicId),
             { data ->
                 data.children.mapNotNull { value ->
                     value.getValue(MedicalAppointment::class.java)
-                }
-            }
-        ).toSingle()
+                }.filter { it.status == AppointmentStatus.AWAITING }.sortedBy { it.dateTime }
 
-    fun getMedicalAppointmentsForUser(userId: String): Flowable<List<MedicalAppointment>> =
+            }
+        )
+
+    fun updateMedicalAppointment(appointment: MedicalAppointment) =
+        RxFirebaseDatabase.updateChildren(
+            firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).child(
+                appointment.id
+            ),
+            appointment.toMap()
+        )
+
+    fun createCancelationReason(cancelationReason: AppointmentCancelationReason): Completable
+//            : Completable = RxFirebaseDatabase.setValue(
+//        firebaseDatabase.reference.child(FirebaseDatabaseConfig.CANCELED_APPOINTMENTS).child(cancelationReason.id),
+//        cancelationReason
+//    )
+    {
+        firebaseDatabase.reference.child(FirebaseDatabaseConfig.CANCELED_APPOINTMENTS).child(cancelationReason.id).setValue(cancelationReason)
+        return Completable.complete()
+    }
+
+
+    fun getFutureMedicalAppointmentsForUser(userId: String, timestamp: Long): Flowable<List<MedicalAppointment>> =
         RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
             FirebaseDatabaseConfig.APPOINTMENT_PATIENT_ID
         ).equalTo(userId),
             { data ->
-                data.children.mapNotNull { value ->
-                    value.getValue(MedicalAppointment::class.java)
-                }
+                data.children.mapNotNull { value -> value.getValue(MedicalAppointment::class.java) }.filter { it.dateTime >= timestamp }
             }
         )
 
@@ -76,7 +91,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             ).map { data ->
                 val medicalAppointments = ArrayList<MedicalAppointment>(data.children.mapNotNull { value ->
                     value.getValue(MedicalAppointment::class.java)
-                })
+                }.filter { it.status != AppointmentStatus.REJECTED })
                 medicalAppointments.sortBy { it.dateTime }
                 medicalAppointments.forEach { appointment ->
                     val calendar = Calendar.getInstance().setToDayStartWithTimestamp(appointment.dateTime)
@@ -176,6 +191,5 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
     companion object {
         private const val WEEKEND_DAY = -1
     }
-
 }
 

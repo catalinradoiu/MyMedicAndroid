@@ -26,5 +26,8 @@ class FirebaseDatabaseConfig {
         const val MEDICAL_APPOINTMENTS_TABLE_NAME = "medical_appointments"
         const val APPOINTMENTS_TABLE_MEDIC_ID = "medicId"
         const val APPOINTMENT_PATIENT_ID = "patientId"
+
+        //Canceled appointments
+        const val CANCELED_APPOINTMENTS = "canceled_appointments"
     }
 }
