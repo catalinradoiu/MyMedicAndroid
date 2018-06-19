@@ -106,14 +106,14 @@ class AwaitingAppointmentsFragment : Fragment() {
             }
 
             override fun onAccept(position: Int) {
-                if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
-                    displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
-                    awaitingAppointmentsAdapter.removeAppointment(position)
-                }
                 viewModel.approveAppointment(
                     awaitingAppointmentsAdapter.awaitingAppointments[position],
                     AppointmentStatus.CONFIRMED
                 )
+                if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
+                    displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
+                    awaitingAppointmentsAdapter.removeAppointment(position)
+                }
             }
 
         })
