@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.catalin.mymedic.R
 import com.catalin.mymedic.databinding.HomeActivityBinding
-import com.catalin.mymedic.feature.chat.ChatListFragment
+import com.catalin.mymedic.feature.chat.ConversationsListFragment
 import com.catalin.mymedic.feature.medicalrecord.MedicalRecordFragment
 import com.catalin.mymedic.feature.profile.ProfileFragment
 import com.catalin.mymedic.feature.settings.SettingsFragment
@@ -37,8 +37,8 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
                 R.id.main_navigation_chat -> {
-                    if (oldFragment !is ChatListFragment) {
-                        supportFragmentManager.beginTransaction().replace(R.id.home_fragment_container, ChatListFragment(), CURRENT_FRAGMENT).commit()
+                    if (oldFragment !is ConversationsListFragment) {
+                        supportFragmentManager.beginTransaction().replace(R.id.home_fragment_container, ConversationsListFragment(), CURRENT_FRAGMENT).commit()
                     }
                 }
                 R.id.main_navigation_profile -> {

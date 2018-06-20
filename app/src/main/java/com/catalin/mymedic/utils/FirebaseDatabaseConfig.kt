@@ -29,5 +29,10 @@ class FirebaseDatabaseConfig {
 
         //Canceled appointments
         const val CANCELED_APPOINTMENTS = "canceled_appointments"
+
+        //Conversations
+        const val CONVERSATIONS = "conversations"
+        const val FIRST_PARTICIPANT_ID = "firstParticipantId"
+        const val SECOND_PARTICIPANT_ID = "secondParticipantId"
     }
 }

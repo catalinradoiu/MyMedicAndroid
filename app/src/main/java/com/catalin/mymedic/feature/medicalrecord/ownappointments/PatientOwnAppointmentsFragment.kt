@@ -58,6 +58,10 @@ class PatientOwnAppointmentsFragment : Fragment() {
     }
 
     private fun initListeners() {
+        binding.patientOwnAppointmentsStateLayout.setOnErrorTryAgainListener {
+            viewModel.initMedicalAppointments()
+        }
+
         viewModel.patientAppointments.observe(this, Observer {
             patientOwnAppointmentsAdapter.appointmentsList = ArrayList(it)
         })

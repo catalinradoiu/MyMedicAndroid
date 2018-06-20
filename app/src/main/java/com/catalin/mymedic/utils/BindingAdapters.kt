@@ -15,6 +15,7 @@ import java.util.*
  */
 
 private const val TIME_FORMAT_PATTERN = "dd/MM/yyyy HH:mm"
+private const val CALENDAR_DATE_PATTERN = "dd/MM/yyyy"
 
 @BindingAdapter("drawableTint")
 fun setIconTint(textView: TextView, color: Int) {
@@ -38,6 +39,14 @@ fun setDateFromLong(textInputEditText: TextInputEditText, date: Long) {
 fun setDateFromLong(textView: TextView, date: Long) {
     if (date != 0L) {
         textView.text = SimpleDateFormat(TIME_FORMAT_PATTERN).format(Date(date))
+    }
+}
+
+@SuppressLint("SimpleDateFormat")
+@BindingAdapter("calendarDateLong", requireAll = true)
+fun setCalendarDateFromLong(textView: TextView, date: Long) {
+    if (date != 0L) {
+        textView.text = SimpleDateFormat(CALENDAR_DATE_PATTERN).format(Date(date))
     }
 }
 

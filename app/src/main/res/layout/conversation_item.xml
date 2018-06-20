@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--suppress AndroidUnknownAttribute -->
+    <data class=".ConversationItemBinding">
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.chat.ConversationItemViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/primary_margin">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/conversation_person_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/conversation_person_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/primary_margin"
+            android:text="@{viewModel.conversationPersonName}"
+            android:textSize="@dimen/alert_text_size"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/conversation_person_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Popescu Ioan" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:layout_marginStart="@dimen/primary_margin"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@{viewModel.lastMessageText}"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@id/conversation_last_message_time"
+            app:layout_constraintStart_toEndOf="@id/conversation_person_image"
+            app:layout_constraintTop_toBottomOf="@id/conversation_person_name"
+            tools:text="This is a long message to see how d " />
+
+        <TextView
+            android:id="@+id/conversation_last_message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:calendarDateLong="@{viewModel.lastMessageTime}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12.10.2010" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

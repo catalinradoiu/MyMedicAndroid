@@ -4,6 +4,7 @@ import com.catalin.mymedic.component.MyMedicFirebaseInstanceIdService
 import com.catalin.mymedic.feature.authentication.login.LoginActivity
 import com.catalin.mymedic.feature.authentication.passwordreset.PasswordResetActivity
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
+import com.catalin.mymedic.feature.chat.ConversationsListFragment
 import com.catalin.mymedic.feature.createappointment.AppointmentCreateActivity
 import com.catalin.mymedic.feature.launcher.LauncherActivity
 import com.catalin.mymedic.feature.medicalrecord.MedicalRecordFragment
@@ -34,4 +35,5 @@ interface ApplicationComponent {
     fun inject(firebaseInstanceIdService: MyMedicFirebaseInstanceIdService)
     fun inject(patientOwnAppointmentsFragment: PatientOwnAppointmentsFragment)
     fun inject(awaitingAppointmentsFragment: AwaitingAppointmentsFragment)
+    fun inject(conversationsListFragment: ConversationsListFragment)
 }
