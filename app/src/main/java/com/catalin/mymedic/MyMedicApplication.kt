@@ -23,8 +23,8 @@ class MyMedicApplication : Application() {
         super.onCreate()
         val database = FirebaseDatabase.getInstance()
         database.setPersistenceEnabled(true)
-        database.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME)
-            .keepSynced(true)
+        database.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).keepSynced(true)
+        database.reference.child(FirebaseDatabaseConfig.CONVERSATIONS).keepSynced(true)
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
     }
 }

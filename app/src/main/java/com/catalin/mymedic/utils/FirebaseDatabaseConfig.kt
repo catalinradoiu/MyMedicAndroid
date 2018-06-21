@@ -32,7 +32,10 @@ class FirebaseDatabaseConfig {
 
         //Conversations
         const val CONVERSATIONS = "conversations"
+        const val CONVERSATION_ID = "id"
         const val FIRST_PARTICIPANT_ID = "firstParticipantId"
         const val SECOND_PARTICIPANT_ID = "secondParticipantId"
+        const val CONVERSATION_MESSAGES = "messages"
+        const val CONVERSATION_LAST_MESSAGE = "lastMessage"
     }
 }

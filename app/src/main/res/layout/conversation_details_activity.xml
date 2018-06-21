@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--suppress AndroidUnknownAttribute -->
+    <data class=".ConversationDetailsBinding">
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.chat.conversationdetails.ConversationDetailsViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.catalin.mymedic.feature.shared.StateLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/divider_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_empty="@layout/layout_empty_no_message"
+            app:layout_error="@layout/layout_error"
+            app:layout_loading="@layout/loading_layout"
+            app:state="@{viewModel.state}">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/messages_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/primary_margin" />
+
+        </com.catalin.mymedic.feature.shared.StateLayout>
+
+        <View
+            android:id="@+id/divider_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/send_message_button"
+            app:layout_constraintVertical_bias="0" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:alpha="0.8"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_view" />
+
+        <EditText
+            android:id="@+id/message_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/primary_margin"
+            android:hint="@string/enter_your_message"
+            android:inputType="text"
+            android:text="@={viewModel.messageText}"
+            android:textColor="@color/white"
+            android:textColorHint="@color/transparent_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/send_message_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/send_message_button"
+            tools:ignore="LabelFor" />
+
+        <ImageButton
+            android:id="@+id/send_message_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{() -> viewModel.sendMessage()}"
+            android:src="@drawable/ic_send_24dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ContentDescription" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

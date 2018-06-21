@@ -78,6 +78,8 @@
 
     <!-- Chat -->
     <string name="no_conversations">You have no conversations yet</string>
+    <string name="enter_your_message">Enter your message</string>
+    <string name="no_messages">This is the beginning of your conversation</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>

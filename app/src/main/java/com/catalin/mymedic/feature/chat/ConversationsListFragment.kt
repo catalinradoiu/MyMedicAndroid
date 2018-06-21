@@ -15,6 +15,7 @@ import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.data.Conversation
 import com.catalin.mymedic.databinding.ChatListFragmentBinding
+import com.catalin.mymedic.feature.chat.conversationdetails.ConversationDetailsActivity
 import javax.inject.Inject
 
 /**
@@ -39,7 +40,32 @@ class ConversationsListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.chat_list_fragment, container, false)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ConversationsListViewModel::class.java)
         binding.viewModel = viewModel
-        conversationsAdapter = ConversationsAdapter(viewModel.getUserId(), viewModel.firebaseStorage)
+        conversationsAdapter = ConversationsAdapter(viewModel.getUserId(), viewModel.firebaseStorage).apply {
+            setOnConversationClickListener(object : ConversationsAdapter.OnConversationClickListener {
+                override fun onClick(position: Int) {
+                    context?.let {
+                        val conversation = conversationsAdapter.conversations[position]
+                        val userId = viewModel.getUserId()
+                        val otherParticipantId =
+                            if (conversation.firstParticipantId == userId) conversation.secondParticipantId else conversation.firstParticipantId
+                        val otherParticipantName =
+                            if (conversation.firstParticipantId == userId) conversation.secondParticipantName else conversation.firstParticipantName
+                        val otherParticipantImageUrl =
+                            if (conversation.firstParticipantId == userId) conversation.secondParticipantImageUrl else conversation.firstParticipantImageUrl
+                        startActivity(
+                            ConversationDetailsActivity.getStartIntent(
+                                it,
+                                conversation.id,
+                                otherParticipantId,
+                                otherParticipantImageUrl,
+                                otherParticipantName
+                            )
+                        )
+                    }
+                }
+
+            })
+        }
         return binding.root
     }
 

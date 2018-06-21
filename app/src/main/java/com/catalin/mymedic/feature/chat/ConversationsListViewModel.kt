@@ -31,10 +31,11 @@ class ConversationsListViewModel(
     fun initConversations() {
         state.set(StateLayout.State.LOADING)
         conversationsRepository.getConversationsForUser(preferencesManager.currentUserId).mainThreadSubscribe(Consumer {
-            if (it.isEmpty()) {
+            val messages = it.filter { it.lastMessage.text.isNotEmpty() }
+            if (messages.isEmpty()) {
                 state.set(StateLayout.State.EMPTY)
             } else {
-                conversationsList.value = ArrayList(it)
+                conversationsList.value = ArrayList(messages)
                 state.set(StateLayout.State.NORMAL)
             }
         },

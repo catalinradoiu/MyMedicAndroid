@@ -14,7 +14,7 @@ import com.google.firebase.storage.FirebaseStorage
  * @author catalinradoiu
  * @since 6/19/2018
  */
-class ConversationsAdapter(var userId: String = "", private val firebaseStorage: FirebaseStorage) :
+class ConversationsAdapter(private var userId: String = "", private val firebaseStorage: FirebaseStorage) :
     RecyclerView.Adapter<ConversationsAdapter.ConversationItemHolder>() {
 
     var conversations = ArrayList<Conversation>()
@@ -23,9 +23,12 @@ class ConversationsAdapter(var userId: String = "", private val firebaseStorage:
             notifyDataSetChanged()
         }
 
+    private var onConversationClickListener: OnConversationClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ConversationItemHolder(
         DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.conversation_item, parent, false),
-        ConversationItemViewModel(firebaseStorage).apply { userId = this@ConversationsAdapter.userId }
+        ConversationItemViewModel(firebaseStorage).apply { userId = this@ConversationsAdapter.userId },
+        onConversationClickListener
     )
 
     override fun onBindViewHolder(holder: ConversationItemHolder, position: Int) {
@@ -34,12 +37,26 @@ class ConversationsAdapter(var userId: String = "", private val firebaseStorage:
 
     override fun getItemCount() = conversations.size
 
+    fun setOnConversationClickListener(onConversationClickListener: OnConversationClickListener) {
+        this.onConversationClickListener = onConversationClickListener
+    }
 
-    class ConversationItemHolder(private val binding: ConversationItemBinding, private val viewModel: ConversationItemViewModel) :
+
+    class ConversationItemHolder(
+        private val binding: ConversationItemBinding,
+        private val viewModel: ConversationItemViewModel,
+        onConversationClickListener: OnConversationClickListener?
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.viewModel = viewModel
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onConversationClickListener?.onClick(position)
+                }
+            }
         }
 
         fun bind(conversation: Conversation) {
@@ -52,5 +69,9 @@ class ConversationsAdapter(var userId: String = "", private val firebaseStorage:
                 .load(viewModel.firebaseStorage.reference.child(if (viewModel.userId == conversation.firstParticipantId) conversation.firstParticipantImageUrl else conversation.firstParticipantImageUrl))
                 .into(binding.conversationPersonImage)
         }
+    }
+
+    interface OnConversationClickListener {
+        fun onClick(position: Int)
     }
 }
