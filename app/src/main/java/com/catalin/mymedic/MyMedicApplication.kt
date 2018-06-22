@@ -17,6 +17,8 @@ import com.google.firebase.messaging.FirebaseMessaging
  */
 class MyMedicApplication : Application() {
 
+    //TODO : Add flag to check when the app is in foreground in order to not display notifications in that case
+
     val applicationComponent: ApplicationComponent = DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
 
     override fun onCreate() {
