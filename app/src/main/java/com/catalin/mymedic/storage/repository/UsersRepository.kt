@@ -28,7 +28,10 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
 
     fun getUserByEmailAndPassword(email: String, password: String): Single<AuthResult> = usersFirebaseSource.getUserByEmailAndPassword(email, password)
 
-    fun getUserById(userId: String): Single<User> = usersFirebaseSource.getUserById(userId)
+    fun getUserById(userId: String): Single<User> {
+        val cachedUser = usersList.find { it.id == userId }
+        return if (cachedUser == null) usersFirebaseSource.getUserById(userId).doOnSuccess { usersList.add(it) } else Single.just(cachedUser)
+    }
 
     fun sendPasswordResetEmail(email: String) = usersFirebaseSource.sendPasswordResetEmail(email)
 
@@ -59,4 +62,6 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
             currentUserId = userId
         }
     }
+
+    fun getCurrentUserId() = preferencesManager.currentUserId
 }

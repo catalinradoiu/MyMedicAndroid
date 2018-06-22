@@ -13,6 +13,7 @@ import com.catalin.mymedic.feature.medicalrecord.awaitingappointments.AwaitingAp
 import com.catalin.mymedic.feature.medicalrecord.ownappointments.PatientOwnAppointmentsFragment
 import com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchActivity
 import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
+import com.catalin.mymedic.feature.profile.ProfileFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -38,4 +39,5 @@ interface ApplicationComponent {
     fun inject(awaitingAppointmentsFragment: AwaitingAppointmentsFragment)
     fun inject(conversationsListFragment: ConversationsListFragment)
     fun inject(conversationDetailsActivity: ConversationDetailsActivity)
+    fun inject(profileFragment: ProfileFragment)
 }

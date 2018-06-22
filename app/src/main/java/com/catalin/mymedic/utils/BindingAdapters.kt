@@ -45,6 +45,14 @@ fun setDateFromLong(textView: TextView, date: Long) {
 }
 
 @SuppressLint("SimpleDateFormat")
+@BindingAdapter("calendarDate", requireAll = false)
+fun setCalendarDate(textView: TextView, date: Long) {
+    if (date != 0L) {
+        textView.text = SimpleDateFormat(CALENDAR_DATE_PATTERN).format(Date(date))
+    }
+}
+
+@SuppressLint("SimpleDateFormat")
 @BindingAdapter("messageTime", requireAll = true)
 fun setMessageTime(textView: TextView, time: Long) {
     if (time != 0L) {
