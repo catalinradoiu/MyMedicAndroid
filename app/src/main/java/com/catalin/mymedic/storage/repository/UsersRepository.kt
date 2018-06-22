@@ -46,4 +46,17 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
 
     fun getFilteredMedicsList(specialtyId: Int, name: String): Single<List<User>> =
         Single.just(usersList.filter { it.specialisationId == specialtyId && it.displayName.contains(name) })
+
+    fun updateUserNotificationToken(userToken: String) {
+        usersFirebaseSource.updateUserNotificationToken(userToken, preferencesManager.currentUserId)
+    }
+
+    fun updateUserLocalData(user: User, userId: String) {
+        preferencesManager.apply {
+            currentUserAvatar = user.imageUrl
+            currentUserSpecialty = user.specialisationId
+            currentUserName = user.displayName
+            currentUserId = userId
+        }
+    }
 }
