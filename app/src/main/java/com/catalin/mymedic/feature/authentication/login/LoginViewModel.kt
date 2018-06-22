@@ -9,6 +9,7 @@ import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
+import com.google.firebase.iid.FirebaseInstanceId
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import javax.inject.Inject
@@ -33,7 +34,6 @@ class LoginViewModel(
     private val disposables = CompositeDisposable()
 
     fun loginUser() {
-        //TODO : Handle the case when the user wants to log in as a medic
         val isValidEmail = authenticationValidator.isValidEmailAdress(email.get().orEmpty())
         val isValidPassword = authenticationValidator.isValidPassword(password.get().orEmpty())
         validEmail.set(isValidEmail)
@@ -48,11 +48,8 @@ class LoginViewModel(
                     .mainThreadSubscribe(
                         Consumer { (authResult, user) ->
                             if (authResult.user.isEmailVerified) {
-                                preferencesManager.apply {
-                                    currentUserSpecialty = user.specialisationId
-                                    currentUserName = user.displayName
-                                    currentUserId = authResult.user.uid
-                                }
+                                usersRepository.updateUserLocalData(user, authResult.user.uid)
+                                usersRepository.updateUserNotificationToken(FirebaseInstanceId.getInstance().token.orEmpty())
                                 loginResult.set(OperationResult.Success())
                             } else {
                                 loginResult.set(OperationResult.Error(EMAIL_NOT_VERIFIED))

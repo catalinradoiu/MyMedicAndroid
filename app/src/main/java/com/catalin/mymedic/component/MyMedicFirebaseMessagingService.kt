@@ -10,6 +10,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.data.AppointmentNotification
 import com.catalin.mymedic.feature.launcher.LauncherActivity
@@ -31,23 +32,24 @@ class MyMedicFirebaseMessagingService : FirebaseMessagingService() {
 
     @SuppressLint("NewApi")
     override fun onMessageReceived(message: RemoteMessage?) {
-        message?.let {
-            @Suppress("DEPRECATION")
-            val notificationBuilder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val notificationChannel = NotificationChannel(MY_MEDIC_NOTIFICATIONS_CHANNEL_ID, MY_MEDIC_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
-                notificationManager.createNotificationChannel(notificationChannel)
-                NotificationCompat.Builder(this, notificationChannel.id)
-            } else {
-                NotificationCompat.Builder(this)
+        if (!(application as MyMedicApplication).isInForeground) {
+            message?.let {
+                @Suppress("DEPRECATION")
+                val notificationBuilder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val notificationChannel = NotificationChannel(MY_MEDIC_NOTIFICATIONS_CHANNEL_ID, MY_MEDIC_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
+                    notificationManager.createNotificationChannel(notificationChannel)
+                    NotificationCompat.Builder(this, notificationChannel.id)
+                } else {
+                    NotificationCompat.Builder(this)
+                }
+
+                val messageType = it.data[NOTIFICATION_TYPE_KEY]?.toInt() ?: 0
+                val intentBuilder = createTaskStackBuilder(messageType)
+                val notificationData = AppointmentNotification.createNotification(it.data ?: HashMap())
+                val notification = buildNotification(notificationBuilder, notificationData, intentBuilder)
+
+                notificationManager.notify(notification.hashCode(), notification)
             }
-
-
-            val messageType = it.data[NOTIFICATION_TYPE_KEY]?.toInt() ?: 0
-            val intentBuilder = createTaskStackBuilder(messageType)
-            val notificationData = AppointmentNotification.createNotification(it.data ?: HashMap())
-            val notification = buildNotification(notificationBuilder, notificationData, intentBuilder)
-
-            notificationManager.notify(notification.hashCode(), notification)
         }
     }
 

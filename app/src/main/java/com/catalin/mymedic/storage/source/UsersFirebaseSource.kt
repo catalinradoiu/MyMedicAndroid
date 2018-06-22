@@ -63,6 +63,8 @@ class UsersFirebaseSource @Inject constructor(private val firebaseAuth: Firebase
             }).toSingle()
 
     fun updateUserNotificationToken(token: String?, userId: String) {
-        RxFirebaseDatabase.setValue(firebaseDatabase.reference.child(userId).child(FirebaseDatabaseConfig.USERS_NOTIFICATION_TOKEN), token)
+        firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).child(userId).child(FirebaseDatabaseConfig.USERS_NOTIFICATION_TOKEN)
+            .setValue(token)
     }
+
 }
