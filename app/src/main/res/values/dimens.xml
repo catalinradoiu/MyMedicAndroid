@@ -31,5 +31,6 @@
     <dimen name="medic_search_image_height">320dp</dimen>
     <dimen name="medic_search_name_size">32sp</dimen>
     <dimen name="appointment_details_field_height">140dp</dimen>
+    <dimen name="conversation_user_avatar_size">48dp</dimen>
 
 </resources>

@@ -19,8 +19,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/conversation_person_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/conversation_user_avatar_size"
+            android:layout_height="@dimen/conversation_user_avatar_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -56,7 +56,7 @@
             android:id="@+id/conversation_last_message_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:calendarDateLong="@{viewModel.lastMessageTime}"
+            app:messageTime="@{viewModel.lastMessageTime}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -1,6 +1,7 @@
 package com.catalin.mymedic.storage.repository
 
 import com.catalin.mymedic.data.User
+import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.source.UsersFirebaseSource
 import com.google.firebase.auth.AuthResult
 import io.reactivex.Completable
@@ -15,7 +16,7 @@ import javax.inject.Singleton
  * @since 2/19/2018
  */
 @Singleton
-class UsersRepository @Inject constructor(private val usersFirebaseSource: UsersFirebaseSource) {
+class UsersRepository @Inject constructor(private val usersFirebaseSource: UsersFirebaseSource, private val preferencesManager: SharedPreferencesManager) {
 
     private var usersList = ArrayList<User>()
 
@@ -35,7 +36,10 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
 
     fun getMedicsBySpecialty(specialtyId: Int): Single<List<User>> {
         val cachedMedics = usersList.filter { it.specialisationId == specialtyId }
-        return if (cachedMedics.isEmpty()) usersFirebaseSource.getMedicsBySpecialty(specialtyId).doOnSuccess { medics -> usersList.addAll(medics) } else Single.just(
+        return if (cachedMedics.isEmpty()) usersFirebaseSource.getMedicsBySpecialty(
+            specialtyId,
+            preferencesManager.currentUserId
+        ).doOnSuccess { medics -> usersList.addAll(medics) } else Single.just(
             cachedMedics
         )
     }

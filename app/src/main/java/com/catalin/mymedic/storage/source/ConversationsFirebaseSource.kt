@@ -34,7 +34,7 @@ class ConversationsFirebaseSource @Inject constructor(private val firebaseDataba
             ).map { secondResult ->
                 val finalResult = ArrayList(firstResult)
                 finalResult.addAll(secondResult)
-                finalResult
+                finalResult.sortedByDescending { it.lastMessage.sendTime }
             }
         }
 
@@ -62,8 +62,7 @@ class ConversationsFirebaseSource @Inject constructor(private val firebaseDataba
         val conversationId = firebaseDatabase.reference.child(FirebaseDatabaseConfig.CONVERSATIONS).push().key ?: ""
         return RxFirebaseDatabase.setValue(firebaseDatabase.reference.child(FirebaseDatabaseConfig.CONVERSATIONS).child(conversationId), conversation.apply {
             id = conversationId
-        })
-            .toFlowable<Unit>().flatMap { getConversationById(conversationId) }
+        }).andThen(getConversationById(conversationId))
     }
 
     fun createMessage(message: Message, conversationId: String): Completable {

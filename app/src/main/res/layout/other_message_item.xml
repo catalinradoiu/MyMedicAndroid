@@ -14,7 +14,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/primary_margin">
+        android:padding="@dimen/small_margin">
 
         <android.support.constraint.Guideline
             android:id="@+id/margin_guideline"
@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:background="@drawable/rounded_corner_gray"
+            android:background="@drawable/rounded_corner_light_gray"
             android:orientation="vertical"
             android:padding="@dimen/primary_margin"
             app:layout_constraintEnd_toStartOf="@id/margin_guideline"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginTop="@dimen/small_margin"
-                app:longDate="@{viewModel.messageTime}"
+                app:messageTime="@{viewModel.messageTime}"
                 tools:text="12.10.2017 10:00" />
 
         </LinearLayout>

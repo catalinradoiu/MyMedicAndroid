@@ -63,10 +63,10 @@ class ConversationsAdapter(private var userId: String = "", private val firebase
             viewModel.apply {
                 conversationPersonName.set(if (viewModel.userId == conversation.firstParticipantId) conversation.secondParticipantName else conversation.firstParticipantName)
                 lastMessageText.set(conversation.lastMessage.text)
-//                lastMessageTime.set(conversation.lastMessage.sendTime)
+                lastMessageTime.set(conversation.lastMessage.sendTime)
             }
             GlideApp.with(binding.conversationPersonImage)
-                .load(viewModel.firebaseStorage.reference.child(if (viewModel.userId == conversation.firstParticipantId) conversation.firstParticipantImageUrl else conversation.firstParticipantImageUrl))
+                .load(viewModel.firebaseStorage.reference.child(if (viewModel.userId == conversation.firstParticipantId) conversation.secondParticipantImageUrl else conversation.firstParticipantImageUrl))
                 .into(binding.conversationPersonImage)
         }
     }

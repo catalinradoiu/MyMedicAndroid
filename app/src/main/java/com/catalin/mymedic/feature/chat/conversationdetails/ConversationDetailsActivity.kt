@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager
 import com.catalin.mymedic.ConversationDetailsBinding
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
+import com.catalin.mymedic.utils.FirebaseDatabaseConfig
+import com.catalin.mymedic.utils.GlideApp
 import javax.inject.Inject
 
 /**
@@ -37,12 +39,22 @@ class ConversationDetailsActivity : AppCompatActivity() {
 
         }
         messagesAdapter = ConversationMessagesAdapter(viewModel.getCurrentUserId())
+
         binding = DataBindingUtil.setContentView(this, R.layout.conversation_details_activity)
-        binding.viewModel = viewModel
-        binding.messagesRecycler.apply {
-            adapter = messagesAdapter
-            layoutManager = LinearLayoutManager(this@ConversationDetailsActivity)
+        binding.apply {
+            viewModel = this@ConversationDetailsActivity.viewModel
+            messagesRecycler.apply {
+                adapter = messagesAdapter
+                layoutManager = LinearLayoutManager(this@ConversationDetailsActivity)
+            }
         }
+        setSupportActionBar(binding.conversationDetailsToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        GlideApp.with(binding.otherParticipantImage)
+            .load(viewModel.firebaseStorage.reference.child(viewModel.otherParticipantImageUrl.get() ?: FirebaseDatabaseConfig.DEFAULT_USER_IMAGE_LOCATION))
+            .into(binding.otherParticipantImage)
+
         viewModel.initConversation()
         initListeners()
     }

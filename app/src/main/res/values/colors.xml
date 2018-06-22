@@ -12,4 +12,6 @@
     <color name="light_green">#006e1a</color>
     <color name="yellow">#ab9700</color>
     <color name="black">#000000</color>
+    <color name="transparent_red">#64f44e4e</color>
+    <color name="transparent_gray">#78a4a4a4</color>
 </resources>
