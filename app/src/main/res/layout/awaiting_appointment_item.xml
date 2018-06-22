@@ -46,6 +46,7 @@
             android:background="?attr/selectableItemBackground"
             android:text="@string/confirm"
             android:textColor="@color/light_green"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appointment_time" />
 
         <Button
@@ -57,7 +58,7 @@
             android:background="?attr/selectableItemBackground"
             android:text="@string/reject"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toEndOf="@id/confirm_appoitment_button"
+            app:layout_constraintEnd_toStartOf="@id/confirm_appoitment_button"
             app:layout_constraintTop_toBottomOf="@id/appointment_time" />
 
     </android.support.constraint.ConstraintLayout>

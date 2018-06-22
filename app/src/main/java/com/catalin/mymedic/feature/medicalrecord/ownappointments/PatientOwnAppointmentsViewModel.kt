@@ -9,6 +9,7 @@ import com.catalin.mymedic.feature.shared.StateLayout
 import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.MedicalAppointmentsRepository
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import javax.inject.Inject
 
@@ -24,9 +25,11 @@ class PatientOwnAppointmentsViewModel(
     val patientAppointments = MutableLiveData<List<MedicalAppointment>>()
     val state = ObservableField<StateLayout.State>(StateLayout.State.LOADING)
 
+    private val disposables = CompositeDisposable()
+
     fun initMedicalAppointments() {
         state.set(StateLayout.State.LOADING)
-        medicalAppointmentsRepository.getFutureMedicalAppointmentsForUser(sharedPreferencesManager.currentUserId, System.currentTimeMillis())
+        disposables.add(medicalAppointmentsRepository.getFutureMedicalAppointmentsForUser(sharedPreferencesManager.currentUserId, System.currentTimeMillis())
             .mainThreadSubscribe(Consumer {
                 if (it.isEmpty()) {
                     state.set(StateLayout.State.EMPTY)
@@ -37,6 +40,12 @@ class PatientOwnAppointmentsViewModel(
             }, Consumer {
                 state.set(StateLayout.State.ERROR)
             })
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
     }
 
     class Factory @Inject constructor(

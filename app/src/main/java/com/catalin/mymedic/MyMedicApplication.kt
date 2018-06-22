@@ -17,14 +17,16 @@ import com.google.firebase.messaging.FirebaseMessaging
  */
 class MyMedicApplication : Application() {
 
+    //TODO : Add flag to check when the app is in foreground in order to not display notifications in that case
+
     val applicationComponent: ApplicationComponent = DaggerApplicationComponent.builder().applicationModule(ApplicationModule(this)).build()
 
     override fun onCreate() {
         super.onCreate()
         val database = FirebaseDatabase.getInstance()
         database.setPersistenceEnabled(true)
-        database.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME)
-            .keepSynced(true)
+        database.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).keepSynced(true)
+        database.reference.child(FirebaseDatabaseConfig.CONVERSATIONS).keepSynced(true)
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
     }
 }

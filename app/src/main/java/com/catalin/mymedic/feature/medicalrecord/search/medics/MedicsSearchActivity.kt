@@ -15,6 +15,7 @@ import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.databinding.MedicsSearchActivityBinding
+import com.catalin.mymedic.feature.chat.conversationdetails.ConversationDetailsActivity
 import com.catalin.mymedic.feature.createappointment.AppointmentCreateActivity
 import com.catalin.mymedic.feature.shared.OnTextChangedListener
 import com.catalin.mymedic.utils.extension.dismissIfVisible
@@ -107,7 +108,8 @@ class MedicsSearchActivity : AppCompatActivity() {
             }
 
             override fun onNewMessageClick(position: Int) {
-
+                val medic = medicsAdapter.getMedic(position)
+                startActivity(ConversationDetailsActivity.getStartIntent(this@MedicsSearchActivity, medic.id, medic.imageUrl, medic.displayName))
             }
 
         })

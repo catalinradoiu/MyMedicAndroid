@@ -51,14 +51,15 @@ class UsersFirebaseSource @Inject constructor(private val firebaseAuth: Firebase
             User::class.java
         ).toSingle()
 
-    fun getMedicsBySpecialty(specialtyId: Int): Single<List<User>> =
+    fun getMedicsBySpecialty(specialtyId: Int, currentUserId: String): Single<List<User>> =
         RxFirebaseDatabase.observeSingleValueEvent(
             firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).orderByChild(
                 FirebaseDatabaseConfig.USERS_TABLE_SPECIALISATION_ID_COLUMN
             ).equalTo(
                 specialtyId.toDouble()
             ), { data ->
-                data.children.mapNotNull { value -> value.getValue(User::class.java) }.filter { medic -> medic.specialisationId == specialtyId }
+                data.children.mapNotNull { value -> value.getValue(User::class.java) }
+                    .filter { medic -> medic.specialisationId == specialtyId && medic.id != currentUserId }
             }).toSingle()
 
     fun updateUserNotificationToken(token: String?, userId: String) {

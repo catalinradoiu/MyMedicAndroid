@@ -17,6 +17,7 @@ import javax.inject.Inject
  * @author catalinradoiu
  * @since 4/6/2018
  */
+//TODO : The preferences manager can be moved to the users repository in this case
 class LoginViewModel(
     private val usersRepository: UsersRepository,
     private val authenticationValidator: AuthenticationValidator,

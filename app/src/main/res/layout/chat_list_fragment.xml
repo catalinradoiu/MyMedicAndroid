@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.chat.ConversationsListViewModel" />
+    </data>
+
+    <com.catalin.mymedic.feature.shared.StateLayout
+        android:id="@+id/conversations_state_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_empty="@layout/layout_empty_no_conversations"
+        app:layout_error="@layout/layout_error"
+        app:layout_loading="@layout/loading_layout"
+        app:state="@{viewModel.state}">
 
-    </android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/conversations_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.catalin.mymedic.feature.shared.StateLayout>
 </layout>

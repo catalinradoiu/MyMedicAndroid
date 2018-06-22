@@ -49,6 +49,11 @@
             android:name=".feature.createappointment.AppointmentCreateActivity"
             android:parentActivityName=".feature.medicalrecord.search.medics.MedicsSearchActivity" />
 
+        <activity
+            android:name=".feature.chat.conversationdetails.ConversationDetailsActivity"
+            android:parentActivityName=".feature.home.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service android:name=".component.MyMedicFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
