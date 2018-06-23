@@ -35,6 +35,8 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
     val passwordsMatch = ObservableBoolean(true)
     val registrationResult = ObservableField<OperationResult>(OperationResult.NoOperation)
 
+    val isLoading = ObservableBoolean()
+
     val validName = SingleLiveEvent<Boolean>()
 
     private val disposables = CompositeDisposable()
@@ -54,6 +56,7 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
         passwordsMatch.set(true)
         if (isValidEmail && isValidPassword && isValidName) {
             if (password.get() == passwordConfirmation.get()) {
+                isLoading.set(true)
                 passwordsMatch.set(true)
                 disposables.add(
                     usersRepository.registerUser(
@@ -68,8 +71,10 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
                         ),
                         password.get().orEmpty()
                     ).mainThreadSubscribe(Action {
+                        isLoading.set(false)
                         registrationResult.set(OperationResult.Success())
                     }, Consumer {
+                        isLoading.set(false)
                         registrationResult.set(OperationResult.Error(it.localizedMessage))
                     })
                 )

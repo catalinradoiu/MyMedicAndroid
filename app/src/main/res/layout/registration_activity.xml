@@ -136,7 +136,16 @@
                     android:onClick="@{() -> viewModel.registerUser()}"
                     android:text="@string/register_now"
                     android:textAllCaps="false"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    app:visibleGone="@{viewModel.isLoading == false}" />
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/secondary_margin"
+                    app:visibleGone="@{viewModel.isLoading}"
+                    tools:visibility="gone" />
 
                 <TextView
                     android:id="@+id/already_registered_text"
