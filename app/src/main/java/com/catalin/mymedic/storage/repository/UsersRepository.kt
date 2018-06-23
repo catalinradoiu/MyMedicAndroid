@@ -38,7 +38,7 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
     fun getCurrentUser() = usersFirebaseSource.getCurrentUser()
 
     fun getMedicsBySpecialty(specialtyId: Int): Single<List<User>> {
-        val cachedMedics = usersList.filter { it.specialisationId == specialtyId }
+        val cachedMedics = usersList.filter { it.specialisationId == specialtyId && it.id != preferencesManager.currentUserId }
         return if (cachedMedics.isEmpty()) usersFirebaseSource.getMedicsBySpecialty(
             specialtyId,
             preferencesManager.currentUserId

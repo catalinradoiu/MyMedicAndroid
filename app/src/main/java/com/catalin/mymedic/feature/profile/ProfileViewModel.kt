@@ -1,9 +1,11 @@
 package com.catalin.mymedic.feature.profile
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableField
 import android.databinding.ObservableLong
+import com.catalin.mymedic.data.Gender
 import com.catalin.mymedic.feature.shared.StateLayout
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
@@ -22,16 +24,23 @@ class ProfileViewModel(private val usersRepository: UsersRepository, val firebas
     val userName = ObservableField<String>("")
     val userEmail = ObservableField<String>("")
     val userBirthDate = ObservableLong()
-    val userGender = ObservableField<String>("")
+    val userGender = ObservableField<Gender>()
+
+    val profileImage = MutableLiveData<String>()
 
     private val disposables = CompositeDisposable()
 
     fun getCurrentUserDetails() {
+        state.set(StateLayout.State.LOADING)
         usersRepository.getUserById(usersRepository.getCurrentUserId()).mainThreadSubscribe(Consumer {
+            state.set(StateLayout.State.NORMAL)
             userName.set(it.displayName)
             userEmail.set(it.email)
+            userBirthDate.set(it.birthDate)
+            userGender.set(it.gender)
+            profileImage.value = it.imageUrl
         }, Consumer {
-
+            state.set(StateLayout.State.ERROR)
         })
     }
 

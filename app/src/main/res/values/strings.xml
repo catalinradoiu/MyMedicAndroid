@@ -3,6 +3,7 @@
     <!-- General strings -->
     <string name="app_name">MyMedic</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="not_completed">Not completed</string>
 
     <!-- Launcher -->
     <string name="welcome_anonymous_user">Welcome!</string>

@@ -1,5 +1,6 @@
 package com.catalin.mymedic.feature.profile
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.ProfileBinding
 import com.catalin.mymedic.R
+import com.catalin.mymedic.utils.GlideApp
 import javax.inject.Inject
 
 /**
@@ -44,6 +46,15 @@ class ProfileFragment : Fragment() {
             title = getString(R.string.profile)
             elevation = resources.getDimension(R.dimen.standard_elevation)
         }
+        initListeners()
         viewModel.getCurrentUserDetails()
+    }
+
+    private fun initListeners() {
+        viewModel.profileImage.observe(this, Observer {
+            it?.let { imageUrl ->
+                GlideApp.with(binding.userProfileImage).load(viewModel.firebaseStorage.reference.child(imageUrl)).into(binding.userProfileImage)
+            }
+        })
     }
 }
