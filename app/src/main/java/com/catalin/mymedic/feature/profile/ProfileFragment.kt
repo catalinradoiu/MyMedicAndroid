@@ -65,6 +65,7 @@ class ProfileFragment : Fragment() {
         if (item.itemId == R.id.profile_edit) {
             context?.let {
                 startActivityForResult(ProfileEditActivity.getStartIntent(it, viewModel.getCurrentUserId()), PROFILE_EDIT_REQUEST)
+                activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             }
         }
         return super.onOptionsItemSelected(item)

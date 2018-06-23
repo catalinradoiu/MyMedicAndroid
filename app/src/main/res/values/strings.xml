@@ -85,6 +85,7 @@
     <string name="edit">Edit</string>
     <string name="change_photo">Change photo</string>
     <string name="update">Update</string>
+    <string name="change_password">Change password</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>

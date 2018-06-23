@@ -100,7 +100,16 @@
                     android:onClick="@{() -> viewModel.loginUser()}"
                     android:text="@string/login"
                     android:textAllCaps="false"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    app:visibleGone="@{viewModel.isLoading == false}" />
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/secondary_margin"
+                    app:visibleGone="@{viewModel.isLoading}"
+                    tools:visibility="gone" />
 
                 <Button
                     android:id="@+id/sign_up_button"
@@ -111,6 +120,7 @@
                     android:layout_marginStart="@dimen/secondary_margin"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/rounded_corner_button"
+                    android:enabled="@{viewModel.isLoading}"
                     android:text="@string/sign_up"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />

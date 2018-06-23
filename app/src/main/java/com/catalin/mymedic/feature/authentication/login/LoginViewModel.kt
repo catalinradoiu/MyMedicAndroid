@@ -21,8 +21,7 @@ import javax.inject.Inject
 //TODO : The preferences manager can be moved to the users repository in this case
 class LoginViewModel(
     private val usersRepository: UsersRepository,
-    private val authenticationValidator: AuthenticationValidator,
-    private val preferencesManager: SharedPreferencesManager
+    private val authenticationValidator: AuthenticationValidator
 ) : ViewModel() {
 
     val email = ObservableField<String>("")
@@ -30,6 +29,8 @@ class LoginViewModel(
     val validEmail = ObservableBoolean(true)
     val validPassword = ObservableBoolean(true)
     val loginResult = ObservableField<OperationResult>(OperationResult.NoOperation)
+
+    val isLoading = ObservableBoolean(false)
 
     private val disposables = CompositeDisposable()
 
@@ -40,6 +41,7 @@ class LoginViewModel(
         validPassword.set(isValidPassword)
         if (isValidEmail && isValidPassword) {
 
+            isLoading.set(true)
             disposables.add(
                 usersRepository.getUserByEmailAndPassword(email.get().orEmpty(), password.get().orEmpty())
                     .flatMap { authResult ->
@@ -47,6 +49,7 @@ class LoginViewModel(
                     }
                     .mainThreadSubscribe(
                         Consumer { (authResult, user) ->
+                            isLoading.set(false)
                             if (authResult.user.isEmailVerified) {
                                 usersRepository.updateUserLocalData(user, authResult.user.uid)
                                 usersRepository.updateUserNotificationToken(FirebaseInstanceId.getInstance().token.orEmpty())
@@ -56,6 +59,7 @@ class LoginViewModel(
                             }
                         },
                         Consumer { error ->
+                            isLoading.set(false)
                             loginResult.set(OperationResult.Error(error.localizedMessage))
                         }
                     ))
@@ -73,7 +77,7 @@ class LoginViewModel(
         private val preferencesManager: SharedPreferencesManager
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator, preferencesManager) as T)
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator) as T)
     }
 
     companion object {

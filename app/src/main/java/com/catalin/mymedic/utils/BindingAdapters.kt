@@ -5,6 +5,7 @@ import android.databinding.BindingAdapter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.support.design.widget.TextInputEditText
+import android.view.View
 import android.widget.TextView
 import com.catalin.mymedic.R
 import com.catalin.mymedic.data.Gender
@@ -78,5 +79,10 @@ fun setGender(textView: TextView, gender: Gender?) {
     } else {
         textView.text = textView.context.resources.getString(R.string.not_completed)
     }
+}
+
+@BindingAdapter("visibleGone", requireAll = true)
+fun setVisible(view: View, visible: Boolean) {
+    view.visibility = if (visible) View.VISIBLE else View.GONE
 }
 
