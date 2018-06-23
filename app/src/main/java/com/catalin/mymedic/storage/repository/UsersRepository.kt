@@ -1,11 +1,13 @@
 package com.catalin.mymedic.storage.repository
 
+import android.net.Uri
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.source.UsersFirebaseSource
 import com.google.firebase.auth.AuthResult
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -53,6 +55,12 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
     fun updateUserNotificationToken(userToken: String) {
         usersFirebaseSource.updateUserNotificationToken(userToken, preferencesManager.currentUserId)
     }
+
+    fun updateUser(userImageFile: File) {
+
+    }
+
+    fun updateUserImage(userId: String, userImage: Uri) = usersFirebaseSource.updateUserImage(userId, userImage)
 
     fun updateUserLocalData(user: User, userId: String) {
         preferencesManager.apply {

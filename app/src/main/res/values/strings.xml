@@ -25,8 +25,9 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="birth_date">Birth date</string>
+    <string name="full_name">Full name</string>
     <string name="gender">Gender</string>
-    <string name="login_i_am_medic">I am a medic</string>
+    <string name="invalid_name">The name is not valid</string>
     <string name="already_registered">I am already registered!</string>
 
     <string name="password_reset_string">Please enter your email address below. We\'ll send an mail to reset your password to the specified address :</string>
@@ -81,6 +82,9 @@
     <string name="no_conversations">You have no conversations yet</string>
     <string name="enter_your_message">Enter your message</string>
     <string name="no_messages">This is the beginning of your conversation</string>
+    <string name="edit">Edit</string>
+    <string name="change_photo">Change photo</string>
+    <string name="update">Update</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>

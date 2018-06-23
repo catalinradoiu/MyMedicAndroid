@@ -1,13 +1,16 @@
 package com.catalin.mymedic.storage.source
 
+import android.net.Uri
 import com.catalin.mymedic.data.User
 import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import durdinapps.rxfirebase2.RxFirebaseDatabase
+import durdinapps.rxfirebase2.RxFirebaseStorage
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
@@ -20,7 +23,11 @@ import javax.inject.Singleton
  * @since 2/21/2018
  */
 @Singleton
-class UsersFirebaseSource @Inject constructor(private val firebaseAuth: FirebaseAuth, private val firebaseDatabase: FirebaseDatabase) {
+class UsersFirebaseSource @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val firebaseDatabase: FirebaseDatabase,
+    private val firebaseStorage: FirebaseStorage
+) {
 
     /**
      * Get as parameters the user and his password
@@ -66,5 +73,14 @@ class UsersFirebaseSource @Inject constructor(private val firebaseAuth: Firebase
         firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).child(userId).child(FirebaseDatabaseConfig.USERS_NOTIFICATION_TOKEN)
             .setValue(token)
     }
+
+    fun updateUser() {
+
+    }
+
+    fun updateUserImage(userId: String, userImage: Uri) = RxFirebaseStorage.putFile(
+        firebaseStorage.reference.child(FirebaseDatabaseConfig.USERS_IMAGES_FOLDER + userId + FirebaseDatabaseConfig.USER_IMAGE_EXTENSTION),
+        userImage
+    )
 
 }

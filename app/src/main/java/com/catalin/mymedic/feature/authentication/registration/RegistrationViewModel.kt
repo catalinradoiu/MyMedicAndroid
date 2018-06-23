@@ -11,6 +11,7 @@ import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.Constants
 import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.catalin.mymedic.utils.OperationResult
+import com.catalin.mymedic.utils.SingleLiveEvent
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
@@ -25,6 +26,7 @@ import javax.inject.Inject
  */
 internal class RegistrationViewModel(private val usersRepository: UsersRepository, private val authenticationValidator: AuthenticationValidator) : ViewModel() {
 
+    val fullName = ObservableField<String>("")
     val email: ObservableField<String> = ObservableField("")
     val password: ObservableField<String> = ObservableField("")
     val passwordConfirmation: ObservableField<String> = ObservableField("")
@@ -32,6 +34,8 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
     val validPassword = ObservableBoolean(true)
     val passwordsMatch = ObservableBoolean(true)
     val registrationResult = ObservableField<OperationResult>(OperationResult.NoOperation)
+
+    val validName = SingleLiveEvent<Boolean>()
 
     private val disposables = CompositeDisposable()
 
@@ -41,17 +45,27 @@ internal class RegistrationViewModel(private val usersRepository: UsersRepositor
      * Sets the corresponding result of the operation depending on its status ( success, failure )
      */
     fun registerUser() {
+        val isValidName = authenticationValidator.isValidName(fullName.get().orEmpty())
         val isValidEmail = authenticationValidator.isValidEmailAdress(email.get().orEmpty())
         val isValidPassword = authenticationValidator.isValidPassword(password.get().orEmpty())
         validEmail.set(isValidEmail)
         validPassword.set(isValidPassword)
+        validName.value = isValidName
         passwordsMatch.set(true)
-        if (isValidEmail && isValidPassword) {
+        if (isValidEmail && isValidPassword && isValidName) {
             if (password.get() == passwordConfirmation.get()) {
                 passwordsMatch.set(true)
                 disposables.add(
                     usersRepository.registerUser(
-                        User("", "", email.get().orEmpty(), 0, Gender.NOT_COMPLETED, Constants.PATIENT, FirebaseDatabaseConfig.DEFAULT_USER_IMAGE_LOCATION),
+                        User(
+                            "",
+                            fullName.get().orEmpty(),
+                            email.get().orEmpty(),
+                            0,
+                            Gender.NOT_COMPLETED,
+                            Constants.PATIENT,
+                            FirebaseDatabaseConfig.DEFAULT_USER_IMAGE_LOCATION
+                        ),
                         password.get().orEmpty()
                     ).mainThreadSubscribe(Action {
                         registrationResult.set(OperationResult.Success())

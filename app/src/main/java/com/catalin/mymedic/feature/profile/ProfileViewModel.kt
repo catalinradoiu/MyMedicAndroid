@@ -44,6 +44,8 @@ class ProfileViewModel(private val usersRepository: UsersRepository, val firebas
         })
     }
 
+    fun getCurrentUserId() = usersRepository.getCurrentUserId()
+
     override fun onCleared() {
         super.onCleared()
         disposables.clear()

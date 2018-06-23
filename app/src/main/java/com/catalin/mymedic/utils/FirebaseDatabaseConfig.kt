@@ -8,6 +8,9 @@ class FirebaseDatabaseConfig {
 
     companion object {
 
+        const val USERS_IMAGES_FOLDER = "users/"
+        const val USER_IMAGE_EXTENSTION = ".jpg"
+
         //Defaults
         const val DEFAULT_USER_IMAGE_LOCATION = "users/anonymous_person.png"
 

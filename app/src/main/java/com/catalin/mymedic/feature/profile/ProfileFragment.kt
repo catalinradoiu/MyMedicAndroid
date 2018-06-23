@@ -3,16 +3,17 @@ package com.catalin.mymedic.feature.profile
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.ProfileBinding
 import com.catalin.mymedic.R
+import com.catalin.mymedic.feature.profile.edit.ProfileEditActivity
 import com.catalin.mymedic.utils.GlideApp
 import javax.inject.Inject
 
@@ -33,6 +34,11 @@ class ProfileFragment : Fragment() {
         (context.applicationContext as MyMedicApplication).applicationComponent.inject(this)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container, false)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel::class.java)
@@ -50,11 +56,40 @@ class ProfileFragment : Fragment() {
         viewModel.getCurrentUserDetails()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_edit_profile, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.profile_edit) {
+            context?.let {
+                startActivityForResult(ProfileEditActivity.getStartIntent(it, viewModel.getCurrentUserId()), PROFILE_EDIT_REQUEST)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PROFILE_EDIT_REQUEST) {
+            Log.d("profileEdit", "activityResult")
+        }
+    }
+
     private fun initListeners() {
+        binding.profileStateLayout.setOnErrorTryAgainListener {
+            viewModel.getCurrentUserDetails()
+        }
+
         viewModel.profileImage.observe(this, Observer {
             it?.let { imageUrl ->
                 GlideApp.with(binding.userProfileImage).load(viewModel.firebaseStorage.reference.child(imageUrl)).into(binding.userProfileImage)
             }
         })
+    }
+
+    companion object {
+        private const val PROFILE_EDIT_REQUEST = 1
     }
 }
