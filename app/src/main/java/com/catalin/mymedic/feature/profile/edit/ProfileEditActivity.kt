@@ -7,17 +7,26 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import com.bumptech.glide.signature.ObjectKey
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.ProfileEditBinding
 import com.catalin.mymedic.R
+import com.catalin.mymedic.data.Gender
 import com.catalin.mymedic.utils.GlideApp
+import com.catalin.mymedic.utils.OperationResult
+import com.catalin.mymedic.utils.extension.newLongSnackbar
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import java.util.*
 import javax.inject.Inject
+
 
 /**
  * @author catalinradoiu
@@ -31,6 +40,8 @@ class ProfileEditActivity : AppCompatActivity() {
     private lateinit var binding: ProfileEditBinding
     private lateinit var viewModel: ProfileEditViewModel
 
+    private var operationSnackbar: Snackbar? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (application as MyMedicApplication).applicationComponent.inject(this)
@@ -40,6 +51,9 @@ class ProfileEditActivity : AppCompatActivity() {
         initListeners()
         viewModel.initUserProfile(intent.userId)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        binding.genderSpinner.adapter = ArrayAdapter.createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -84,9 +98,55 @@ class ProfileEditActivity : AppCompatActivity() {
             displayDatePickerDialog()
         }
 
+        binding.genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (position) {
+                    NOT_SELECTED_GENDER_POSITION -> viewModel.user.gender = Gender.NOT_COMPLETED
+                    MALE_GENDER_POSITION -> viewModel.user.gender = Gender.MALE
+                    FEMALE_GENDER_POSITION -> viewModel.user.gender = Gender.FEMALE
+                }
+            }
+
+        }
+
+        viewModel.profileUpdateSuccess.observe(this, Observer {
+            it?.let { success ->
+                if (success) {
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                } else {
+
+                }
+            }
+
+        })
+
+        viewModel.passwordChangeResult.observe(this, Observer { result ->
+            when (result) {
+                is OperationResult.Success -> displaySnackbar(getString(R.string.password_update_success))
+                is OperationResult.Error -> displaySnackbar(result.message.orEmpty())
+            }
+        })
+
+        viewModel.userGender.observe(this, Observer {
+            it?.let { gender ->
+                when (gender) {
+                    Gender.MALE -> binding.genderSpinner.setSelection(MALE_GENDER_POSITION)
+                    Gender.FEMALE -> binding.genderSpinner.setSelection(FEMALE_GENDER_POSITION)
+                    else -> binding.genderSpinner.setSelection(NOT_SELECTED_GENDER_POSITION)
+                }
+            }
+        })
+
         viewModel.userImage.observe(this, Observer { image ->
             image?.let {
-                GlideApp.with(binding.userProfileImage).load(viewModel.firebaseStorage.reference.child(it)).into(binding.userProfileImage)
+                GlideApp.with(binding.userProfileImage).load(viewModel.firebaseStorage.reference.child(it))
+                    .signature(ObjectKey(System.currentTimeMillis().toString())).into(binding.userProfileImage)
             }
         })
     }
@@ -107,11 +167,19 @@ class ProfileEditActivity : AppCompatActivity() {
         }.show(fragmentManager, DATE_PICKER_DIALOG_TAG)
     }
 
+    private fun displaySnackbar(message: String) {
+        operationSnackbar.newLongSnackbar(binding.root, message)
+    }
+
     companion object {
         private const val USER_ID = "userId"
         private const val DATE_PICKER_DIALOG_TAG = "datePickerDialog"
         private const val REQUEST_IMAGE_SELECT = 1
         private const val MIN_YEAR = 1910
+
+        private const val NOT_SELECTED_GENDER_POSITION = 0
+        private const val MALE_GENDER_POSITION = 1
+        private const val FEMALE_GENDER_POSITION = 2
 
         private val Intent.userId
             get() = this.getStringExtra(USER_ID)

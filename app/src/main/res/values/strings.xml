@@ -86,6 +86,8 @@
     <string name="change_photo">Change photo</string>
     <string name="update">Update</string>
     <string name="change_password">Change password</string>
+    <string name="current_password">Current password</string>
+    <string name="password_update_success">The password has been updated</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>
@@ -101,6 +103,7 @@
     </string-array>
 
     <string-array name="genders">
+        <item>Not completed</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>

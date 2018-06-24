@@ -18,7 +18,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/primary_margin">
+            android:paddingBottom="@dimen/secondary_margin">
 
             <android.support.constraint.Guideline
                 android:id="@+id/profile_image_start_guideline"
@@ -160,39 +160,106 @@
                 app:layout_constraintStart_toEndOf="@string/gender"
                 app:layout_constraintTop_toBottomOf="@id/birth_date_layout" />
 
+            <View
+                android:id="@+id/profile_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/secondary_margin"
+                android:background="@color/light_gray"
+                app:layout_constraintTop_toBottomOf="@id/gender_spinner" />
+
             <TextView
                 android:id="@+id/change_password_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/secondary_margin"
-                android:gravity="center"
+                android:layout_marginTop="@dimen/primary_margin"
+                android:gravity="start"
                 android:text="@string/change_password"
-                android:textSize="@dimen/highlight_text_size"
+                android:textSize="@dimen/alert_text_size"
                 app:layout_constraintEnd_toStartOf="@id/text_field_end_guideline"
                 app:layout_constraintStart_toStartOf="@id/text_field_start_guideline"
-                app:layout_constraintTop_toBottomOf="@id/gender_spinner" />
+                app:layout_constraintTop_toBottomOf="@id/profile_divider" />
 
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/old_password_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true"
                 android:layout_marginTop="@dimen/primary_margin"
-                app:layout_constraintTop_toBottomOf="@id/change_password_text"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toStartOf="@id/text_field_end_guideline"
-                app:layout_constraintStart_toStartOf="@id/text_field_start_guideline">
+                app:layout_constraintStart_toStartOf="@id/text_field_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/change_password_text">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/old_password_input"
-                    android:layout_width="@dimen/medical_specialty_image_size"
-                    android:inputType="textPassword"
-                    android:drawableStart="@drawable/ic_key_24dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:drawablePadding="@dimen/primary_margin"
-                    app:drawableTint="@{@color/colorAccent}"
-                    android:layout_height="match_parent" />
+                    android:drawableStart="@drawable/ic_key_24dp"
+                    android:hint="@string/current_password"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.oldPassword}"
+                    app:drawableTint="@{@color/colorAccent}" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/new_password_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toStartOf="@id/text_field_end_guideline"
+                app:layout_constraintStart_toStartOf="@id/text_field_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/old_password_layout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/new_password_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/primary_margin"
+                    android:drawableStart="@drawable/ic_key_24dp"
+                    android:hint="@string/current_password"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.newPassword}"
+                    app:drawableTint="@{@color/colorAccent}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/new_password_confirmation_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toStartOf="@id/text_field_end_guideline"
+                app:layout_constraintStart_toStartOf="@id/text_field_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/new_password_layout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/new_password_confirmation_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/primary_margin"
+                    android:drawableStart="@drawable/ic_key_24dp"
+                    android:hint="@string/current_password"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.newPasswordConfirmation}"
+                    app:drawableTint="@{@color/colorAccent}" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/change_password_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> viewModel.updatePassword()}"
+                android:text="@string/change_password"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/new_password_confirmation_layout" />
 
         </android.support.constraint.ConstraintLayout>
 

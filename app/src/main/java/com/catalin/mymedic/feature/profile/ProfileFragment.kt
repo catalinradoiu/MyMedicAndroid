@@ -1,5 +1,6 @@
 package com.catalin.mymedic.feature.profile
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -8,8 +9,8 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.*
+import com.bumptech.glide.signature.ObjectKey
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.ProfileBinding
 import com.catalin.mymedic.R
@@ -73,8 +74,8 @@ class ProfileFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PROFILE_EDIT_REQUEST) {
-            Log.d("profileEdit", "activityResult")
+        if (requestCode == PROFILE_EDIT_REQUEST && resultCode == Activity.RESULT_OK) {
+            viewModel.getCurrentUserDetails()
         }
     }
 
@@ -85,7 +86,9 @@ class ProfileFragment : Fragment() {
 
         viewModel.profileImage.observe(this, Observer {
             it?.let { imageUrl ->
-                GlideApp.with(binding.userProfileImage).load(viewModel.firebaseStorage.reference.child(imageUrl)).into(binding.userProfileImage)
+                GlideApp.with(binding.userProfileImage).load(viewModel.firebaseStorage.reference.child(imageUrl))
+                    .signature(ObjectKey(System.currentTimeMillis().toString()))
+                    .into(binding.userProfileImage)
             }
         })
     }

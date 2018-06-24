@@ -2,8 +2,11 @@ package com.catalin.mymedic.storage.source
 
 import android.net.Uri
 import com.catalin.mymedic.data.User
+import com.catalin.mymedic.data.toMap
+import com.catalin.mymedic.feature.profile.PasswordChangeCallback
 import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
@@ -74,13 +77,32 @@ class UsersFirebaseSource @Inject constructor(
             .setValue(token)
     }
 
-    fun updateUser() {
+    fun updateUser(user: User): Completable =
+        RxFirebaseDatabase.updateChildren(firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).child(user.id), user.toMap())
 
-    }
-
-    fun updateUserImage(userId: String, userImage: Uri) = RxFirebaseStorage.putFile(
+    fun updateUserImage(userId: String, userImage: Uri): Completable = RxFirebaseStorage.putFile(
         firebaseStorage.reference.child(FirebaseDatabaseConfig.USERS_IMAGES_FOLDER + userId + FirebaseDatabaseConfig.USER_IMAGE_EXTENSTION),
         userImage
-    )
+    ).toCompletable()
+
+    fun reauthenticateUser(email: String, password: String, callback: PasswordChangeCallback) {
+        firebaseAuth.currentUser?.reauthenticate(EmailAuthProvider.getCredential(email, password))?.addOnCompleteListener({ task ->
+            if (task.isSuccessful) {
+                callback.onSuccess()
+            } else {
+                callback.onError(task.exception?.localizedMessage.orEmpty())
+            }
+        })
+    }
+
+    fun changeUserPassword(newPassword: String, callback: PasswordChangeCallback) {
+        firebaseAuth.currentUser?.updatePassword(newPassword)?.addOnCompleteListener {
+            if (it.isSuccessful) {
+                callback.onSuccess()
+            } else {
+                callback.onError(it.exception?.localizedMessage.orEmpty())
+            }
+        }
+    }
 
 }

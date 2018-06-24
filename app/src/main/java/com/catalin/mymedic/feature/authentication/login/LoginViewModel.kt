@@ -45,7 +45,7 @@ class LoginViewModel(
             disposables.add(
                 usersRepository.getUserByEmailAndPassword(email.get().orEmpty(), password.get().orEmpty())
                     .flatMap { authResult ->
-                        usersRepository.getUserById(authResult.user.uid).map { Pair(authResult, it) }
+                        usersRepository.getUserById(authResult.user.uid, false).map { Pair(authResult, it) }
                     }
                     .mainThreadSubscribe(
                         Consumer { (authResult, user) ->
