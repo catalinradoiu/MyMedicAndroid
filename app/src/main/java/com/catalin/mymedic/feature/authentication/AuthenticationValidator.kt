@@ -9,7 +9,7 @@ import javax.inject.Inject
  */
 class AuthenticationValidator @Inject constructor() {
 
-    fun isValidName(name: String) = name.matches(Regex("[a-zA-Z]+")) && name.length > 1
+    fun isValidName(name: String) = name.length > 5
 
     fun isValidPassword(password: String): Boolean = password.length >= 8 //&& password.matches(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+\$"))
 

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.catalin.mymedic">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".MyMedicApplication"
         android:allowBackup="true"
@@ -53,6 +55,10 @@
             android:name=".feature.chat.conversationdetails.ConversationDetailsActivity"
             android:parentActivityName=".feature.home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".feature.profile.edit.ProfileEditActivity"
+            android:parentActivityName=".feature.home.HomeActivity" />
 
         <service android:name=".component.MyMedicFirebaseMessagingService">
             <intent-filter>

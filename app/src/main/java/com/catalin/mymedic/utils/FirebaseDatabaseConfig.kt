@@ -8,6 +8,9 @@ class FirebaseDatabaseConfig {
 
     companion object {
 
+        const val USERS_IMAGES_FOLDER = "users/"
+        const val USER_IMAGE_EXTENSTION = ".jpg"
+
         //Defaults
         const val DEFAULT_USER_IMAGE_LOCATION = "users/anonymous_person.png"
 
@@ -25,7 +28,9 @@ class FirebaseDatabaseConfig {
         //Appointments table
         const val MEDICAL_APPOINTMENTS_TABLE_NAME = "medical_appointments"
         const val APPOINTMENTS_TABLE_MEDIC_ID = "medicId"
+        const val APPOINTMENTS_MEDIC_NAME = "medicName"
         const val APPOINTMENT_PATIENT_ID = "patientId"
+        const val APPOINTMENT_PATIENT_NAME = "patientName"
 
         //Canceled appointments
         const val CANCELED_APPOINTMENTS = "canceled_appointments"

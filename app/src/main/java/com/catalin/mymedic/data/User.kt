@@ -23,3 +23,14 @@ data class User(
 enum class Gender {
     MALE, FEMALE, NOT_COMPLETED
 }
+
+fun User.toMap() = HashMap<String, Any>().apply {
+    put("id", id)
+    put("displayName", displayName)
+    put("email", email)
+    put("birthDate", birthDate)
+    put("gender", gender)
+    put("specialisationId", specialisationId)
+    put("imageUrl", imageUrl)
+    put("notificationToken", notificationToken)
+}

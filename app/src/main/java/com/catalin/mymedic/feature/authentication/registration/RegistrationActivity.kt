@@ -1,5 +1,6 @@
 package com.catalin.mymedic.feature.authentication.registration
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -76,6 +77,12 @@ class RegistrationActivity : AppCompatActivity() {
         viewModel.validEmail.onPropertyChanged { value ->
             binding.emailLayout.error = if (value) "" else getString(R.string.invalid_email)
         }
+
+        viewModel.validName.observe(this, Observer { valid ->
+            valid?.let {
+                binding.nameLayout.error = if (it) "" else getString(R.string.invalid_name)
+            }
+        })
 
         binding.alreadyRegisteredText.setOnClickListener {
             finish()

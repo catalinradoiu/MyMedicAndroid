@@ -1,13 +1,19 @@
 package com.catalin.mymedic.storage.source
 
+import android.net.Uri
 import com.catalin.mymedic.data.User
+import com.catalin.mymedic.data.toMap
+import com.catalin.mymedic.feature.profile.PasswordChangeCallback
 import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import durdinapps.rxfirebase2.RxFirebaseDatabase
+import durdinapps.rxfirebase2.RxFirebaseStorage
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
@@ -20,7 +26,11 @@ import javax.inject.Singleton
  * @since 2/21/2018
  */
 @Singleton
-class UsersFirebaseSource @Inject constructor(private val firebaseAuth: FirebaseAuth, private val firebaseDatabase: FirebaseDatabase) {
+class UsersFirebaseSource @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val firebaseDatabase: FirebaseDatabase,
+    private val firebaseStorage: FirebaseStorage
+) {
 
     /**
      * Get as parameters the user and his password
@@ -65,6 +75,34 @@ class UsersFirebaseSource @Inject constructor(private val firebaseAuth: Firebase
     fun updateUserNotificationToken(token: String?, userId: String) {
         firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).child(userId).child(FirebaseDatabaseConfig.USERS_NOTIFICATION_TOKEN)
             .setValue(token)
+    }
+
+    fun updateUser(user: User): Completable =
+        RxFirebaseDatabase.updateChildren(firebaseDatabase.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).child(user.id), user.toMap())
+
+    fun updateUserImage(userId: String, userImage: Uri): Completable = RxFirebaseStorage.putFile(
+        firebaseStorage.reference.child(FirebaseDatabaseConfig.USERS_IMAGES_FOLDER + userId + FirebaseDatabaseConfig.USER_IMAGE_EXTENSTION),
+        userImage
+    ).toCompletable()
+
+    fun reauthenticateUser(email: String, password: String, callback: PasswordChangeCallback) {
+        firebaseAuth.currentUser?.reauthenticate(EmailAuthProvider.getCredential(email, password))?.addOnCompleteListener({ task ->
+            if (task.isSuccessful) {
+                callback.onSuccess()
+            } else {
+                callback.onError(task.exception?.localizedMessage.orEmpty())
+            }
+        })
+    }
+
+    fun changeUserPassword(newPassword: String, callback: PasswordChangeCallback) {
+        firebaseAuth.currentUser?.updatePassword(newPassword)?.addOnCompleteListener {
+            if (it.isSuccessful) {
+                callback.onSuccess()
+            } else {
+                callback.onError(it.exception?.localizedMessage.orEmpty())
+            }
+        }
     }
 
 }

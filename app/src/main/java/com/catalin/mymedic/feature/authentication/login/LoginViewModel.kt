@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
-import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
@@ -21,8 +20,7 @@ import javax.inject.Inject
 //TODO : The preferences manager can be moved to the users repository in this case
 class LoginViewModel(
     private val usersRepository: UsersRepository,
-    private val authenticationValidator: AuthenticationValidator,
-    private val preferencesManager: SharedPreferencesManager
+    private val authenticationValidator: AuthenticationValidator
 ) : ViewModel() {
 
     val email = ObservableField<String>("")
@@ -30,6 +28,8 @@ class LoginViewModel(
     val validEmail = ObservableBoolean(true)
     val validPassword = ObservableBoolean(true)
     val loginResult = ObservableField<OperationResult>(OperationResult.NoOperation)
+
+    val isLoading = ObservableBoolean(false)
 
     private val disposables = CompositeDisposable()
 
@@ -40,13 +40,15 @@ class LoginViewModel(
         validPassword.set(isValidPassword)
         if (isValidEmail && isValidPassword) {
 
+            isLoading.set(true)
             disposables.add(
                 usersRepository.getUserByEmailAndPassword(email.get().orEmpty(), password.get().orEmpty())
                     .flatMap { authResult ->
-                        usersRepository.getUserById(authResult.user.uid).map { Pair(authResult, it) }
+                        usersRepository.getUserById(authResult.user.uid, false).map { Pair(authResult, it) }
                     }
                     .mainThreadSubscribe(
                         Consumer { (authResult, user) ->
+                            isLoading.set(false)
                             if (authResult.user.isEmailVerified) {
                                 usersRepository.updateUserLocalData(user, authResult.user.uid)
                                 usersRepository.updateUserNotificationToken(FirebaseInstanceId.getInstance().token.orEmpty())
@@ -56,6 +58,7 @@ class LoginViewModel(
                             }
                         },
                         Consumer { error ->
+                            isLoading.set(false)
                             loginResult.set(OperationResult.Error(error.localizedMessage))
                         }
                     ))
@@ -69,11 +72,10 @@ class LoginViewModel(
 
     internal class LoginViewModelProvider @Inject constructor(
         private val usersRepository: UsersRepository,
-        private val authenticationValidator: AuthenticationValidator,
-        private val preferencesManager: SharedPreferencesManager
+        private val authenticationValidator: AuthenticationValidator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator, preferencesManager) as T)
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator) as T)
     }
 
     companion object {

@@ -31,6 +31,7 @@ class MyMedicApplication : Application() {
         database.setPersistenceEnabled(true)
         database.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).keepSynced(true)
         database.reference.child(FirebaseDatabaseConfig.CONVERSATIONS).keepSynced(true)
+        database.reference.child(FirebaseDatabaseConfig.USERS_TABLE_NAME).keepSynced(true)
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
 
         registerActivityLifecycleCallbacks(object : ActivityPauseResumeCallbacks() {
