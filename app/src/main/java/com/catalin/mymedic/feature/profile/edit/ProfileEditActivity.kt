@@ -90,6 +90,10 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     private fun initListeners() {
+        binding.profileEditStateLayout.setOnErrorTryAgainListener {
+            viewModel.initUserProfile(intent.userId)
+        }
+
         binding.changePhotoButton.setOnClickListener {
             startActivityForResult(Intent(Intent.ACTION_PICK).setType("image/*"), REQUEST_IMAGE_SELECT)
         }
@@ -113,17 +117,39 @@ class ProfileEditActivity : AppCompatActivity() {
 
         }
 
-        viewModel.profileUpdateSuccess.observe(this, Observer {
-            it?.let { success ->
-                if (success) {
+        viewModel.validName.observe(this, Observer {
+            it?.let { valid ->
+                binding.nameLayout.error = if (valid) "" else getString(R.string.invalid_name)
+            }
+        })
+
+        viewModel.validOldPassword.observe(this, Observer {
+            it?.let { valid ->
+                binding.oldPasswordLayout.error = if (valid) "" else getString(R.string.invalid_password)
+            }
+        })
+
+        viewModel.validNewPassword.observe(this, Observer {
+            it?.let { valid ->
+                binding.newPasswordLayout.error = if (valid) "" else getString(R.string.invalid_password)
+            }
+        })
+
+        viewModel.passwordsMatch.observe(this, Observer {
+            it?.let { valid ->
+                binding.newPasswordConfirmationLayout.error = if (valid) "" else getString(R.string.registration_passwords_not_match)
+            }
+        })
+
+        viewModel.profileUpdateResult.observe(this, Observer {
+            when (it) {
+                is OperationResult.Success -> {
                     setResult(Activity.RESULT_OK)
                     finish()
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-                } else {
-
                 }
+                is OperationResult.Error -> displaySnackbar(it.message.orEmpty())
             }
-
         })
 
         viewModel.passwordChangeResult.observe(this, Observer { result ->
@@ -177,9 +203,9 @@ class ProfileEditActivity : AppCompatActivity() {
         private const val REQUEST_IMAGE_SELECT = 1
         private const val MIN_YEAR = 1910
 
-        private const val NOT_SELECTED_GENDER_POSITION = 0
-        private const val MALE_GENDER_POSITION = 1
-        private const val FEMALE_GENDER_POSITION = 2
+        private const val NOT_SELECTED_GENDER_POSITION = 2
+        private const val MALE_GENDER_POSITION = 0
+        private const val FEMALE_GENDER_POSITION = 1
 
         private val Intent.userId
             get() = this.getStringExtra(USER_ID)

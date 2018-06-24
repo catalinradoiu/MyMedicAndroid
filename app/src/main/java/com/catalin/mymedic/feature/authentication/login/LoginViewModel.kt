@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import com.catalin.mymedic.feature.authentication.AuthenticationValidator
-import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.UsersRepository
 import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
@@ -73,8 +72,7 @@ class LoginViewModel(
 
     internal class LoginViewModelProvider @Inject constructor(
         private val usersRepository: UsersRepository,
-        private val authenticationValidator: AuthenticationValidator,
-        private val preferencesManager: SharedPreferencesManager
+        private val authenticationValidator: AuthenticationValidator
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = (LoginViewModel(usersRepository, authenticationValidator) as T)

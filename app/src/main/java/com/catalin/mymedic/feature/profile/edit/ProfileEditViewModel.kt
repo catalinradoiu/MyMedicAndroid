@@ -8,6 +8,7 @@ import android.databinding.ObservableLong
 import android.net.Uri
 import com.catalin.mymedic.data.Gender
 import com.catalin.mymedic.data.User
+import com.catalin.mymedic.feature.authentication.AuthenticationValidator
 import com.catalin.mymedic.feature.profile.PasswordChangeCallback
 import com.catalin.mymedic.feature.shared.StateLayout
 import com.catalin.mymedic.storage.repository.UsersRepository
@@ -27,7 +28,11 @@ import javax.inject.Inject
     Firebase storage should not be in the view model, but because it is needed in order to load the images, this situation and other similar cases
     are exceptions
 */
-class ProfileEditViewModel(private val usersRepository: UsersRepository, val firebaseStorage: FirebaseStorage) : ViewModel() {
+class ProfileEditViewModel(
+    private val usersRepository: UsersRepository,
+    val firebaseStorage: FirebaseStorage,
+    val authenticationValidator: AuthenticationValidator
+) : ViewModel() {
 
     lateinit var user: User
 
@@ -41,8 +46,14 @@ class ProfileEditViewModel(private val usersRepository: UsersRepository, val fir
     val newPassword = ObservableField<String>("")
     val newPasswordConfirmation = ObservableField<String>("")
 
-    val profileUpdateSuccess = SingleLiveEvent<Boolean>()
+    val profileUpdateResult = SingleLiveEvent<OperationResult>()
     val passwordChangeResult = SingleLiveEvent<OperationResult>()
+
+    val validName = SingleLiveEvent<Boolean>()
+
+    val validOldPassword = SingleLiveEvent<Boolean>()
+    val validNewPassword = SingleLiveEvent<Boolean>()
+    val passwordsMatch = SingleLiveEvent<Boolean>()
 
     val state = ObservableField<StateLayout.State>()
     var uploadedImage: Uri? = null
@@ -63,46 +74,65 @@ class ProfileEditViewModel(private val usersRepository: UsersRepository, val fir
     }
 
     fun updateProfile(userId: String) {
-        user.apply {
-            displayName = userName.get().orEmpty()
-            birthDate = userBirthDate.get()
+        validName.value = authenticationValidator.isValidName(userName.get().orEmpty())
+        if (validName.value == true) {
+            state.set(StateLayout.State.LOADING)
+            user.apply {
+                displayName = userName.get().orEmpty()
+                birthDate = userBirthDate.get()
+            }
+            usersRepository.updateUser(user).andThen(usersRepository.updateUserImage(userId, uploadedImage)).mainThreadSubscribe(Action {
+                state.set(StateLayout.State.NORMAL)
+                profileUpdateResult.value = OperationResult.Success()
+            }, Consumer {
+                state.set(StateLayout.State.NORMAL)
+                profileUpdateResult.value = OperationResult.Error(it.localizedMessage.orEmpty())
+            })
         }
-        usersRepository.updateUser(user).andThen(usersRepository.updateUserImage(userId, uploadedImage)).mainThreadSubscribe(Action {
-            profileUpdateSuccess.value = true
-        }, Consumer {
-            profileUpdateSuccess.value = false
-        })
-
     }
 
     fun updatePassword() {
-        usersRepository.reauthenticateUser(user.email, oldPassword.get().orEmpty(), object : PasswordChangeCallback {
-            override fun onSuccess() {
-                usersRepository.changeUserPassword(newPassword.get().orEmpty(), object : PasswordChangeCallback {
+        val oldPasswordValid = authenticationValidator.isValidPassword(oldPassword.get().orEmpty())
+        val newPasswordValid = authenticationValidator.isValidPassword(newPassword.get().orEmpty())
+
+        validNewPassword.value = newPasswordValid
+        validOldPassword.value = oldPasswordValid
+
+        if (oldPasswordValid && newPasswordValid) {
+            passwordsMatch.value = newPassword.get().orEmpty() == newPasswordConfirmation.get().orEmpty()
+            if (passwordsMatch.value == true) {
+                usersRepository.reauthenticateUser(user.email, oldPassword.get().orEmpty(), object : PasswordChangeCallback {
                     override fun onSuccess() {
-                        passwordChangeResult.value = OperationResult.Success()
-                        newPassword.set("")
-                        oldPassword.set("")
-                        newPasswordConfirmation.set("")
+                        usersRepository.changeUserPassword(newPassword.get().orEmpty(), object : PasswordChangeCallback {
+                            override fun onSuccess() {
+                                passwordChangeResult.value = OperationResult.Success()
+                                newPassword.set("")
+                                oldPassword.set("")
+                                newPasswordConfirmation.set("")
+                            }
+
+                            override fun onError(errorMessage: String) {
+                                passwordChangeResult.value = OperationResult.Error(errorMessage)
+                            }
+
+                        })
                     }
 
                     override fun onError(errorMessage: String) {
                         passwordChangeResult.value = OperationResult.Error(errorMessage)
                     }
-
                 })
             }
-
-            override fun onError(errorMessage: String) {
-                passwordChangeResult.value = OperationResult.Error(errorMessage)
-            }
-
-        })
+        }
     }
 
-    class Factory @Inject constructor(private val usersRepository: UsersRepository, private val firebaseStorage: FirebaseStorage) : ViewModelProvider.Factory {
+    class Factory @Inject constructor(
+        private val usersRepository: UsersRepository,
+        private val firebaseStorage: FirebaseStorage,
+        private val authenticationValidator: AuthenticationValidator
+    ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T = ProfileEditViewModel(usersRepository, firebaseStorage) as T
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T = ProfileEditViewModel(usersRepository, firebaseStorage, authenticationValidator) as T
     }
 }

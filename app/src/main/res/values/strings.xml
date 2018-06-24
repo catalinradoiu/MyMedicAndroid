@@ -88,6 +88,8 @@
     <string name="change_password">Change password</string>
     <string name="current_password">Current password</string>
     <string name="password_update_success">The password has been updated</string>
+    <string name="new_password">New password</string>
+    <string name="new_password_confirmation">New password confirmation</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>
@@ -103,8 +105,8 @@
     </string-array>
 
     <string-array name="genders">
-        <item>Not completed</item>
         <item>Male</item>
         <item>Female</item>
+        <item>Not completed</item>
     </string-array>
 </resources>
