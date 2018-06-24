@@ -1,6 +1,7 @@
 package com.catalin.mymedic.architecture
 
 import com.catalin.mymedic.component.MyMedicFirebaseInstanceIdService
+import com.catalin.mymedic.component.MyMedicFirebaseMessagingService
 import com.catalin.mymedic.feature.authentication.login.LoginActivity
 import com.catalin.mymedic.feature.authentication.passwordreset.PasswordResetActivity
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
@@ -15,6 +16,7 @@ import com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchActiv
 import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 import com.catalin.mymedic.feature.profile.ProfileFragment
 import com.catalin.mymedic.feature.profile.edit.ProfileEditActivity
+import com.catalin.mymedic.feature.settings.SettingsFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -42,4 +44,6 @@ interface ApplicationComponent {
     fun inject(conversationDetailsActivity: ConversationDetailsActivity)
     fun inject(profileFragment: ProfileFragment)
     fun inject(profileEditActivity: ProfileEditActivity)
+    fun inject(settingsFragment: SettingsFragment)
+    fun inject(myMedicFirebaseMessagingService: MyMedicFirebaseMessagingService)
 }

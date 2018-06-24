@@ -82,14 +82,24 @@
     <string name="no_conversations">You have no conversations yet</string>
     <string name="enter_your_message">Enter your message</string>
     <string name="no_messages">This is the beginning of your conversation</string>
+
+    <!-- Profile -->
     <string name="edit">Edit</string>
     <string name="change_photo">Change photo</string>
     <string name="update">Update</string>
     <string name="change_password">Change password</string>
     <string name="current_password">Current password</string>
     <string name="password_update_success">The password has been updated</string>
+    <string name="edit_profile">Edit profile</string>
     <string name="new_password">New password</string>
     <string name="new_password_confirmation">New password confirmation</string>
+
+    <!-- Settings -->
+    <string name="enable_messages_notifications">Enable messages notifications. You will receive push notifications when you get a new message.</string>
+    <string name="enable_appointments_notifications">Enable appointments notifications. You will receive push notifications when you appointments are updated.</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="about_us">About us</string>
+    <string name="log_out">Log out</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>

@@ -105,4 +105,9 @@ class UsersFirebaseSource @Inject constructor(
         }
     }
 
+    fun logOutUser(userId: String) {
+        firebaseAuth.signOut()
+        updateUserNotificationToken("", userId)
+    }
+
 }

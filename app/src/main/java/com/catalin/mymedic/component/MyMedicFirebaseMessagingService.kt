@@ -14,8 +14,10 @@ import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.data.AppointmentNotification
 import com.catalin.mymedic.feature.launcher.LauncherActivity
+import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import javax.inject.Inject
 
 /**
  * @author catalinradoiu
@@ -23,10 +25,14 @@ import com.google.firebase.messaging.RemoteMessage
  */
 class MyMedicFirebaseMessagingService : FirebaseMessagingService() {
 
+    @Inject
+    lateinit var preferencesManager: SharedPreferencesManager
+
     private lateinit var notificationManager: NotificationManager
 
     override fun onCreate() {
         super.onCreate()
+        (applicationContext as MyMedicApplication).applicationComponent.inject(this)
         notificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
@@ -44,11 +50,14 @@ class MyMedicFirebaseMessagingService : FirebaseMessagingService() {
                 }
 
                 val messageType = it.data[NOTIFICATION_TYPE_KEY]?.toInt() ?: 0
-                val intentBuilder = createTaskStackBuilder(messageType)
-                val notificationData = AppointmentNotification.createNotification(it.data ?: HashMap())
-                val notification = buildNotification(notificationBuilder, notificationData, intentBuilder)
 
-                notificationManager.notify(notification.hashCode(), notification)
+                if ((messageType < NEW_MESSAGE_NOTIFICATION && preferencesManager.appointmentNotificationsEnabled) || (messageType == NEW_MESSAGE_NOTIFICATION && preferencesManager.messageNotificationsEnabled)) {
+                    val intentBuilder = createTaskStackBuilder(messageType)
+                    val notificationData = AppointmentNotification.createNotification(it.data ?: HashMap())
+                    val notification = buildNotification(notificationBuilder, notificationData, intentBuilder)
+
+                    notificationManager.notify(notification.hashCode(), notification)
+                }
             }
         }
     }
@@ -72,6 +81,7 @@ class MyMedicFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
         private const val NEW_APPOINTMENT_MESSAGE = 1
         private const val APPOINTMENT_APPROVED_MESSAGE = 2
+        private const val NEW_MESSAGE_NOTIFICATION = 5
         private const val INTENT_BUILDER_REQUEST_CODE = 123
 
         private const val MY_MEDIC_NOTIFICATIONS_CHANNEL_ID = "my_medic_channel_01"
