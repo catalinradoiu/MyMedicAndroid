@@ -54,6 +54,7 @@ class ProfileEditActivity : AppCompatActivity() {
         binding.genderSpinner.adapter = ArrayAdapter.createFromResource(this, R.array.genders, android.R.layout.simple_spinner_item).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
+        supportActionBar?.title = getString(R.string.edit_profile)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

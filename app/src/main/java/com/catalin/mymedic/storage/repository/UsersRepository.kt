@@ -107,4 +107,9 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
 
         })
     }
+
+    fun logOutUser() {
+        usersFirebaseSource.logOutUser(preferencesManager.currentUserId)
+        preferencesManager.clearUserPreferences()
+    }
 }

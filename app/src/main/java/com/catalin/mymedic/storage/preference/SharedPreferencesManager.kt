@@ -22,12 +22,16 @@ class SharedPreferencesManager @Inject constructor(context: Context) {
     var currentUserName by PreferenceFieldDelegate.String(CURRENT_USER_NAME)
     var currentUserId by PreferenceFieldDelegate.String(CURRENT_USER_ID)
     var currentUserAvatar by PreferenceFieldDelegate.String(CURRENT_USER_AVATAR)
+    var messageNotificationsEnabled by PreferenceFieldDelegate.Boolean(MESSAGE_NOTIFICATIONS_ENABLED)
+    var appointmentNotificationsEnabled by PreferenceFieldDelegate.Boolean(APPOINTMENT_NOTIFICATION_ENABLED)
 
     fun clearUserPreferences() {
         currentUserName = PREFERENCE_DEFAULT_STRING_VALUE
         currentUserId = PREFERENCE_DEFAULT_STRING_VALUE
         currentUserSpecialty = PREFERENCE_DEFAULT_INT_VALUE
         currentUserAvatar = PREFERENCE_DEFAULT_STRING_VALUE
+        messageNotificationsEnabled = true
+        appointmentNotificationsEnabled = true
     }
 
     private sealed class PreferenceFieldDelegate<T>(protected val key: kotlin.String) : ReadWriteProperty<SharedPreferencesManager, T> {
@@ -49,6 +53,16 @@ class SharedPreferencesManager @Inject constructor(context: Context) {
                 thisRef.sharedPreferences.edit().putString(key, value).apply()
 
         }
+
+        class Boolean(key: kotlin.String) : PreferenceFieldDelegate<kotlin.Boolean>(key) {
+            override fun getValue(thisRef: SharedPreferencesManager, property: KProperty<*>): kotlin.Boolean =
+                thisRef.sharedPreferences.getBoolean(key, true)
+
+            override fun setValue(thisRef: SharedPreferencesManager, property: KProperty<*>, value: kotlin.Boolean) {
+                thisRef.sharedPreferences.edit().putBoolean(key, value).apply()
+            }
+
+        }
     }
 
     companion object {
@@ -56,6 +70,8 @@ class SharedPreferencesManager @Inject constructor(context: Context) {
         private const val CURRENT_USER_NAME = "currentUserName"
         private const val CURRENT_USER_ID = "currentUserId"
         private const val CURRENT_USER_AVATAR = "currentUserAvatar"
+        private const val MESSAGE_NOTIFICATIONS_ENABLED = "messageNotificationsEnabled"
+        private const val APPOINTMENT_NOTIFICATION_ENABLED = "appointmentNotificationEnabled"
         private const val PREFERENCE_DEFAULT_INT_VALUE = 0
         private const val PREFERENCE_DEFAULT_STRING_VALUE = ""
     }
