@@ -1,4 +1,4 @@
-package com.catalin.mymedic.feature.medicalrecord.ownappointments
+package com.catalin.mymedic.feature.medicalrecord.futureappointments
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author catalinradoiu
  * @since 6/17/2018
  */
-class PatientOwnAppointmentsViewModel(
+class FutureAppointmentsViewModel(
     private val medicalAppointmentsRepository: MedicalAppointmentsRepository,
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : ViewModel() {
@@ -29,7 +29,8 @@ class PatientOwnAppointmentsViewModel(
 
     fun initMedicalAppointments() {
         state.set(StateLayout.State.LOADING)
-        disposables.add(medicalAppointmentsRepository.getFutureMedicalAppointmentsForUser(sharedPreferencesManager.currentUserId, System.currentTimeMillis())
+        disposables.add(
+            medicalAppointmentsRepository.getFutureMedicalAppointments(sharedPreferencesManager.currentUserId, System.currentTimeMillis())
             .mainThreadSubscribe(Consumer {
                 if (it.isEmpty()) {
                     state.set(StateLayout.State.EMPTY)
@@ -43,6 +44,8 @@ class PatientOwnAppointmentsViewModel(
         )
     }
 
+    fun getCurrentUserId() = sharedPreferencesManager.currentUserId
+
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
@@ -54,6 +57,6 @@ class PatientOwnAppointmentsViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-            PatientOwnAppointmentsViewModel(medicalAppointmentsRepository, sharedPreferencesManager) as T
+            FutureAppointmentsViewModel(medicalAppointmentsRepository, sharedPreferencesManager) as T
     }
 }

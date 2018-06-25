@@ -11,7 +11,7 @@ import com.catalin.mymedic.feature.createappointment.AppointmentCreateActivity
 import com.catalin.mymedic.feature.launcher.LauncherActivity
 import com.catalin.mymedic.feature.medicalrecord.MedicalRecordFragment
 import com.catalin.mymedic.feature.medicalrecord.awaitingappointments.AwaitingAppointmentsFragment
-import com.catalin.mymedic.feature.medicalrecord.ownappointments.PatientOwnAppointmentsFragment
+import com.catalin.mymedic.feature.medicalrecord.futureappointments.FutureAppointmentsFragment
 import com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchActivity
 import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 import com.catalin.mymedic.feature.profile.ProfileFragment
@@ -38,7 +38,7 @@ interface ApplicationComponent {
     fun inject(medicsSearchActivity: MedicsSearchActivity)
     fun inject(appointmentCreateActivity: AppointmentCreateActivity)
     fun inject(firebaseInstanceIdService: MyMedicFirebaseInstanceIdService)
-    fun inject(patientOwnAppointmentsFragment: PatientOwnAppointmentsFragment)
+    fun inject(futureAppointmentsFragment: FutureAppointmentsFragment)
     fun inject(awaitingAppointmentsFragment: AwaitingAppointmentsFragment)
     fun inject(conversationsListFragment: ConversationsListFragment)
     fun inject(conversationDetailsActivity: ConversationDetailsActivity)

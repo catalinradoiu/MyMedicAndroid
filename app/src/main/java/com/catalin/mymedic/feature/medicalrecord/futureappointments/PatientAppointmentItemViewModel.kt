@@ -1,4 +1,4 @@
-package com.catalin.mymedic.feature.medicalrecord.ownappointments
+package com.catalin.mymedic.feature.medicalrecord.futureappointments
 
 import android.databinding.ObservableField
 import android.databinding.ObservableLong

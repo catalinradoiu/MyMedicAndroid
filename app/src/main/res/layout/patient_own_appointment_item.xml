@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.catalin.mymedic.feature.medicalrecord.ownappointments.PatientAppointmentItemViewModel" />
+            type="com.catalin.mymedic.feature.medicalrecord.futureappointments.PatientAppointmentItemViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout

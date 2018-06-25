@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.catalin.mymedic.feature.medicalrecord.ownappointments.PatientOwnAppointmentsViewModel" />
+            type="com.catalin.mymedic.feature.medicalrecord.futureappointments.FutureAppointmentsViewModel" />
     </data>
 
     <com.catalin.mymedic.feature.shared.StateLayout

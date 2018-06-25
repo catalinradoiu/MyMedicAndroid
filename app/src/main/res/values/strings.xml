@@ -68,6 +68,9 @@
     <string name="awaiting">Awaiting</string>
     <string name="confirmed">Confirmed</string>
 
+    <!-- Incoming appointments -->
+    <string name="incoming_patients">Incoming patients : </string>
+
     <!-- Awaiting appointments -->
     <string name="new_appointment_request">New request</string>
     <string name="confirm">Confirm</string>

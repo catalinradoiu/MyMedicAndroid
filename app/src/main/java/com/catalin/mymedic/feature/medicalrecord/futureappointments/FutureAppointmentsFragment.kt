@@ -1,4 +1,4 @@
-package com.catalin.mymedic.feature.medicalrecord.ownappointments
+package com.catalin.mymedic.feature.medicalrecord.futureappointments
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -20,28 +20,24 @@ import javax.inject.Inject
  * @author catalinradoiu
  * @since 6/17/2018
  */
-class PatientOwnAppointmentsFragment : Fragment() {
+class FutureAppointmentsFragment : Fragment() {
 
     @Inject
-    lateinit var viewModelFactory: PatientOwnAppointmentsViewModel.Factory
+    lateinit var viewModelFactory: FutureAppointmentsViewModel.Factory
 
-    private lateinit var viewModel: PatientOwnAppointmentsViewModel
+    private lateinit var viewModel: FutureAppointmentsViewModel
     private lateinit var binding: PatientOwnAppointmentsBinding
-    private val patientOwnAppointmentsAdapter = PatientOwnAppointmentsAdapter()
+    private lateinit var futureAppointmentsAdapter: FutureAppointmentsAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         (context?.applicationContext as MyMedicApplication).applicationComponent.inject(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.patient_own_appointments_fragment, container, false)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(PatientOwnAppointmentsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FutureAppointmentsViewModel::class.java)
+        futureAppointmentsAdapter = FutureAppointmentsAdapter(viewModel.getCurrentUserId())
         binding.viewModel = viewModel
         return binding.root
     }
@@ -49,7 +45,7 @@ class PatientOwnAppointmentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.patientOwnAppointmentsRecycler.apply {
-            adapter = patientOwnAppointmentsAdapter
+            adapter = futureAppointmentsAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         }
@@ -63,7 +59,7 @@ class PatientOwnAppointmentsFragment : Fragment() {
         }
 
         viewModel.patientAppointments.observe(this, Observer {
-            patientOwnAppointmentsAdapter.appointmentsList = ArrayList(it)
+            futureAppointmentsAdapter.appointmentsList = ArrayList(it)
         })
     }
 }
