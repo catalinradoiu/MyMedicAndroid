@@ -21,20 +21,24 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
             notifyDataSetChanged()
         }
 
+    private var onAppointmentCancelListener: OnAppointmentCancelListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         R.layout.patient_appointment_header_view -> PatientAppointmentHeader(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false)
         )
         R.layout.patient_own_appointment_item -> PatientAppointmentItem(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false),
-            PatientAppointmentItemViewModel()
+            PatientAppointmentItemViewModel(),
+            onAppointmentCancelListener
         )
         R.layout.incoming_pattients_header_view -> IncomingAppointmentsHeader(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false)
         )
         else -> MedicIncomingAppointmentItem(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.incoming_patient_item, parent, false),
-            IncomingPatientItemViewModel()
+            IncomingPatientItemViewModel(),
+            onAppointmentCancelListener
         )
     }
 
@@ -59,11 +63,29 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
 
     override fun getItemCount() = appointmentsList.size
 
-    class PatientAppointmentItem(binding: PatientItemBinding, private val viewModel: PatientAppointmentItemViewModel) :
+    fun setOnAppointmentCancelListener(onAppointmentCancelListener: OnAppointmentCancelListener) {
+        this.onAppointmentCancelListener = onAppointmentCancelListener
+    }
+
+    interface OnAppointmentCancelListener {
+        fun onCancel(position: Int)
+    }
+
+    class PatientAppointmentItem(
+        binding: PatientItemBinding,
+        private val viewModel: PatientAppointmentItemViewModel,
+        onAppointmentCancelListener: OnAppointmentCancelListener?
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.viewModel = viewModel
+            binding.appointmentCancelButton.setOnClickListener {
+                val position = adapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onAppointmentCancelListener?.onCancel(position)
+                }
+            }
         }
 
         fun bind(appointment: MedicalAppointment) {
@@ -83,22 +105,32 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
         }
     }
 
-    class MedicIncomingAppointmentItem(binding: IncomingPatientBinding, viewModel: IncomingPatientItemViewModel) : RecyclerView.ViewHolder(binding.root) {
+    class MedicIncomingAppointmentItem(
+        binding: IncomingPatientBinding,
+        private val viewModel: IncomingPatientItemViewModel,
+        onAppointmentCancelListener: OnAppointmentCancelListener?
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.viewModel = viewModel
+            binding.appointmentCancelButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAppointmentCancelListener?.onCancel(position)
+                }
+            }
         }
 
         fun bind(appointment: MedicalAppointment) {
+            viewModel.apply {
+                patientName.set(appointment.patientName)
+                appointmentTime.set(appointment.dateTime)
 
+            }
         }
     }
 
     class PatientAppointmentHeader(binding: PatientAppointmentHeaderBinding) : RecyclerView.ViewHolder(binding.root)
 
     class IncomingAppointmentsHeader(binding: IncomingPatientsHeaderBinding) : RecyclerView.ViewHolder(binding.root)
-
-    companion object {
-        private const val HEADER_ITEM_POSITION = 0
-    }
 }

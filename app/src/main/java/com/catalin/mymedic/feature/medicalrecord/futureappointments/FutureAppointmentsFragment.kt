@@ -5,8 +5,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +14,11 @@ import android.view.ViewGroup
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.PatientOwnAppointmentsBinding
 import com.catalin.mymedic.R
+import com.catalin.mymedic.feature.shared.AppointmentCancelationDialog
+import com.catalin.mymedic.feature.shared.AppointmentCancelationViewModel
+import com.catalin.mymedic.utils.NetworkManager
+import com.catalin.mymedic.utils.OperationResult
+import com.catalin.mymedic.utils.extension.newLongSnackbar
 import javax.inject.Inject
 
 /**
@@ -28,6 +33,8 @@ class FutureAppointmentsFragment : Fragment() {
     private lateinit var viewModel: FutureAppointmentsViewModel
     private lateinit var binding: PatientOwnAppointmentsBinding
     private lateinit var futureAppointmentsAdapter: FutureAppointmentsAdapter
+
+    private var operationSnackbar: Snackbar? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -47,7 +54,6 @@ class FutureAppointmentsFragment : Fragment() {
         binding.patientOwnAppointmentsRecycler.apply {
             adapter = futureAppointmentsAdapter
             layoutManager = LinearLayoutManager(context)
-            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         }
         initListeners()
         viewModel.initMedicalAppointments()
@@ -61,5 +67,39 @@ class FutureAppointmentsFragment : Fragment() {
         viewModel.patientAppointments.observe(this, Observer {
             futureAppointmentsAdapter.appointmentsList = ArrayList(it)
         })
+
+        viewModel.appointmentCancelResult.observe(this, Observer {
+            when (it) {
+                is OperationResult.Success -> displaySnackbar(getString(R.string.appointment_canceled))
+                is OperationResult.Error -> displaySnackbar(it.message.orEmpty())
+            }
+        })
+
+        futureAppointmentsAdapter.setOnAppointmentCancelListener(object : FutureAppointmentsAdapter.OnAppointmentCancelListener {
+            override fun onCancel(position: Int) {
+                val appointmentCancelationViewModel = AppointmentCancelationViewModel()
+                val appointmentCancelDialog = AppointmentCancelationDialog.getInstance(appointmentCancelationViewModel).apply {
+                    setOnConfirmationClickListener {
+                        viewModel.cancelAppointment(
+                            futureAppointmentsAdapter.appointmentsList[position],
+                            appointmentCancelationViewModel.cancelationReason.get().orEmpty()
+                        )
+                        if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
+                            displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
+                        }
+                    }
+                }
+                appointmentCancelDialog.show(fragmentManager, APPOINTMENT_CANCEL_DIALOG_TAG)
+            }
+
+        })
+    }
+
+    private fun displaySnackbar(message: String) {
+        operationSnackbar.newLongSnackbar(binding.root, message)
+    }
+
+    companion object {
+        private const val APPOINTMENT_CANCEL_DIALOG_TAG = "appointmentCancelDialogTag"
     }
 }

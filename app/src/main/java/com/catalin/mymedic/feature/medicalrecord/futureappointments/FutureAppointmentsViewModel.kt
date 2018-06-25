@@ -4,12 +4,17 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.databinding.ObservableField
+import com.catalin.mymedic.data.AppointmentCancelationReason
+import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.data.MedicalAppointment
 import com.catalin.mymedic.feature.shared.StateLayout
 import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.MedicalAppointmentsRepository
+import com.catalin.mymedic.utils.OperationResult
+import com.catalin.mymedic.utils.SingleLiveEvent
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import javax.inject.Inject
 
@@ -24,6 +29,8 @@ class FutureAppointmentsViewModel(
 
     val patientAppointments = MutableLiveData<List<MedicalAppointment>>()
     val state = ObservableField<StateLayout.State>(StateLayout.State.LOADING)
+
+    val appointmentCancelResult = SingleLiveEvent<OperationResult>()
 
     private val disposables = CompositeDisposable()
 
@@ -42,6 +49,22 @@ class FutureAppointmentsViewModel(
                 state.set(StateLayout.State.ERROR)
             })
         )
+    }
+
+    fun cancelAppointment(appointment: MedicalAppointment, cancelationReason: String) {
+        medicalAppointmentsRepository.updateMedicalAppointment(appointment.apply { status = AppointmentStatus.CANCELED }).andThen(
+            medicalAppointmentsRepository.createCancelationReason(
+                AppointmentCancelationReason(
+                    appointment.id,
+                    cancelationReason, AppointmentStatus.CANCELED
+                )
+            )
+        ).mainThreadSubscribe(
+            Action {
+                appointmentCancelResult.value = OperationResult.Success()
+            }, Consumer {
+                appointmentCancelResult.value = OperationResult.Error(it.localizedMessage)
+            })
     }
 
     fun getCurrentUserId() = sharedPreferencesManager.currentUserId
