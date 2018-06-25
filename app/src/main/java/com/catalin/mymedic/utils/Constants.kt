@@ -19,5 +19,8 @@ class Constants {
         const val HOUR_TIME_IN_MILLIS: Long = 3600 * 1000
         const val MINUTE_TIME_IN_MILLIS = 60 * 1000
         const val DAY_TIME_IN_MILLIS = 24 * 3600 * 1000
+
+        const val OWN_APPOINTMENTS_HEADER_ID = "ownAppointmentHeaderItem"
+        const val PATIENT_APPOINTMENTS_HEADER_ID = "patientAppointmentsHeaderItem"
     }
 }

@@ -54,7 +54,7 @@ class UsersRepository @Inject constructor(private val usersFirebaseSource: Users
     }
 
     fun getFilteredMedicsList(specialtyId: Int, name: String): Single<List<User>> =
-        Single.just(usersList.filter { it.specialisationId == specialtyId && it.displayName.contains(name) })
+        Single.just(usersList.filter { it.specialisationId == specialtyId && it.displayName.contains(name) && it.id != preferencesManager.currentUserId })
 
     fun updateUserNotificationToken(userToken: String) {
         usersFirebaseSource.updateUserNotificationToken(userToken, preferencesManager.currentUserId)

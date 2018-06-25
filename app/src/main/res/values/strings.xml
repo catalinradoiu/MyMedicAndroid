@@ -68,6 +68,9 @@
     <string name="awaiting">Awaiting</string>
     <string name="confirmed">Confirmed</string>
 
+    <!-- Incoming appointments -->
+    <string name="incoming_patients">Incoming patients : </string>
+
     <!-- Awaiting appointments -->
     <string name="new_appointment_request">New request</string>
     <string name="confirm">Confirm</string>
@@ -100,6 +103,7 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="about_us">About us</string>
     <string name="log_out">Log out</string>
+    <string name="appointment_canceled">The appointment has been canceled</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>
