@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.PatientOwnAppointmentsBinding
 import com.catalin.mymedic.R
+import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.feature.shared.AppointmentCancelationDialog
 import com.catalin.mymedic.feature.shared.AppointmentCancelationViewModel
 import com.catalin.mymedic.utils.NetworkManager
@@ -75,14 +76,35 @@ class FutureAppointmentsFragment : Fragment() {
             }
         })
 
-        futureAppointmentsAdapter.setOnAppointmentCancelListener(object : FutureAppointmentsAdapter.OnAppointmentCancelListener {
+        futureAppointmentsAdapter.setOnOwnAppointmentCancelListener(object : FutureAppointmentsAdapter.OnOwnAppointmentCancelListener {
             override fun onCancel(position: Int) {
                 val appointmentCancelationViewModel = AppointmentCancelationViewModel()
                 val appointmentCancelDialog = AppointmentCancelationDialog.getInstance(appointmentCancelationViewModel).apply {
                     setOnConfirmationClickListener {
                         viewModel.cancelAppointment(
                             futureAppointmentsAdapter.appointmentsList[position],
-                            appointmentCancelationViewModel.cancelationReason.get().orEmpty()
+                            appointmentCancelationViewModel.cancelationReason.get().orEmpty(),
+                            AppointmentStatus.CANCELED_BY_PATIENT
+                        )
+                        if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
+                            displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))
+                        }
+                    }
+                }
+                appointmentCancelDialog.show(fragmentManager, APPOINTMENT_CANCEL_DIALOG_TAG)
+            }
+
+        })
+
+        futureAppointmentsAdapter.setOnPatientAppointmentCancelListener(object : FutureAppointmentsAdapter.OnPatientappointmentCancelListener {
+            override fun onCancel(position: Int) {
+                val appointmentCancelationViewModel = AppointmentCancelationViewModel()
+                val appointmentCancelDialog = AppointmentCancelationDialog.getInstance(appointmentCancelationViewModel).apply {
+                    setOnConfirmationClickListener {
+                        viewModel.cancelAppointment(
+                            futureAppointmentsAdapter.appointmentsList[position],
+                            appointmentCancelationViewModel.cancelationReason.get().orEmpty(),
+                            AppointmentStatus.CANCELED_BY_MEDIC
                         )
                         if (!NetworkManager.isNetworkAvailable(binding.root.context)) {
                             displaySnackbar(getString(R.string.no_internet_appointment_will_be_updated))

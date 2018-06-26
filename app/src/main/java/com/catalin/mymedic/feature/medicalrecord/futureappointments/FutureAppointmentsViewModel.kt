@@ -51,12 +51,12 @@ class FutureAppointmentsViewModel(
         )
     }
 
-    fun cancelAppointment(appointment: MedicalAppointment, cancelationReason: String) {
-        medicalAppointmentsRepository.updateMedicalAppointment(appointment.apply { status = AppointmentStatus.CANCELED }).andThen(
+    fun cancelAppointment(appointment: MedicalAppointment, cancelationReason: String, cancelType: AppointmentStatus) {
+        medicalAppointmentsRepository.updateMedicalAppointment(appointment.apply { status = cancelType }).andThen(
             medicalAppointmentsRepository.createCancelationReason(
                 AppointmentCancelationReason(
                     appointment.id,
-                    cancelationReason, AppointmentStatus.CANCELED
+                    cancelationReason, cancelType
                 )
             )
         ).mainThreadSubscribe(

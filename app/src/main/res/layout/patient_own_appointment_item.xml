@@ -58,7 +58,6 @@
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.appointmentStatusString}"
                 android:textAllCaps="true"
-                android:textColor="@{viewModel.status == AppointmentStatus.AWAITING ? @color/yellow : @color/light_green }"
                 app:layout_constraintTop_toBottomOf="@id/patient_appointment_date"
                 tools:text="AWAITING" />
 

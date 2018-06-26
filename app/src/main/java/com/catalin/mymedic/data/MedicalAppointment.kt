@@ -24,7 +24,7 @@ data class MedicalAppointment(
 }
 
 enum class AppointmentStatus {
-    CONFIRMED, AWAITING, REJECTED, CANCELED
+    CONFIRMED, AWAITING, REJECTED, CANCELED_BY_PATIENT, CANCELED_BY_MEDIC
 }
 
 fun MedicalAppointment.toMap() = HashMap<String, Any>().apply {

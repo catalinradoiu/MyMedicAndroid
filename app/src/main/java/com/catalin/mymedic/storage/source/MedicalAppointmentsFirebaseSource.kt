@@ -51,7 +51,7 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
         )
             .equalTo(userId), { data ->
             data.children.mapNotNull { value -> value.getValue(MedicalAppointment::class.java) }
-                .filter { (it.dateTime >= timestamp) && (it.status == AppointmentStatus.AWAITING || it.status == AppointmentStatus.CONFIRMED) }
+                .filter { (it.dateTime >= timestamp) && it.status == AppointmentStatus.CONFIRMED }
                 .sortedBy { it.dateTime }
         }).flatMap { firstResult ->
             val result = ArrayList<MedicalAppointment>().apply {
@@ -93,16 +93,6 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
         firebaseDatabase.reference.child(FirebaseDatabaseConfig.CANCELED_APPOINTMENTS).child(cancelationReason.id).setValue(cancelationReason)
         return Completable.complete()
     }
-
-
-    fun getFutureMedicalAppointmentsForPatient(userId: String, timestamp: Long): Flowable<List<MedicalAppointment>> =
-        RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
-            FirebaseDatabaseConfig.APPOINTMENT_PATIENT_ID
-        ).equalTo(userId),
-            { data ->
-                data.children.mapNotNull { value -> value.getValue(MedicalAppointment::class.java) }.filter { it.dateTime >= timestamp }
-            }
-        )
 
     fun getAvailableAppointmentsTime(medicId: String): Single<AvailableAppointments> {
         val result = AvailableAppointments()

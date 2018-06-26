@@ -104,6 +104,8 @@
     <string name="about_us">About us</string>
     <string name="log_out">Log out</string>
     <string name="appointment_canceled">The appointment has been canceled</string>
+    <string name="rejected">Rejected</string>
+    <string name="canceled">Canceled</string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>
