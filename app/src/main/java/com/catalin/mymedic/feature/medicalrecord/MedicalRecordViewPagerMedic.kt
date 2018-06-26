@@ -5,21 +5,22 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import com.catalin.mymedic.feature.medicalrecord.awaitingappointments.AwaitingAppointmentsFragment
 import com.catalin.mymedic.feature.medicalrecord.futureappointments.FutureAppointmentsFragment
+import com.catalin.mymedic.feature.medicalrecord.medicalhistory.MedicalHistoryFragment
 import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 
 /**
  * @author catalinradoiu
  * @since 4/30/2018
  */
-class MedicalRecordViewPagerMedic(fragmentManager: FragmentManager) :
-    FragmentStatePagerAdapter(fragmentManager) {
+class MedicalRecordViewPagerMedic(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
     var pageTitles: List<String>? = null
 
     override fun getItem(position: Int): Fragment = when (position) {
         0 -> AwaitingAppointmentsFragment()
         1 -> FutureAppointmentsFragment()
-        else -> MedicalSpecialtiesSearchFragment()
+        2 -> MedicalSpecialtiesSearchFragment()
+        else -> MedicalHistoryFragment()
     }
 
     override fun getCount(): Int = pageTitles?.size ?: 0

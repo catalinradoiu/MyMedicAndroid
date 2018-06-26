@@ -2,12 +2,14 @@ package com.catalin.mymedic.feature.medicalrecord.futureappointments
 
 import android.databinding.DataBindingUtil
 import android.support.v4.content.ContextCompat
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.catalin.mymedic.*
 import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.data.MedicalAppointment
+import com.catalin.mymedic.feature.shared.AppointmentDiffCallback
 import com.catalin.mymedic.utils.Constants
 
 /**
@@ -18,8 +20,10 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
 
     var appointmentsList = ArrayList<MedicalAppointment>()
         set(value) {
-            field = value
-            notifyDataSetChanged()
+            val diffResult = DiffUtil.calculateDiff(AppointmentDiffCallback(value, field))
+            field.clear()
+            field.addAll(value)
+            diffResult.dispatchUpdatesTo(this)
         }
 
     private var onOwnAppointmentCancelListener: OnOwnAppointmentCancelListener? = null
@@ -70,7 +74,7 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
     }
 
     fun setOnPatientAppointmentCancelListener(onPatientappointmentCancelListener: OnPatientappointmentCancelListener?) {
-        this.onPatientAppointmentCancelListener = onPatientAppointmentCancelListener
+        this.onPatientAppointmentCancelListener = onPatientappointmentCancelListener
     }
 
     interface OnOwnAppointmentCancelListener {
