@@ -12,6 +12,7 @@ import com.catalin.mymedic.feature.launcher.LauncherActivity
 import com.catalin.mymedic.feature.medicalrecord.MedicalRecordFragment
 import com.catalin.mymedic.feature.medicalrecord.awaitingappointments.AwaitingAppointmentsFragment
 import com.catalin.mymedic.feature.medicalrecord.futureappointments.FutureAppointmentsFragment
+import com.catalin.mymedic.feature.medicalrecord.medicalhistory.MedicalHistoryFragment
 import com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchActivity
 import com.catalin.mymedic.feature.medicalrecord.search.specialties.MedicalSpecialtiesSearchFragment
 import com.catalin.mymedic.feature.profile.ProfileFragment
@@ -46,4 +47,5 @@ interface ApplicationComponent {
     fun inject(profileEditActivity: ProfileEditActivity)
     fun inject(settingsFragment: SettingsFragment)
     fun inject(myMedicFirebaseMessagingService: MyMedicFirebaseMessagingService)
+    fun inject(medicalHistoryFragment: MedicalHistoryFragment)
 }

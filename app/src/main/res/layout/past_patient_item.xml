@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--suppress AndroidUnknownAttribute -->
+    <data class=".PastPatientItemBinding">
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.medicalrecord.medicalhistory.PastPatientItemViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/small_margin"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="@dimen/standard_elevation"
+        app:cardCornerRadius="@dimen/secondary_margin"
+        android:layout_height="wrap_content">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:padding="@dimen/primary_margin"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/patient_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.patientName}"
+                android:textStyle="bold"
+                android:textSize="@dimen/alert_text_size"
+                tools:text="Popescu Ion" />
+
+            <TextView
+                android:id="@+id/appointment_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/patient_name"
+                app:calendarDate="@{viewModel.appointmentDate}"
+                tools:text="12.10.2017" />
+
+            <TextView
+                android:id="@+id/appointment_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/appointment_date"
+                app:appointmentColoredStatus="@{viewModel.appointmentStatus}"
+                android:textSize="@dimen/alert_text_size"
+                tools:text="CONFIRMED"
+                tools:textColor="@color/light_green" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</layout>

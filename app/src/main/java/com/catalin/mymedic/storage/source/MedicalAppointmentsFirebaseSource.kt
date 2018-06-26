@@ -76,6 +76,35 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             }
         }
 
+    fun getPastAppointments(userId: String, timestamp: Long): Flowable<List<MedicalAppointment>> =
+        RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
+            FirebaseDatabaseConfig.APPOINTMENTS_TABLE_MEDIC_ID
+        ).equalTo(userId), { data ->
+            data.children.mapNotNull { value -> value.getValue(MedicalAppointment::class.java) }
+                .filter { (it.dateTime <= timestamp) || (it.status == AppointmentStatus.REJECTED || it.status == AppointmentStatus.CANCELED_BY_MEDIC || it.status == AppointmentStatus.CANCELED_BY_PATIENT) }
+                .sortedBy { it.dateTime }
+        }).flatMap { firstResult ->
+            val result = ArrayList<MedicalAppointment>().apply {
+                if (firstResult.isNotEmpty()) {
+                    add(MedicalAppointment().apply { id = Constants.PATIENT_APPOINTMENTS_HEADER_ID })
+                    addAll(firstResult)
+                }
+            }
+            RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
+                FirebaseDatabaseConfig.APPOINTMENT_PATIENT_ID
+            ).equalTo(userId), { snapshot ->
+                snapshot.children.mapNotNull { value -> value.getValue(MedicalAppointment::class.java) }
+                    .filter { (it.dateTime <= timestamp) || (it.status == AppointmentStatus.REJECTED || it.status == AppointmentStatus.CANCELED_BY_MEDIC || it.status == AppointmentStatus.CANCELED_BY_PATIENT) }
+                    .sortedBy { it.dateTime }
+            }).map { secondResult ->
+                if (secondResult.isNotEmpty()) {
+                    result.add(MedicalAppointment().apply { id = Constants.OWN_APPOINTMENTS_HEADER_ID })
+                    result.addAll(secondResult)
+                }
+                result
+            }
+        }
+
     fun updateMedicalAppointment(appointment: MedicalAppointment) =
         RxFirebaseDatabase.updateChildren(
             firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).child(

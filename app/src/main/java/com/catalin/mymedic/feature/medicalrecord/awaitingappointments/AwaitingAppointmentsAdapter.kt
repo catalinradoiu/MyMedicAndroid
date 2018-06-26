@@ -1,11 +1,13 @@
 package com.catalin.mymedic.feature.medicalrecord.awaitingappointments
 
 import android.annotation.SuppressLint
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.catalin.mymedic.data.MedicalAppointment
 import com.catalin.mymedic.databinding.AwaitingAppointmentItemBinding
+import com.catalin.mymedic.feature.shared.AppointmentDiffCallback
 import java.text.SimpleDateFormat
 
 /**
@@ -17,8 +19,10 @@ class AwaitingAppointmentsAdapter :
 
     var awaitingAppointments = ArrayList<MedicalAppointment>()
         set(value) {
-            field = ArrayList(value)
-            notifyDataSetChanged()
+            val diffResult = DiffUtil.calculateDiff(AppointmentDiffCallback(value, field))
+            field.clear()
+            field.addAll(value)
+            diffResult.dispatchUpdatesTo(this)
         }
 
     private var onAppointmentStatusChangeListener: OnAppointmentStatusChangeListener? = null

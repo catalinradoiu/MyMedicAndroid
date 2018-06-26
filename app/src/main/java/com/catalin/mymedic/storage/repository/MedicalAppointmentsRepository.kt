@@ -40,6 +40,8 @@ class MedicalAppointmentsRepository @Inject constructor(private val medicalAppoi
         else
             Single.just(availableAppointmentsDetails[medicId])
 
+    fun getPastMedicalAppointemnts(userId: String, timestamp: Long) = medicalAppointmentsRemoteSource.getPastAppointments(userId, timestamp)
+
     fun updateMedicalAppointment(appointment: MedicalAppointment): Completable =
         medicalAppointmentsRemoteSource.updateMedicalAppointment(appointment)
 

@@ -5,9 +5,11 @@ import android.databinding.BindingAdapter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.support.design.widget.TextInputEditText
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.TextView
 import com.catalin.mymedic.R
+import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.data.Gender
 import com.catalin.mymedic.utils.extension.setToDayStart
 import java.text.SimpleDateFormat
@@ -78,6 +80,28 @@ fun setGender(textView: TextView, gender: Gender?) {
         }
     } else {
         textView.text = textView.context.resources.getString(R.string.not_completed)
+    }
+}
+
+@BindingAdapter("appointmentColoredStatus", requireAll = true)
+fun setAppointmentStatus(textView: TextView, appointmentStatus: AppointmentStatus) {
+    when (appointmentStatus) {
+        AppointmentStatus.CONFIRMED -> {
+            textView.text = textView.context.getString(R.string.confirmed)
+            textView.setTextColor(ContextCompat.getColor(textView.context, R.color.light_green))
+        }
+        AppointmentStatus.AWAITING -> {
+            textView.text = textView.context.getString(R.string.awaiting)
+            textView.setTextColor(ContextCompat.getColor(textView.context, R.color.yellow))
+        }
+        AppointmentStatus.REJECTED -> {
+            textView.text = textView.context.getString(R.string.rejected)
+            textView.setTextColor(ContextCompat.getColor(textView.context, R.color.colorPrimary))
+        }
+        else -> {
+            textView.text = textView.context.getString(R.string.canceled)
+            textView.setTextColor(ContextCompat.getColor(textView.context, R.color.colorPrimary))
+        }
     }
 }
 

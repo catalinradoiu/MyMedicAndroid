@@ -62,14 +62,15 @@
     <string name="appointment_created">Your appointment request was sent successfully</string>
     <string name="no_internet_appointment_will_be_created">You have no internet now, but the appointment will be created once you get online</string>
 
-    <!-- Own appointments -->
+    <!-- Incoming appointments -->
+    <string name="incoming_patients">Incoming patients : </string>
+    <string name="appointment_canceled">The appointment has been canceled</string>
     <string name="your_appointments">Your appointments :</string>
     <string name="cancel">Cancel</string>
     <string name="awaiting">Awaiting</string>
     <string name="confirmed">Confirmed</string>
-
-    <!-- Incoming appointments -->
-    <string name="incoming_patients">Incoming patients : </string>
+    <string name="rejected">Rejected</string>
+    <string name="canceled">Canceled</string>
 
     <!-- Awaiting appointments -->
     <string name="new_appointment_request">New request</string>
@@ -103,9 +104,10 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="about_us">About us</string>
     <string name="log_out">Log out</string>
-    <string name="appointment_canceled">The appointment has been canceled</string>
-    <string name="rejected">Rejected</string>
-    <string name="canceled">Canceled</string>
+
+    <!-- Medical history -->
+    <string name="past_appointments">Past/ cancelled appointments : </string>
+    <string name="past_patients">Past/ cancelled patients : </string>
 
     <string-array name="medical_record_patient_options">
         <item>Search</item>
