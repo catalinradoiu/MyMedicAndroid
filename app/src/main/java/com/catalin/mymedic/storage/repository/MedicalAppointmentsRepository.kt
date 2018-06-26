@@ -1,6 +1,7 @@
 package com.catalin.mymedic.storage.repository
 
 import com.catalin.mymedic.data.AppointmentCancelationReason
+import com.catalin.mymedic.data.AppointmentStatus
 import com.catalin.mymedic.data.AvailableAppointments
 import com.catalin.mymedic.data.MedicalAppointment
 import com.catalin.mymedic.storage.source.MedicalAppointmentsFirebaseSource
@@ -39,6 +40,17 @@ class MedicalAppointmentsRepository @Inject constructor(private val medicalAppoi
             }
         else
             Single.just(availableAppointmentsDetails[medicId])
+
+    fun getAppointmentDetails(appointmentId: String): Single<Pair<MedicalAppointment, AppointmentCancelationReason?>> =
+        medicalAppointmentsRemoteSource.getAppointmentDetails(appointmentId).flatMap { appointment ->
+            if (appointment.status != AppointmentStatus.AWAITING && appointment.status != AppointmentStatus.CONFIRMED) {
+                medicalAppointmentsRemoteSource.getAppointmentCancelationReason(appointmentId).map {
+                    Pair(appointment, it)
+                }
+            } else {
+                Single.just(Pair(appointment, null))
+            }
+        }
 
     fun getPastMedicalAppointemnts(userId: String, timestamp: Long) = medicalAppointmentsRemoteSource.getPastAppointments(userId, timestamp)
 

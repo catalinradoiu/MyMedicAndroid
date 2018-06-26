@@ -2,6 +2,7 @@ package com.catalin.mymedic.architecture
 
 import com.catalin.mymedic.component.MyMedicFirebaseInstanceIdService
 import com.catalin.mymedic.component.MyMedicFirebaseMessagingService
+import com.catalin.mymedic.feature.appointmentdetails.AppointmentDetailsActivity
 import com.catalin.mymedic.feature.authentication.login.LoginActivity
 import com.catalin.mymedic.feature.authentication.passwordreset.PasswordResetActivity
 import com.catalin.mymedic.feature.authentication.registration.RegistrationActivity
@@ -48,4 +49,5 @@ interface ApplicationComponent {
     fun inject(settingsFragment: SettingsFragment)
     fun inject(myMedicFirebaseMessagingService: MyMedicFirebaseMessagingService)
     fun inject(medicalHistoryFragment: MedicalHistoryFragment)
+    fun inject(appointmentDetailsActivity: AppointmentDetailsActivity)
 }

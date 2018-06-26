@@ -24,7 +24,7 @@ class MedicalSpecialtiesSearchViewModel(private val medicalSpecialtiesRepository
 
     fun initMedicalSpecialties() {
         state.set(StateLayout.State.LOADING)
-        medicalSpecialtiesRepository.getAllMedicalSpecialties().mainThreadSubscribe(
+        disposables.add(medicalSpecialtiesRepository.getAllMedicalSpecialties().mainThreadSubscribe(
             Consumer {
                 if (it.isEmpty()) {
                     state.set(StateLayout.State.EMPTY)
@@ -36,7 +36,7 @@ class MedicalSpecialtiesSearchViewModel(private val medicalSpecialtiesRepository
             Consumer {
                 state.set(StateLayout.State.ERROR)
             }
-        )
+        ))
     }
 
     override fun onCleared() {

@@ -15,6 +15,7 @@ import com.catalin.mymedic.AwaitingAppointmentsBinding
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
 import com.catalin.mymedic.data.AppointmentStatus
+import com.catalin.mymedic.feature.appointmentdetails.AppointmentDetailsActivity
 import com.catalin.mymedic.feature.shared.AppointmentCancelationDialog
 import com.catalin.mymedic.feature.shared.AppointmentCancelationViewModel
 import com.catalin.mymedic.utils.NetworkManager
@@ -84,6 +85,12 @@ class AwaitingAppointmentsFragment : Fragment() {
 
         awaitingAppointmentsAdapter.setOnAppointmentStatusChangeListener(object :
             AwaitingAppointmentsAdapter.OnAppointmentStatusChangeListener {
+            override fun onClick(position: Int) {
+                context?.let {
+                    startActivity(AppointmentDetailsActivity.getStartIntent(it, awaitingAppointmentsAdapter.awaitingAppointments[position].id))
+                }
+            }
+
             override fun onReject(position: Int) {
                 context?.let {
                     val dialogViewModel = AppointmentCancelationViewModel()

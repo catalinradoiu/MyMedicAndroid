@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.catalin.mymedic.MedicalHistoryBinding
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
+import com.catalin.mymedic.feature.appointmentdetails.AppointmentDetailsActivity
 import javax.inject.Inject
 
 /**
@@ -60,6 +61,15 @@ class MedicalHistoryFragment : Fragment() {
             it?.let { list ->
                 pastAppointmentsAdapter.appointmentsList = ArrayList(list)
             }
+        })
+
+        pastAppointmentsAdapter.setOnAppointmentClickListener(object : PastAppointmentsAdapter.OnAppointmentClickListener {
+            override fun onClick(position: Int) {
+                context?.let {
+                    startActivity(AppointmentDetailsActivity.getStartIntent(it, pastAppointmentsAdapter.appointmentsList[position].id))
+                }
+            }
+
         })
     }
 }

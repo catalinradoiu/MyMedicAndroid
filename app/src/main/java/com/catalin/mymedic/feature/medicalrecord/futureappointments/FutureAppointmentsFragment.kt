@@ -15,6 +15,7 @@ import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.PatientOwnAppointmentsBinding
 import com.catalin.mymedic.R
 import com.catalin.mymedic.data.AppointmentStatus
+import com.catalin.mymedic.feature.appointmentdetails.AppointmentDetailsActivity
 import com.catalin.mymedic.feature.shared.AppointmentCancelationDialog
 import com.catalin.mymedic.feature.shared.AppointmentCancelationViewModel
 import com.catalin.mymedic.utils.NetworkManager
@@ -112,6 +113,15 @@ class FutureAppointmentsFragment : Fragment() {
                     }
                 }
                 appointmentCancelDialog.show(fragmentManager, APPOINTMENT_CANCEL_DIALOG_TAG)
+            }
+
+        })
+
+        futureAppointmentsAdapter.setOnAppointmentClickListener(object : FutureAppointmentsAdapter.OnAppointmentClickListener {
+            override fun onClick(position: Int) {
+                context?.let {
+                    startActivity(AppointmentDetailsActivity.getStartIntent(it, futureAppointmentsAdapter.appointmentsList[position].id))
+                }
             }
 
         })

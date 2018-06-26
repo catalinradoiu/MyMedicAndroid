@@ -28,6 +28,7 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
 
     private var onOwnAppointmentCancelListener: OnOwnAppointmentCancelListener? = null
     private var onPatientAppointmentCancelListener: OnPatientappointmentCancelListener? = null
+    private var onAppointmentClickListener: OnAppointmentClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         R.layout.patient_appointment_header_view -> PatientAppointmentHeader(
@@ -36,7 +37,8 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
         R.layout.patient_own_appointment_item -> PatientAppointmentItem(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false),
             PatientAppointmentItemViewModel(),
-            onOwnAppointmentCancelListener
+            onOwnAppointmentCancelListener,
+            onAppointmentClickListener
         )
         R.layout.incoming_pattients_header_view -> IncomingAppointmentsHeader(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false)
@@ -44,7 +46,8 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
         else -> MedicIncomingAppointmentItem(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.incoming_patient_item, parent, false),
             IncomingPatientItemViewModel(),
-            onPatientAppointmentCancelListener
+            onPatientAppointmentCancelListener,
+            onAppointmentClickListener
         )
     }
 
@@ -77,6 +80,10 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
         this.onPatientAppointmentCancelListener = onPatientappointmentCancelListener
     }
 
+    fun setOnAppointmentClickListener(onAppointmentClickListener: OnAppointmentClickListener) {
+        this.onAppointmentClickListener = onAppointmentClickListener
+    }
+
     interface OnOwnAppointmentCancelListener {
         fun onCancel(position: Int)
     }
@@ -85,10 +92,15 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
         fun onCancel(position: Int)
     }
 
+    interface OnAppointmentClickListener {
+        fun onClick(position: Int)
+    }
+
     class PatientAppointmentItem(
         private val binding: PatientItemBinding,
         private val viewModel: PatientAppointmentItemViewModel,
-        onOwnAppointmentCancelListener: OnOwnAppointmentCancelListener?
+        onOwnAppointmentCancelListener: OnOwnAppointmentCancelListener?,
+        onAppointmentClickListener: OnAppointmentClickListener?
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -98,6 +110,13 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
                 val position = adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onOwnAppointmentCancelListener?.onCancel(position)
+                }
+            }
+
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAppointmentClickListener?.onClick(position)
                 }
             }
         }
@@ -130,7 +149,8 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
     class MedicIncomingAppointmentItem(
         binding: IncomingPatientBinding,
         private val viewModel: IncomingPatientItemViewModel,
-        onPatientappointmentCancelListener: OnPatientappointmentCancelListener?
+        onPatientappointmentCancelListener: OnPatientappointmentCancelListener?,
+        onAppointmentClickListener: OnAppointmentClickListener?
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -139,6 +159,13 @@ class FutureAppointmentsAdapter(private val userId: String) : RecyclerView.Adapt
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onPatientappointmentCancelListener?.onCancel(position)
+                }
+            }
+
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAppointmentClickListener?.onClick(position)
                 }
             }
         }

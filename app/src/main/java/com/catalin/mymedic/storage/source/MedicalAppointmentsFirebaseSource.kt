@@ -45,6 +45,18 @@ class MedicalAppointmentsFirebaseSource @Inject constructor(private val firebase
             }
         )
 
+    fun getAppointmentDetails(appointmentId: String): Single<MedicalAppointment> =
+        RxFirebaseDatabase.observeSingleValueEvent(
+            firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).child(appointmentId),
+            MedicalAppointment::class.java
+        ).toSingle()
+
+    fun getAppointmentCancelationReason(appointmentId: String): Single<AppointmentCancelationReason> =
+        RxFirebaseDatabase.observeSingleValueEvent(
+            firebaseDatabase.reference.child(FirebaseDatabaseConfig.CANCELED_APPOINTMENTS).child(appointmentId),
+            AppointmentCancelationReason::class.java
+        ).toSingle()
+
     fun getFutureMedicalAppointments(userId: String, timestamp: Long): Flowable<List<MedicalAppointment>> =
         RxFirebaseDatabase.observeValueEvent(firebaseDatabase.reference.child(FirebaseDatabaseConfig.MEDICAL_APPOINTMENTS_TABLE_NAME).orderByChild(
             FirebaseDatabaseConfig.APPOINTMENTS_TABLE_MEDIC_ID

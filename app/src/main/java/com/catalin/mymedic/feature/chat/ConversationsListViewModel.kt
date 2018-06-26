@@ -10,6 +10,7 @@ import com.catalin.mymedic.storage.preference.SharedPreferencesManager
 import com.catalin.mymedic.storage.repository.ConversationsRepository
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
 import com.google.firebase.storage.FirebaseStorage
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import javax.inject.Inject
 
@@ -26,11 +27,13 @@ class ConversationsListViewModel(
 
     val state = ObservableField<StateLayout.State>(StateLayout.State.LOADING)
     var conversationsList = MutableLiveData<List<Conversation>>()
+    val disposables = CompositeDisposable()
 
 
     fun initConversations() {
         state.set(StateLayout.State.LOADING)
-        conversationsRepository.getConversationsForUser(preferencesManager.currentUserId).mainThreadSubscribe(Consumer {
+        disposables.add(
+            conversationsRepository.getConversationsForUser(preferencesManager.currentUserId).mainThreadSubscribe(Consumer {
             val messages = it.filter { it.lastMessage.text.isNotEmpty() }
             if (messages.isEmpty()) {
                 state.set(StateLayout.State.EMPTY)
@@ -47,9 +50,15 @@ class ConversationsListViewModel(
                     state.set(StateLayout.State.ERROR)
                 }
             })
+        )
     }
 
     fun getUserId() = preferencesManager.currentUserId
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
+    }
 
     class Factory @Inject constructor(
         private val conversationsRepository: ConversationsRepository,
