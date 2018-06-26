@@ -33,6 +33,7 @@ class FutureAppointmentsViewModel(
     val appointmentCancelResult = SingleLiveEvent<OperationResult>()
 
     private val disposables = CompositeDisposable()
+    private val disposableCancel = CompositeDisposable()
 
     fun initMedicalAppointments() {
         state.set(StateLayout.State.LOADING)
@@ -52,7 +53,8 @@ class FutureAppointmentsViewModel(
     }
 
     fun cancelAppointment(appointment: MedicalAppointment, cancelationReason: String, cancelType: AppointmentStatus) {
-        medicalAppointmentsRepository.updateMedicalAppointment(appointment.apply { status = cancelType }).andThen(
+        disposableCancel.add(
+            medicalAppointmentsRepository.updateMedicalAppointment(appointment.apply { status = cancelType }).andThen(
             medicalAppointmentsRepository.createCancelationReason(
                 AppointmentCancelationReason(
                     appointment.id,
@@ -64,7 +66,8 @@ class FutureAppointmentsViewModel(
                 appointmentCancelResult.value = OperationResult.Success()
             }, Consumer {
                 appointmentCancelResult.value = OperationResult.Error(it.localizedMessage)
-            })
+                })
+        )
     }
 
     fun getCurrentUserId() = sharedPreferencesManager.currentUserId
@@ -72,6 +75,7 @@ class FutureAppointmentsViewModel(
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
+        disposableCancel.clear()
     }
 
     class Factory @Inject constructor(

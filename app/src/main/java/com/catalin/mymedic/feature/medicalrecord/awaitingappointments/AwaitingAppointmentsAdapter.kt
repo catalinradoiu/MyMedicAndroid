@@ -50,6 +50,7 @@ class AwaitingAppointmentsAdapter :
     interface OnAppointmentStatusChangeListener {
         fun onAccept(position: Int)
         fun onReject(position: Int)
+        fun onClick(position: Int)
     }
 
     class AwaitingAppointmentViewHolder(
@@ -69,6 +70,13 @@ class AwaitingAppointmentsAdapter :
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onAppointmentStatusChangeListener?.onReject(position)
+                }
+            }
+
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAppointmentStatusChangeListener?.onClick(position)
                 }
             }
         }

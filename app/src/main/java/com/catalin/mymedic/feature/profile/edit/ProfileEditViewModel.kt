@@ -16,6 +16,7 @@ import com.catalin.mymedic.utils.OperationResult
 import com.catalin.mymedic.utils.SingleLiveEvent
 import com.catalin.mymedic.utils.extension.mainThreadSubscribe
 import com.google.firebase.storage.FirebaseStorage
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import javax.inject.Inject
@@ -58,9 +59,11 @@ class ProfileEditViewModel(
     val state = ObservableField<StateLayout.State>()
     var uploadedImage: Uri? = null
 
+    private val disposables = CompositeDisposable()
+
     fun initUserProfile(userId: String) {
         state.set(StateLayout.State.LOADING)
-        usersRepository.getUserById(userId).mainThreadSubscribe(Consumer {
+        disposables.add(usersRepository.getUserById(userId).mainThreadSubscribe(Consumer {
             user = it
             userName.set(it.displayName)
             userEmail.set(it.email)
@@ -70,7 +73,7 @@ class ProfileEditViewModel(
             state.set(StateLayout.State.NORMAL)
         }, Consumer {
             state.set(StateLayout.State.ERROR)
-        })
+        }))
     }
 
     fun updateProfile(userId: String) {
@@ -81,13 +84,13 @@ class ProfileEditViewModel(
                 displayName = userName.get().orEmpty()
                 birthDate = userBirthDate.get()
             }
-            usersRepository.updateUser(user).andThen(usersRepository.updateUserImage(userId, uploadedImage)).mainThreadSubscribe(Action {
+            disposables.add(usersRepository.updateUser(user).andThen(usersRepository.updateUserImage(userId, uploadedImage)).mainThreadSubscribe(Action {
                 state.set(StateLayout.State.NORMAL)
                 profileUpdateResult.value = OperationResult.Success()
             }, Consumer {
                 state.set(StateLayout.State.NORMAL)
                 profileUpdateResult.value = OperationResult.Error(it.localizedMessage.orEmpty())
-            })
+            }))
         }
     }
 
@@ -124,6 +127,11 @@ class ProfileEditViewModel(
                 })
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
     }
 
     class Factory @Inject constructor(

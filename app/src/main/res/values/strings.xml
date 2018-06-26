@@ -109,6 +109,15 @@
     <string name="past_appointments">Past/ cancelled appointments : </string>
     <string name="past_patients">Past/ cancelled patients : </string>
 
+    <!-- Appointment details -->
+    <string name="appointment_details">Details</string>
+    <string name="datetime">Datetime : </string>
+    <string name="patient_name">Patient name : </string>
+    <string name="medic_name_appointment_details">Medic name : </string>
+    <string name="medical_specialty_appointment_details">Medical specialty :</string>
+    <string name="description">Description :</string>
+    <string name="cancelation_reason">Cancelation reason :</string>
+
     <string-array name="medical_record_patient_options">
         <item>Search</item>
         <item>Appointments</item>

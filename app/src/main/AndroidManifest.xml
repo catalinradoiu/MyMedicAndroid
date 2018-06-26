@@ -61,6 +61,10 @@
             android:name=".feature.profile.edit.ProfileEditActivity"
             android:parentActivityName=".feature.home.HomeActivity" />
 
+        <activity
+            android:name=".feature.appointmentdetails.AppointmentDetailsActivity"
+            android:parentActivityName=".feature.home.HomeActivity" />
+
         <service android:name=".component.MyMedicFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

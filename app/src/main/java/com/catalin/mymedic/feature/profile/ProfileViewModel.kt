@@ -32,7 +32,7 @@ class ProfileViewModel(private val usersRepository: UsersRepository, val firebas
 
     fun getCurrentUserDetails() {
         state.set(StateLayout.State.LOADING)
-        usersRepository.getUserById(usersRepository.getCurrentUserId()).mainThreadSubscribe(Consumer {
+        disposables.add(usersRepository.getUserById(usersRepository.getCurrentUserId()).mainThreadSubscribe(Consumer {
             state.set(StateLayout.State.NORMAL)
             userName.set(it.displayName)
             userEmail.set(it.email)
@@ -41,7 +41,7 @@ class ProfileViewModel(private val usersRepository: UsersRepository, val firebas
             profileImage.value = it.imageUrl
         }, Consumer {
             state.set(StateLayout.State.ERROR)
-        })
+        }))
     }
 
     fun getCurrentUserId() = usersRepository.getCurrentUserId()

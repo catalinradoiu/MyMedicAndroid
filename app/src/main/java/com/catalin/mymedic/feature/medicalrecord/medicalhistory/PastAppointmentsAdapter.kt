@@ -24,6 +24,8 @@ class PastAppointmentsAdapter(private val userId: String) : RecyclerView.Adapter
             diffResult.dispatchUpdatesTo(this)
         }
 
+    private var onAppointmentClickListener: OnAppointmentClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         R.layout.past_patients_header_view -> PastPatientsHeaderViewHolder(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false)
@@ -33,11 +35,13 @@ class PastAppointmentsAdapter(private val userId: String) : RecyclerView.Adapter
         )
         R.layout.past_appointment_item -> PastAppointmentViewHolder(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), viewType, parent, false),
-            PastAppointmentItemViewModel()
+            PastAppointmentItemViewModel(),
+            onAppointmentClickListener
         )
         else -> PastPatientViewHolder(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.past_patient_item, parent, false),
-            PastPatientItemViewModel()
+            PastPatientItemViewModel(),
+            onAppointmentClickListener
         )
     }
 
@@ -62,15 +66,29 @@ class PastAppointmentsAdapter(private val userId: String) : RecyclerView.Adapter
         }
     }
 
+    fun setOnAppointmentClickListener(onAppointmentClickListener: OnAppointmentClickListener) {
+        this.onAppointmentClickListener = onAppointmentClickListener
+    }
+
     class PastAppointmentsHeaderViewHolder(binding: PastAppointmentsHeaderViewBinding) : RecyclerView.ViewHolder(binding.root)
 
     class PastPatientsHeaderViewHolder(binding: PastPatientsHeaderViewBinding) : RecyclerView.ViewHolder(binding.root)
 
-    class PastAppointmentViewHolder(binding: PastAppointmentItemBinding, private val viewModel: PastAppointmentItemViewModel) :
-        RecyclerView.ViewHolder(binding.root) {
+    class PastAppointmentViewHolder(
+        binding: PastAppointmentItemBinding,
+        private val viewModel: PastAppointmentItemViewModel,
+        onAppointmentClickListener: OnAppointmentClickListener?
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.viewModel = viewModel
+
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAppointmentClickListener?.onClick(position)
+                }
+            }
         }
 
         fun bind(appointment: MedicalAppointment) {
@@ -82,10 +100,25 @@ class PastAppointmentsAdapter(private val userId: String) : RecyclerView.Adapter
         }
     }
 
-    class PastPatientViewHolder(binding: PastPatientItemBinding, private val viewModel: PastPatientItemViewModel) : RecyclerView.ViewHolder(binding.root) {
+    interface OnAppointmentClickListener {
+        fun onClick(position: Int)
+    }
+
+    class PastPatientViewHolder(
+        binding: PastPatientItemBinding,
+        private val viewModel: PastPatientItemViewModel,
+        onAppointmentClickListener: OnAppointmentClickListener??
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.viewModel = viewModel
+
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAppointmentClickListener?.onClick(position)
+                }
+            }
         }
 
         fun bind(appointment: MedicalAppointment) {
