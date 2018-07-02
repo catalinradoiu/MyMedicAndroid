@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity
 import com.catalin.mymedic.AppointmentDetailsBinding
 import com.catalin.mymedic.MyMedicApplication
 import com.catalin.mymedic.R
+import com.catalin.mymedic.feature.chat.conversationdetails.ConversationDetailsActivity
+import com.catalin.mymedic.utils.FirebaseDatabaseConfig
 import javax.inject.Inject
 
 /**
@@ -31,11 +33,30 @@ class AppointmentDetailsActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         supportActionBar?.title = getString(R.string.appointment_details)
         viewModel.getAppointmentDetails(intent.appointmentId)
+        initListeners()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
+    }
+
+    private fun initListeners() {
+        binding.messageButton.setOnClickListener {
+            val currentUserId = viewModel.getCurrentUserId()
+            val currentAppointment = viewModel.appointment.get()
+            val otherParticipantId = if (currentUserId == currentAppointment?.medicId) currentAppointment.patientId else currentAppointment?.medicId.orEmpty()
+            val otherParticipantName =
+                if (currentUserId == currentAppointment?.medicId) currentAppointment.patientName else currentAppointment?.medicName.orEmpty()
+            startActivity(
+                ConversationDetailsActivity.getStartIntent(
+                    this,
+                    otherParticipantId,
+                    FirebaseDatabaseConfig.DEFAULT_USER_IMAGE_LOCATION,
+                    otherParticipantName
+                )
+            )
+        }
     }
 
     companion object {

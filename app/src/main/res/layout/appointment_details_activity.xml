@@ -162,6 +162,18 @@
                 tools:text="this is some description dasd adasda das dafasd ad sadaf sda dafas dadsa fafas dasd a" />
 
 
+            <ImageButton
+                android:id="@+id/message_button"
+                android:layout_width="@dimen/image_button_size"
+                android:layout_height="@dimen/image_button_size"
+                android:layout_marginTop="@dimen/primary_margin"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_chat_24dp"
+                android:tint="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cancelation_reason_value"
+                tools:ignore="ContentDescription" />
+
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
