@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.createappointment.AppointmentCreateViewModel" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_blue">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/primary_margin"
+                    android:layout_marginStart="@dimen/primary_margin"
+                    android:layout_marginTop="@dimen/primary_margin"
+                    android:text="@string/enter_appointment_details"
+                    android:textSize="@dimen/highlight_text_size" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/secondary_margin"
+                    android:layout_marginStart="@dimen/secondary_margin"
+                    android:layout_marginTop="@dimen/secondary_margin"
+                    app:errorEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/medic_name_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/primary_margin"
+                        android:drawableStart="@drawable/ic_person_24dp"
+                        android:enabled="false"
+                        android:hint="@string/medic_name"
+                        android:text="@{viewModel.medicName}"
+                        app:drawableTint="@{@color/gray}" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/secondary_margin"
+                    android:layout_marginStart="@dimen/secondary_margin"
+                    app:errorEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/section_name_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/primary_margin"
+                        android:drawableStart="@drawable/ic_medical_specialty_50"
+                        android:enabled="false"
+                        android:hint="@string/medical_specialty"
+                        android:text="@{viewModel.medicalSpecialty}"
+                        app:drawableTint="@{@color/gray}" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/appointment_date_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/secondary_margin"
+                    android:layout_marginStart="@dimen/secondary_margin"
+                    app:errorEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/appointment_date_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="@dimen/primary_margin"
+                        android:drawableStart="@drawable/ic_date_range_24dp"
+                        android:hint="@string/press_to_select_date"
+                        android:lines="1"
+                        app:drawableTint="@{@color/gray}"
+                        app:longDate="@{viewModel.appointmentTime}" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/secondary_margin"
+                    android:layout_marginStart="@dimen/secondary_margin"
+                    android:layout_marginTop="@dimen/primary_margin"
+                    android:text="@string/details" />
+
+                <EditText
+                    android:id="@+id/appointment_details_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/appointment_details_field_height"
+                    android:layout_marginEnd="@dimen/secondary_margin"
+                    android:layout_marginStart="@dimen/secondary_margin"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:background="@drawable/rounded_corner_input"
+                    android:gravity="top"
+                    android:hint="@string/medical_appointment_details_needed"
+                    android:padding="@dimen/small_margin"
+                    android:text="@={viewModel.appointmentDetails}"
+                    android:textColor="@android:color/black" />
+
+                <Button
+                    android:id="@+id/register_appointment_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/secondary_margin"
+                    android:background="@drawable/rounded_corner_button"
+                    android:text="@string/request_appointment"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.catalin.mymedic.feature.shared.StateLayout.State" />
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.medicalrecord.search.medics.MedicsSearchViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/standard_elevation">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:theme="@style/ToolbarStyle"
+                app:titleTextColor="@color/white" />
+
+            <EditText
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/small_margin"
+                android:layout_marginEnd="@dimen/primary_margin"
+                android:layout_marginStart="@dimen/primary_margin"
+                android:layout_marginTop="@dimen/small_margin"
+                android:backgroundTint="@color/white"
+                android:drawablePadding="@dimen/primary_margin"
+                android:drawableStart="@drawable/ic_search_24dp"
+                android:hint="@string/medic_name"
+                android:inputType="text"
+                android:text="@={viewModel.filteringName}"
+                android:textColor="@color/white"
+                app:drawableTint="@{@color/white}"
+                tools:ignore="LabelFor" />
+
+            <ProgressBar
+                android:id="@+id/filtering_progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="@{viewModel.isFilterInProgress ? View.VISIBLE : View.INVISIBLE}" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <com.catalin.mymedic.feature.shared.StateLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_empty="@layout/layout_empty"
+            app:layout_error="@layout/layout_error"
+            app:layout_loading="@layout/loading_layout"
+            app:state="@{viewModel.state}">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/medics_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/small_margin" />
+
+        </com.catalin.mymedic.feature.shared.StateLayout>
+
+    </LinearLayout>
+
+</layout>

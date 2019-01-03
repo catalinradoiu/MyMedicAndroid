@@ -2,14 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.catalin.mymedic">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".MyMedicApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".feature.LoginActivity">
+        <activity
+            android:name=".feature.launcher.LauncherActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,9 +23,70 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.AuthenticationActivity"
-            android:label="@string/title_activity_authentication"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".feature.authentication.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".feature.authentication.registration.RegistrationActivity"
+            android:label="@string/register_now"
+            android:parentActivityName=".feature.authentication.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".feature.home.HomeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.authentication.passwordreset.PasswordResetActivity"
+            android:label="@string/reset_password"
+            android:parentActivityName=".feature.authentication.login.LoginActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.medicalrecord.search.medics.MedicsSearchActivity"
+            android:parentActivityName=".feature.home.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".feature.createappointment.AppointmentCreateActivity"
+            android:parentActivityName=".feature.medicalrecord.search.medics.MedicsSearchActivity" />
+
+        <activity
+            android:name=".feature.chat.conversationdetails.ConversationDetailsActivity"
+            android:parentActivityName=".feature.home.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".feature.profile.edit.ProfileEditActivity"
+            android:parentActivityName=".feature.home.HomeActivity" />
+
+        <activity
+            android:name=".feature.appointmentdetails.AppointmentDetailsActivity"
+            android:parentActivityName=".feature.home.HomeActivity" />
+
+        <service android:name=".component.MyMedicFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".component.MyMedicFirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_application_logo" />
+
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming notification message. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
     </application>
 
 </manifest>

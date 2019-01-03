@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--suppress AndroidUnknownAttribute -->
+    <data class=".ProfileBinding">
+
+        <variable
+            name="viewModel"
+            type="com.catalin.mymedic.feature.profile.ProfileViewModel" />
+    </data>
+
+    <com.catalin.mymedic.feature.shared.StateLayout
+        android:id="@+id/profile_state_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_empty="@layout/layout_empty"
+        app:layout_error="@layout/layout_error"
+        app:layout_loading="@layout/loading_layout"
+        app:state="@{viewModel.state}">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/primary_margin">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/profile_image_start_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.2" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/profile_image_end_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.8" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/text_field_start_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/text_field_end_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.85" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_profile_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/secondary_margin"
+                app:layout_constraintBottom_toTopOf="@id/user_name"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@id/profile_image_end_guideline"
+                app:layout_constraintStart_toStartOf="@id/profile_image_start_guideline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:src="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/second_key_line"
+                android:drawablePadding="@dimen/primary_margin"
+                android:drawableStart="@drawable/ic_person_24dp"
+                android:lines="1"
+                android:text="@{viewModel.userName}"
+                android:textSize="@dimen/highlight_text_size"
+                app:autoSizeTextType="uniform"
+                app:drawableTint="@{@color/colorAccent}"
+                app:layout_constraintBottom_toTopOf="@id/user_email"
+                app:layout_constraintEnd_toStartOf="@id/text_field_end_guideline"
+                app:layout_constraintStart_toStartOf="@id/text_field_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/user_profile_image"
+                tools:text="Popescu Ioan" />
+
+            <TextView
+                android:id="@+id/user_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/primary_margin"
+                android:drawablePadding="@dimen/primary_margin"
+                android:drawableStart="@drawable/ic_mail_24dp"
+                android:lines="1"
+                android:text="@{viewModel.userEmail}"
+                android:textSize="@dimen/highlight_text_size"
+                app:autoSizeTextType="uniform"
+                app:drawableTint="@{@color/colorAccent}"
+                app:layout_constraintBottom_toTopOf="@id/user_birth_date"
+                app:layout_constraintEnd_toStartOf="@id/text_field_end_guideline"
+                app:layout_constraintStart_toStartOf="@id/text_field_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/user_name"
+                tools:text="popescu_ioan1996@gmail.com" />
+
+            <TextView
+                android:id="@+id/user_birth_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/primary_margin"
+                android:drawablePadding="@dimen/primary_margin"
+                android:drawableStart="@drawable/ic_date_range_24dp"
+                android:lines="1"
+                android:textSize="@dimen/highlight_text_size"
+                app:calendarDate="@{viewModel.userBirthDate}"
+                app:drawableTint="@{@color/colorAccent}"
+                app:layout_constraintBottom_toTopOf="@id/user_gender"
+                app:layout_constraintEnd_toStartOf="@id/text_field_end_guideline"
+                app:layout_constraintStart_toStartOf="@id/text_field_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/user_email"
+                app:placeholder="@{@string/not_completed}"
+                tools:text="15.11.1996" />
+
+            <TextView
+                android:id="@+id/user_gender"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/primary_margin"
+                android:drawablePadding="@dimen/primary_margin"
+                android:drawableStart="@drawable/ic_gender_24dp"
+                android:lines="1"
+                android:textSize="@dimen/highlight_text_size"
+                app:drawableTint="@{@color/colorAccent}"
+                app:gender="@{viewModel.userGender}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/text_field_end_guideline"
+                app:layout_constraintStart_toStartOf="@id/text_field_start_guideline"
+                app:layout_constraintTop_toBottomOf="@id/user_birth_date"
+                tools:text="Male" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </com.catalin.mymedic.feature.shared.StateLayout>
+</layout>

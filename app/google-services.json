@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "28218211530",
+    "firebase_url": "https://mymedic-c53a4.firebaseio.com",
+    "project_id": "mymedic-c53a4",
+    "storage_bucket": "mymedic-c53a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28218211530:android:54641dbb5cef0009",
+        "android_client_info": {
+          "package_name": "com.catalin.mymedic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28218211530-88oqgms8tkit6ve8esjfd4patkuishc2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.catalin.mymedic",
+            "certificate_hash": "06c49ab9293537338fbf382444b9fae46938f627"
+          }
+        },
+        {
+          "client_id": "28218211530-recc3d9h00jhjlpd6ujeu9e52kvca9e8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq2ILQT8wE5xC_dRifd-b7uA61kYbqI2A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "28218211530-recc3d9h00jhjlpd6ujeu9e52kvca9e8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
